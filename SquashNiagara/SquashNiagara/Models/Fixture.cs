@@ -13,6 +13,11 @@ namespace SquashNiagara.Models
 
         public int ID { get; set; }
 
+        [Display(Name = "Season")]
+        [Range(1, int.MaxValue, ErrorMessage = "You must select the Division.")]
+        public int SeasonID { get; set; }
+        public Season Season { get; set; }
+
         [Display(Name = "Division")]
         [Range(1, int.MaxValue, ErrorMessage = "You must select the Division.")]
         public int DivisionID { get; set; }

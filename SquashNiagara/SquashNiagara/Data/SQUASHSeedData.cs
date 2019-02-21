@@ -171,11 +171,12 @@ namespace SquashNiagara.Data
                     context.Fixtures.AddRange(
                         new Fixture
                         {
+                            SeasonID = 1,
                             DivisionID = 1,
                             HomeTeamID = 1,
                             AwayTeamID = 2,
-                            Date = DateTime.Parse("2019-19-02"),
-                            Time = DateTime.Parse("18:00"),
+                            Date = DateTime.Parse("2019-02-19"),
+                            Time = DateTime.Parse("2019-02-19 6:20:00 PM"),
                             VenueID = 1
                         }
                     );

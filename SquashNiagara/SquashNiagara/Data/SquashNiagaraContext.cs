@@ -150,6 +150,13 @@ namespace SquashNiagara.Data
                 .HasForeignKey(c => c.DivisionID)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            //Prevent Cascade Delete Season to Fixture
+            modelBuilder.Entity<Season>()
+                .HasMany<Fixture>(p => p.Fixtures)
+                .WithOne(c => c.Season)
+                .HasForeignKey(c => c.SeasonID)
+                .OnDelete(DeleteBehavior.Restrict);
+
             //Prevent Cascade Delete Fixture to Match
             modelBuilder.Entity<Fixture>()
                 .HasMany<Match>(p => p.Matches)

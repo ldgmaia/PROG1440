@@ -11,6 +11,7 @@ namespace SquashNiagara.Models
         public Season()
         {
             SeasonDivisionTeams = new HashSet<SeasonDivisionTeam>();
+            Fixtures = new HashSet<Fixture>();
         }
 
         public int ID { get; set; }
@@ -33,6 +34,7 @@ namespace SquashNiagara.Models
         public DateTime EndDate { get; set; }
 
         public ICollection<SeasonDivisionTeam> SeasonDivisionTeams { get; set; }
+        public ICollection<Fixture> Fixtures { get; set; }
 
     }
 }

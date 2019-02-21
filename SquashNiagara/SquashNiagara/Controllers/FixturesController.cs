@@ -22,7 +22,7 @@ namespace SquashNiagara.Controllers
         // GET: Fixtures
         public async Task<IActionResult> Index()
         {
-            var squashNiagaraContext = _context.Fixtures.Include(f => f.AwayTeam).Include(f => f.CaptainApprove).Include(f => f.CaptainResult).Include(f => f.Division).Include(f => f.HomeTeam).Include(f => f.Venue);
+            var squashNiagaraContext = _context.Fixtures.Include(f => f.AwayTeam).Include(f => f.CaptainApprove).Include(f => f.CaptainResult).Include(f => f.Division).Include(f => f.HomeTeam).Include(f => f.Season).Include(f => f.Venue);
             return View(await squashNiagaraContext.ToListAsync());
         }
 
@@ -40,6 +40,7 @@ namespace SquashNiagara.Controllers
                 .Include(f => f.CaptainResult)
                 .Include(f => f.Division)
                 .Include(f => f.HomeTeam)
+                .Include(f => f.Season)
                 .Include(f => f.Venue)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (fixture == null)
@@ -58,6 +59,7 @@ namespace SquashNiagara.Controllers
             ViewData["CaptainResultID"] = new SelectList(_context.Players, "ID", "Email");
             ViewData["DivisionID"] = new SelectList(_context.Divisions, "ID", "Name");
             ViewData["HomeTeamID"] = new SelectList(_context.Teams, "ID", "Name");
+            ViewData["SeasonID"] = new SelectList(_context.Seasons, "ID", "Name");
             ViewData["VenueID"] = new SelectList(_context.Venues, "ID", "Name");
             return View();
         }
@@ -67,7 +69,7 @@ namespace SquashNiagara.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,DivisionID,HomeTeamID,AwayTeamID,Date,Time,VenueID,HomeTeamScore,AwayTeamScore,HomeTeamBonus,AwayTeamBonus")] Fixture fixture)
+        public async Task<IActionResult> Create([Bind("ID,SeasonID,DivisionID,HomeTeamID,AwayTeamID,Date,Time,VenueID,HomeTeamScore,AwayTeamScore,HomeTeamBonus,AwayTeamBonus")] Fixture fixture)
         {
             if (ModelState.IsValid)
             {
@@ -80,6 +82,7 @@ namespace SquashNiagara.Controllers
             ViewData["CaptainResultID"] = new SelectList(_context.Players, "ID", "Email", fixture.CaptainResultID);
             ViewData["DivisionID"] = new SelectList(_context.Divisions, "ID", "Name", fixture.DivisionID);
             ViewData["HomeTeamID"] = new SelectList(_context.Teams, "ID", "Name", fixture.HomeTeamID);
+            ViewData["SeasonID"] = new SelectList(_context.Seasons, "ID", "Name", fixture.SeasonID);
             ViewData["VenueID"] = new SelectList(_context.Venues, "ID", "Name", fixture.VenueID);
             return View(fixture);
         }
@@ -102,6 +105,7 @@ namespace SquashNiagara.Controllers
             ViewData["CaptainResultID"] = new SelectList(_context.Players, "ID", "Email", fixture.CaptainResultID);
             ViewData["DivisionID"] = new SelectList(_context.Divisions, "ID", "Name", fixture.DivisionID);
             ViewData["HomeTeamID"] = new SelectList(_context.Teams, "ID", "Name", fixture.HomeTeamID);
+            ViewData["SeasonID"] = new SelectList(_context.Seasons, "ID", "Name", fixture.SeasonID);
             ViewData["VenueID"] = new SelectList(_context.Venues, "ID", "Name", fixture.VenueID);
             return View(fixture);
         }
@@ -111,7 +115,7 @@ namespace SquashNiagara.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,DivisionID,HomeTeamID,AwayTeamID,Date,Time,VenueID,HomeTeamScore,AwayTeamScore,HomeTeamBonus,AwayTeamBonus")] Fixture fixture)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,SeasonID,DivisionID,HomeTeamID,AwayTeamID,Date,Time,VenueID,HomeTeamScore,AwayTeamScore,HomeTeamBonus,AwayTeamBonus")] Fixture fixture)
         {
             if (id != fixture.ID)
             {
@@ -143,6 +147,7 @@ namespace SquashNiagara.Controllers
             ViewData["CaptainResultID"] = new SelectList(_context.Players, "ID", "Email", fixture.CaptainResultID);
             ViewData["DivisionID"] = new SelectList(_context.Divisions, "ID", "Name", fixture.DivisionID);
             ViewData["HomeTeamID"] = new SelectList(_context.Teams, "ID", "Name", fixture.HomeTeamID);
+            ViewData["SeasonID"] = new SelectList(_context.Seasons, "ID", "Name", fixture.SeasonID);
             ViewData["VenueID"] = new SelectList(_context.Venues, "ID", "Name", fixture.VenueID);
             return View(fixture);
         }
@@ -161,6 +166,7 @@ namespace SquashNiagara.Controllers
                 .Include(f => f.CaptainResult)
                 .Include(f => f.Division)
                 .Include(f => f.HomeTeam)
+                .Include(f => f.Season)
                 .Include(f => f.Venue)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (fixture == null)

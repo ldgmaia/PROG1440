@@ -13,6 +13,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Season)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Division)
             </th>
             <th>
@@ -54,6 +57,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Season.Name)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Division.Name)
             </td>
