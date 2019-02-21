@@ -1,0 +1,48 @@
+﻿@model SquashNiagara.Models.Match
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Match</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Fixture)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Fixture.ID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.HomePlayer)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HomePlayer.Email)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AwayPlayer)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AwayPlayer.Email)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.HomePlayerScore)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HomePlayerScore)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AwayPlayerScore)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AwayPlayerScore)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
