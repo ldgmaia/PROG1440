@@ -1,0 +1,137 @@
+﻿@model SquashNiagara.Models.Fixture
+
+@{
+    ViewData["Title"] = "ApproveResult";
+}
+
+<h2>Approve Result</h2>
+
+<h4>Fixture</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="ApproveResult">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ID" />
+            <input type="hidden" asp-for="SeasonID" />
+            <input type="hidden" asp-for="DivisionID" />
+            <input type="hidden" asp-for="HomeTeamID" />
+            <input type="hidden" asp-for="AwayTeamID" />
+            <input type="hidden" asp-for="Date" />
+            <input type="hidden" asp-for="Time" />
+            <input type="hidden" asp-for="VenueID" />
+            <input type="hidden" asp-for="HomeTeamScore" />
+            <input type="hidden" asp-for="AwayTeamScore" />
+            <input type="hidden" asp-for="HomeTeamBonus" />
+            <input type="hidden" asp-for="AwayTeamBonus" />
+            <input type="hidden" asp-for="CaptainResultID" />
+            <input type="hidden" asp-for="CaptainApproveID" />
+            <div class="form-group">
+                    <div class="checkbox">
+                        <label>
+                            <input asp-for="Approved" /> @Html.DisplayNameFor(model => model.Approved)
+                        </label>
+                    </div>
+            </div>
+
+            @*<div class="form-group">
+                <div class="checkbox">
+                    <input asp-for="Approved" /> @Html.CheckBoxFor(model => model.Approved.Value)
+                </div>
+            </div>*@
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div>
+
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Season)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Season.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Division)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Division.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.HomeTeam)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HomeTeam.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AwayTeam)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AwayTeam.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Time)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Time)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Venue)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Venue.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.HomeTeamScore)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HomeTeamScore)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AwayTeamScore)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AwayTeamScore)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.HomeTeamBonus)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HomeTeamBonus)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AwayTeamBonus)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AwayTeamBonus)
+        </dd>
+        <dd>
+            @Html.DisplayFor(model => model.CaptainApprove.Email)
+        </dd>
+    </dl>
+</div>
+
+<hr />
+
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

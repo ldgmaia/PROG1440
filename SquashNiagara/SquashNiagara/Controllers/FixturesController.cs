@@ -69,7 +69,7 @@ namespace SquashNiagara.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,SeasonID,DivisionID,HomeTeamID,AwayTeamID,Date,Time,VenueID,HomeTeamScore,AwayTeamScore,HomeTeamBonus,AwayTeamBonus")] Fixture fixture)
+        public async Task<IActionResult> Create([Bind("ID,SeasonID,DivisionID,HomeTeamID,AwayTeamID,Date,Time,VenueID,HomeTeamScore,AwayTeamScore,HomeTeamBonus,AwayTeamBonus,Approved")] Fixture fixture)
         {
             if (ModelState.IsValid)
             {
@@ -115,7 +115,7 @@ namespace SquashNiagara.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,SeasonID,DivisionID,HomeTeamID,AwayTeamID,Date,Time,VenueID,HomeTeamScore,AwayTeamScore,HomeTeamBonus,AwayTeamBonus")] Fixture fixture)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,SeasonID,DivisionID,HomeTeamID,AwayTeamID,Date,Time,VenueID,HomeTeamScore,AwayTeamScore,HomeTeamBonus,AwayTeamBonus,Approved")] Fixture fixture)
         {
             if (id != fixture.ID)
             {
@@ -187,6 +187,171 @@ namespace SquashNiagara.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+
+
+
+
+        // GET: Fixtures/AddResult/5
+        public async Task<IActionResult> AddResult(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            //var fixture = await _context.Fixtures.FindAsync(id);
+            var fixture = await _context.Fixtures
+                .Include(f => f.AwayTeam)
+                .Include(f => f.CaptainApprove)
+                .Include(f => f.CaptainResult)
+                .Include(f => f.Division)
+                .Include(f => f.HomeTeam)
+                .Include(f => f.Season)
+                .Include(f => f.Venue)
+                .FirstOrDefaultAsync(m => m.ID == id);
+
+            var match = await _context.Matches.
+                FirstOrDefaultAsync(m => m.FixtureID == id);
+
+            if (fixture == null)
+            {
+                return NotFound();
+            }
+            ViewData["HomePlayerScore"] = match.HomePlayerScore.GetValueOrDefault();
+            ViewData["AwayTeamID"] = new SelectList(_context.Teams, "ID", "Name", fixture.AwayTeamID);
+            ViewData["CaptainApproveID"] = new SelectList(_context.Players, "ID", "Email", fixture.CaptainApproveID);
+            ViewData["CaptainResultID"] = new SelectList(_context.Players, "ID", "Email", fixture.CaptainResultID);
+            ViewData["DivisionID"] = new SelectList(_context.Divisions, "ID", "Name", fixture.DivisionID);
+            ViewData["HomeTeamID"] = new SelectList(_context.Teams, "ID", "Name", fixture.HomeTeamID);
+            ViewData["SeasonID"] = new SelectList(_context.Seasons, "ID", "Name", fixture.SeasonID);
+            ViewData["VenueID"] = new SelectList(_context.Venues, "ID", "Name", fixture.VenueID);
+            return View(fixture);
+        }
+
+        // POST: Fixtures/AddResult/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddResult(int id, [Bind("ID,SeasonID,DivisionID,HomeTeamID,AwayTeamID,Date,Time,VenueID,HomeTeamScore,AwayTeamScore,HomeTeamBonus,AwayTeamBonus")] Fixture fixture)
+        {
+            if (id != fixture.ID)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(fixture);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!FixtureExists(fixture.ID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["AwayTeamID"] = new SelectList(_context.Teams, "ID", "Name", fixture.AwayTeamID);
+            ViewData["CaptainApproveID"] = new SelectList(_context.Players, "ID", "Email", fixture.CaptainApproveID);
+            ViewData["CaptainResultID"] = new SelectList(_context.Players, "ID", "Email", fixture.CaptainResultID);
+            ViewData["DivisionID"] = new SelectList(_context.Divisions, "ID", "Name", fixture.DivisionID);
+            ViewData["HomeTeamID"] = new SelectList(_context.Teams, "ID", "Name", fixture.HomeTeamID);
+            ViewData["SeasonID"] = new SelectList(_context.Seasons, "ID", "Name", fixture.SeasonID);
+            ViewData["VenueID"] = new SelectList(_context.Venues, "ID", "Name", fixture.VenueID);
+            return View(fixture);
+        }
+
+
+
+
+        // GET: Fixtures/ApproveResult
+        public async Task<IActionResult> ApproveResult(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            //var fixture = await _context.Fixtures.FindAsync(id);
+
+            var fixture = await _context.Fixtures
+                .Include(f => f.AwayTeam)
+                .Include(f => f.CaptainApprove)
+                .Include(f => f.CaptainResult)
+                .Include(f => f.Division)
+                .Include(f => f.HomeTeam)
+                .Include(f => f.Season)
+                .Include(f => f.Venue)
+                .FirstOrDefaultAsync(m => m.ID == id);
+
+            if (fixture == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["AwayTeamID"] = new SelectList(_context.Teams, "ID", "Name", fixture.AwayTeamID);
+            ViewData["CaptainApproveID"] = new SelectList(_context.Players, "ID", "Email", fixture.CaptainApproveID);
+            ViewData["CaptainResultID"] = new SelectList(_context.Players, "ID", "Email", fixture.CaptainResultID);
+            ViewData["DivisionID"] = new SelectList(_context.Divisions, "ID", "Name", fixture.DivisionID);
+            ViewData["HomeTeamID"] = new SelectList(_context.Teams, "ID", "Name", fixture.HomeTeamID);
+            ViewData["SeasonID"] = new SelectList(_context.Seasons, "ID", "Name", fixture.SeasonID);
+            ViewData["VenueID"] = new SelectList(_context.Venues, "ID", "Name", fixture.VenueID);
+            return View(fixture);
+        }
+
+        // POST: Fixtures/ApproveResult
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ApproveResult(int id, [Bind("ID,SeasonID,DivisionID,HomeTeamID,AwayTeamID,Date,Time,VenueID,HomeTeamScore,AwayTeamScore,HomeTeamBonus,AwayTeamBonus,Approved")] Fixture fixture)
+        {
+            if (id != fixture.ID)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(fixture);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!FixtureExists(fixture.ID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["AwayTeamID"] = new SelectList(_context.Teams, "ID", "Name", fixture.AwayTeamID);
+            ViewData["CaptainApproveID"] = new SelectList(_context.Players, "ID", "Email", fixture.CaptainApproveID);
+            ViewData["CaptainResultID"] = new SelectList(_context.Players, "ID", "Email", fixture.CaptainResultID);
+            ViewData["DivisionID"] = new SelectList(_context.Divisions, "ID", "Name", fixture.DivisionID);
+            ViewData["HomeTeamID"] = new SelectList(_context.Teams, "ID", "Name", fixture.HomeTeamID);
+            ViewData["SeasonID"] = new SelectList(_context.Seasons, "ID", "Name", fixture.SeasonID);
+            ViewData["VenueID"] = new SelectList(_context.Venues, "ID", "Name", fixture.VenueID);
+            return View(fixture);
+        }
+
+
 
         private bool FixtureExists(int id)
         {

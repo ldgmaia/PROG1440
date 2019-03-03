@@ -228,6 +228,10 @@ namespace SquashNiagara.Data
                 e.HasOne(r => r.HomePlayer).WithMany(r => r.HomeMatches);
                 e.HasOne(r => r.AwayPlayer).WithMany(r => r.AwayMatches);
             });
+
+            modelBuilder.Entity<Fixture>()
+            .Property(b => b.Approved)
+            .HasDefaultValue(bool.Parse("False"));
         }
 
     }

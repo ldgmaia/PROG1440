@@ -77,7 +77,7 @@ namespace SquashNiagara.Models
         public virtual Player CaptainApprove { get; set; }
 
         [ScaffoldColumn(false)]
-        public bool? Approved { get; set; }
+        public bool Approved { get; set; }
 
         public virtual ICollection<Match> Matches { get; set; }
     }

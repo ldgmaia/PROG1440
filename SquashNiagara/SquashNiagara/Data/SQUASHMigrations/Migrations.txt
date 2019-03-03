@@ -2,5 +2,6 @@
 Add-Migration -Context SquashNiagaraContext -o Data\SQUASHMigrations Nullable1
 Add-Migration -Context SquashNiagaraContext -o Data\SQUASHMigrations Nullable2
 Add-Migration -Context SquashNiagaraContext -o Data\SQUASHMigrations FixtureDivision
+Add-Migration -Context SquashNiagaraContext -o Data\SQUASHMigrations FixtureApproved
 
 update-database -Context SquashNiagaraContext

@@ -45,12 +45,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.AwayTeamBonus)
             </th>
-            @*<th>
+            <th>
                 @Html.DisplayNameFor(model => model.CaptainResult)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CaptainApprove)
-            </th>*@
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -90,16 +90,14 @@
             <td>
                 @Html.DisplayFor(modelItem => item.AwayTeamBonus)
             </td>
-            @*<td>
+            <td>
                 @Html.DisplayFor(modelItem => item.CaptainResult.Email)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CaptainApprove.Email)
-            </td>*@
+            </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="AddResult" asp-route-id="@item.ID">Add Result</a> |
-                <a asp-action="ApproveResult" asp-route-id="@item.ID">Approve Result</a> |
                 <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
             </td>

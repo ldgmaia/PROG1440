@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SquashNiagara.Data;
 
 namespace SquashNiagara.Data.SQUASHMigrations
 {
     [DbContext(typeof(SquashNiagaraContext))]
-    partial class SquashNiagaraContextModelSnapshot : ModelSnapshot
+    [Migration("20190223030537_FixtureApproved")]
+    partial class FixtureApproved
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,7 +45,7 @@ namespace SquashNiagara.Data.SQUASHMigrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("Approved")
+                    b.Property<bool?>("Approved")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(false);
 

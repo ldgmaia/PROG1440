@@ -1,0 +1,99 @@
+﻿@model SquashNiagara.Models.Fixture
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Fixture</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Season)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Season.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Division)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Division.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.HomeTeam)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HomeTeam.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AwayTeam)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AwayTeam.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Time)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Time)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Venue)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Venue.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.HomeTeamScore)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HomeTeamScore)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AwayTeamScore)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AwayTeamScore)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.HomeTeamBonus)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HomeTeamBonus)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AwayTeamBonus)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AwayTeamBonus)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CaptainResult)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CaptainResult.Email)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CaptainApprove)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CaptainApprove.Email)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="ID" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>
