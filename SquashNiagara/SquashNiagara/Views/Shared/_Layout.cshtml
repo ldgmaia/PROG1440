@@ -8,6 +8,7 @@
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous" />
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -30,16 +31,59 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    @*<li><a asp-area="" asp-controller="Home" asp-action="Index">Home<i class="fas fa-user"></i></a></li>
+        <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
+        <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>*@
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle">Admin <i class="fas fa-user"></i><b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-area="" asp-controller="Seasons" asp-action="Index">Seasons</a></li>
+                            <li><a asp-area="" asp-controller="Divisions" asp-action="Index">Divisions</a></li>
+                            <li><a asp-area="" asp-controller="Teams" asp-action="Index">Teams</a></li>
+                            <li class="divider"></li>
+                            <li><a asp-area="" asp-controller="Players" asp-action="Index">Players</a></li>
+                            <li class="divider"></li>
+                            <li><a asp-area="" asp-controller="Fixtures" asp-action="Index">Fixtures</a></li>
+                            <li><a asp-area="" asp-controller="Venues" asp-action="Index">Venues</a></li>
+                            <li class="divider"></li>
+                            <li><a asp-area="Identity" asp-page="/Account/Register">Register Users</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle">Squash Results <i class="far fa-list-alt"></i><b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-area="" asp-controller="Teams" asp-action="Index">Team Ranking</a></li>
+                            <li><a asp-area="" asp-controller="Players" asp-action="Index">Player Ranking</a></li>
+                            <li><a asp-area="" asp-controller="Players" asp-action="Index">Standings</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle">Squash Schedule <i class="far fa-calendar-alt"></i><b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-area="" asp-controller="Fixtures" asp-action="Index">Men's Schedule</a></li>
+                            <li><a asp-area="" asp-controller="Fixtures" asp-action="Index">Women's Schedule</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle">League Rules <i class="fas fa-tasks"></i><b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-area="" asp-controller="Home" asp-action="Index">League Constitution</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle">Document <i class="fas fa-file"></i><b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-area="" asp-controller="Home" asp-action="Index">Score Sheet</a></li>
+                        </ul>
+                    </li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index">News <i class="far fa-newspaper"></i></a></li>
                 </ul>
                 <partial name="_LoginPartial" />
             </div>
         </div>
     </nav>
 
-    <partial name="_CookieConsentPartial" />
+    @*<partial name="_CookieConsentPartial" />*@
 
     <div class="container body-content">
         @RenderBody()
