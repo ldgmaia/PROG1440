@@ -43,7 +43,7 @@ namespace SquashNiagara.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? DOB { get; set; }
 
-        [Display(Name ="Teams Captains")]
+        [Display(Name ="Teams Captain")]
         public virtual ICollection<Team> TeamCaptains { get; set; }
 
         public virtual ICollection<PlayerTeam> PlayerTeams { get; set; }

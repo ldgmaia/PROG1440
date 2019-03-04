@@ -49,12 +49,12 @@
             <td>
                 @Html.DisplayFor(modelItem => item.DOB)
             </td>
-            <th>
-                @Html.DisplayNameFor(model => model.TeamCaptains)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PlayerPositions)
-            </th>
+            <td>
+                @Html.DisplayFor(modelItem => item.TeamCaptains)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlayerPositions)
+            </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
