@@ -12,6 +12,7 @@ namespace SquashNiagara.Controllers
 {
     public class DivisionsController : Controller
     {
+       
         private readonly SquashNiagaraContext _context;
 
         public DivisionsController(SquashNiagaraContext context)
