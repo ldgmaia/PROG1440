@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 using SquashNiagara.Data;
 using SquashNiagara.Models;
 
@@ -351,7 +354,38 @@ namespace SquashNiagara.Controllers
             return View(fixture);
         }
 
+        // GET: Players/ImportUsers
+        public IActionResult ImportFixtures()
+        {
+            return View();
+        }
 
+        // POST: Players/ImportFixtures
+        [HttpPost]
+        public async Task<IActionResult> ImportFixtures(IFormFile theExcel)
+        {
+            ExcelPackage excel;
+            using (var memoryStream = new MemoryStream())
+            {
+                await theExcel.CopyToAsync(memoryStream);
+                excel = new ExcelPackage(memoryStream);
+            }
+            var workSheet = excel.Workbook.Worksheets[0];
+            var start = workSheet.Dimension.Start;
+            var end = workSheet.Dimension.End;
+            for (int row = start.Row; row <= end.Row; row++)
+            {
+                // Row by row...
+                Fixture fixture = new Fixture
+                {
+                    SeasonID = 1
+                };
+                _context.Fixtures.Add(fixture);
+            };
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
+        }
 
         private bool FixtureExists(int id)
         {

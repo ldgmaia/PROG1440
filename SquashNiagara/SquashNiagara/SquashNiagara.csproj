@@ -19,6 +19,9 @@
     <Content Update="Views\Fixtures\AddResult.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Views\Fixtures\ImportFixtures.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Fixtures\OriginalFiles\ApproveResult.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
