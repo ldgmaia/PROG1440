@@ -34,6 +34,31 @@ namespace SquashNiagara.Controllers
             return View();
         }
 
+        public IActionResult Rules()
+        {
+            return View();
+        }
+
+        public IActionResult News()
+        {
+            return View();
+        }
+
+        public IActionResult TeamRanking()
+        {
+            return View();
+        }
+
+        public IActionResult PlayerRanking()
+        {
+            return View();
+        }
+
+        public IActionResult Standings()
+        {
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

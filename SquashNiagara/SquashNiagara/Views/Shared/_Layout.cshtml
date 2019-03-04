@@ -52,9 +52,9 @@
                     <li class="dropdown">
                         <a href="#" data-toggle="dropdown" class="dropdown-toggle">Squash Results <i class="far fa-list-alt"></i><b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a asp-area="" asp-controller="Teams" asp-action="Index">Team Ranking</a></li>
-                            <li><a asp-area="" asp-controller="Players" asp-action="Index">Player Ranking</a></li>
-                            <li><a asp-area="" asp-controller="Players" asp-action="Index">Standings</a></li>
+                            <li><a asp-area="" asp-controller="Home" asp-action="TeamRanking">Team Ranking</a></li>
+                            <li><a asp-area="" asp-controller="Home" asp-action="PlayerRanking">Player Ranking</a></li>
+                            <li><a asp-area="" asp-controller="Home" asp-action="Standings">Standings</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -67,7 +67,7 @@
                     <li class="dropdown">
                         <a href="#" data-toggle="dropdown" class="dropdown-toggle">League Rules <i class="fas fa-tasks"></i><b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a asp-area="" asp-controller="Home" asp-action="Index">League Constitution</a></li>
+                            <li><a asp-area="" asp-controller="Home" asp-action="Rules">League Constitution</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -76,7 +76,7 @@
                             <li><a asp-area="" asp-controller="Home" asp-action="Index">Score Sheet</a></li>
                         </ul>
                     </li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">News <i class="far fa-newspaper"></i></a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="News">News <i class="far fa-newspaper"></i></a></li>
                 </ul>
                 <partial name="_LoginPartial" />
             </div>
