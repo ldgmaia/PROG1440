@@ -25,6 +25,7 @@ namespace SquashNiagara.Controllers
         // GET: Players
         public async Task<IActionResult> Index()
         {
+            var squashNiagaraContext = _context.Players.Include(t => t.TeamCaptains).Include(t => t.PlayerPositions);
             return View(await _context.Players.ToListAsync());
         }
 
@@ -37,6 +38,8 @@ namespace SquashNiagara.Controllers
             }
 
             var player = await _context.Players
+                .Include(t => t.TeamCaptains)
+                .Include(t => t.PlayerPositions)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (player == null)
             {
@@ -49,6 +52,8 @@ namespace SquashNiagara.Controllers
         // GET: Players/Create
         public IActionResult Create()
         {
+            ViewData["TeamCaptains"] = new SelectList(_context.Players, "ID", "Email");
+            ViewData["PlayerPositions"] = new SelectList(_context.Venues, "ID", "Name");
             return View();
         }
 
@@ -65,6 +70,8 @@ namespace SquashNiagara.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["TeamCaptains"] = new SelectList(_context.Players, "ID", "Email");
+            ViewData["PlayerPositions"] = new SelectList(_context.Venues, "ID", "Name");
             return View(player);
         }
 
@@ -81,6 +88,8 @@ namespace SquashNiagara.Controllers
             {
                 return NotFound();
             }
+            ViewData["TeamCaptains"] = new SelectList(_context.Players, "ID", "Email");
+            ViewData["PlayerPositions"] = new SelectList(_context.Venues, "ID", "Name");
             return View(player);
         }
 
@@ -116,6 +125,8 @@ namespace SquashNiagara.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["TeamCaptains"] = new SelectList(_context.Players, "ID", "Email");
+            ViewData["PlayerPositions"] = new SelectList(_context.Venues, "ID", "Name");
             return View(player);
         }
 
@@ -128,6 +139,8 @@ namespace SquashNiagara.Controllers
             }
 
             var player = await _context.Players
+                .Include(t => t.TeamCaptains)
+                .Include(t => t.PlayerPositions)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (player == null)
             {
