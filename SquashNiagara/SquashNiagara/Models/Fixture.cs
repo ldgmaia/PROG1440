@@ -23,12 +23,12 @@ namespace SquashNiagara.Models
         public int DivisionID { get; set; }
         public Division Division { get; set; }
 
-        [Display(Name = "Home Team")]
+        [Display(Name = "(H)-Team")]
         [Range(1, int.MaxValue, ErrorMessage = "You must select the Home Team.")]
         public int HomeTeamID { get; set; }
         public Team HomeTeam { get; set; }
 
-        [Display(Name = "Away Team")]
+        [Display(Name = "(A)-Team")]
         [Range(1, int.MaxValue, ErrorMessage = "You must select the Away Team.")]
         public int AwayTeamID { get; set; }
         public Team AwayTeam { get; set; }
@@ -48,22 +48,22 @@ namespace SquashNiagara.Models
         public int VenueID { get; set; }
         public Venue Venue { get; set; }
 
-        [Display(Name = "Home Team Score")]
+        [Display(Name = "(H)-Score")]
         [Range(0, 5, ErrorMessage = "Score have to be beteween 0 and 5")]
         [RegularExpression("^\\d{1}$", ErrorMessage = "Please enter a valid number")]
         public Int16? HomeTeamScore { get; set; }
 
-        [Display(Name = "Away Team Score")]
+        [Display(Name = "(A)-Score")]
         [Range(0, 5, ErrorMessage = "Score have to be beteween 0 and 5")]
         [RegularExpression("^\\d{1}$", ErrorMessage = "Please enter a valid number")]
         public Int16? AwayTeamScore { get; set; }
 
-        [Display(Name = "Home Team Bonus")]
+        [Display(Name = "(H)-Bonus")]
         [Range(0, 1, ErrorMessage = "Bonus have to be 0 or 1")]
         [RegularExpression("^\\d{1}$", ErrorMessage = "Please enter a valid number")]
         public Int16? HomeTeamBonus { get; set; }
 
-        [Display(Name = "Away Team Bonus")]
+        [Display(Name = "(A)-Bonus")]
         [Range(0, 1, ErrorMessage = "Bonus have to be 0 or 1")]
         [RegularExpression("^\\d{1}$", ErrorMessage = "Please enter a valid number")]
         public Int16? AwayTeamBonus { get; set; }
