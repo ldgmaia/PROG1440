@@ -56,8 +56,6 @@ namespace SquashNiagara.Controllers
                 return NotFound();
             }
 
-            int nPositions = 4;
-
             //var fixture = await _context.Fixtures.FindAsync(id);
             var fixture = await _context.Fixtures
                 .Include(f => f.AwayTeam)
@@ -68,6 +66,9 @@ namespace SquashNiagara.Controllers
                 .Include(f => f.Season)
                 .Include(f => f.Venue)
                 .FirstOrDefaultAsync(m => m.ID == id);
+
+            //int nPositions = 4;
+            int nPositions = _context.Divisions.FirstOrDefault(d => d.ID == fixture.DivisionID).PositionNo;
 
             if (fixture == null)
             {
@@ -93,7 +94,8 @@ namespace SquashNiagara.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(FixtureMatch fixtureMatch)
         {
-            int nPositions = 4;
+            //int nPositions = 4;
+            int nPositions = _context.Divisions.FirstOrDefault(d => d.ID == fixtureMatch.Fixture.DivisionID).PositionNo;
                        
             if (ModelState.IsValid)
             {
@@ -110,10 +112,21 @@ namespace SquashNiagara.Controllers
                     else
                         fixture.AwayTeamScore += 1;
 
+                    //PlayerPosition playerPosition = new PlayerPosition
+                    //{
+                    //    PlayerID = match.HomePlayerID,
+                    //    MatchID = match.ID,
+                    //    PositionID = _context.Positions.FirstOrDefault(d => d.Name.Contains((i + 1).ToString())).ID
+                    //};
+                   
                     _context.Add(match);
+                    //_context.Add(playerPosition);
                 }
                
                 _context.Update(fixture);
+
+                
+
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction("Index", "Fixtures");
