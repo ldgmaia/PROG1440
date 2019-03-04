@@ -31,5 +31,9 @@ namespace SquashNiagara.Models
 
         public ICollection<Fixture> Fixtures { get; set; }
 
+        public static implicit operator short(Division v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

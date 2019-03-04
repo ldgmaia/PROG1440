@@ -1,0 +1,35 @@
+﻿@model SquashNiagara.Models.Player
+
+@{
+    ViewData["Title"] = "ImportPlayers";
+}
+
+<h2>Import Players</h2>
+
+<h4>Player</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+            <form asp-action="ImportPlayers" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label class="control-label">Excel File:</label>
+                    <input type="file" class="" name="theExcel" /><br />
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <input type="submit" value="Upload Data" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

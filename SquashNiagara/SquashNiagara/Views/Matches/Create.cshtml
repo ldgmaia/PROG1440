@@ -1,44 +1,139 @@
-﻿@model SquashNiagara.Models.Match
+﻿@model SquashNiagara.Models.FixtureMatch
 
 @{
     ViewData["Title"] = "Create";
+    ViewBag.FixtureID = Model.Fixture.ID;
 }
 
 <h2>Create</h2>
 
 <h4>Match</h4>
 <hr />
+
+
+<div>
+
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Fixture.Season)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Fixture.Season.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Fixture.Division)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Fixture.Division.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Fixture.HomeTeam)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Fixture.HomeTeam.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Fixture.AwayTeam)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Fixture.AwayTeam.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Fixture.Date)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Fixture.Date)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Fixture.Time)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Fixture.Time)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Fixture.Venue)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Fixture.Venue.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Fixture.HomeTeamScore)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Fixture.HomeTeamScore)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Fixture.AwayTeamScore)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Fixture.AwayTeamScore)
+        </dd>
+    </dl>
+</div>
+
+
+<hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="FixtureID" class="control-label"></label>
-                <select asp-for="FixtureID" class ="form-control" asp-items="ViewBag.FixtureID"></select>
+                <input type="hidden" asp-for="Fixture.ID" />
+                <input type="hidden" asp-for="Fixture.SeasonID" />
+                <input type="hidden" asp-for="Fixture.DivisionID" />
+                <input type="hidden" asp-for="Fixture.HomeTeamID" />
+                <input type="hidden" asp-for="Fixture.AwayTeamID" />
+                <input type="hidden" asp-for="Fixture.Date" />
+                <input type="hidden" asp-for="Fixture.Time" />
+                <input type="hidden" asp-for="Fixture.VenueID" />
+                <input type="hidden" asp-for="Fixture.CaptainResultID" />
+                <input type="hidden" asp-for="Fixture.CaptainApproveID" />
+            </div>
+            @{ int counter = 1;
+                for (int i = 0; i < ViewBag.nPositions; i++)
+                {
+                    <div class="form-group">
+                        <input type="hidden" asp-for="Matches[i].FixtureID" value=@ViewBag.FixtureID />
+                    </div>
+                    <h4>Position @counter</h4>
+                    <div class="form-group">
+                        <label asp-for="Matches[i].HomePlayerID" class="control-label"></label>
+                        <select asp-for="Matches[i].HomePlayerID" class="form-control" asp-items="ViewBag.HomePlayerID"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Matches[i].AwayPlayerID" class="control-label"></label>
+                        <select asp-for="Matches[i].AwayPlayerID" class="form-control" asp-items="ViewBag.AwayPlayerID"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Matches[i].HomePlayerScore" class="control-label"></label>
+                        <input asp-for="Matches[i].HomePlayerScore" class="form-control" />
+                        <span asp-validation-for="Matches[i].HomePlayerScore" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Matches[i].AwayPlayerScore" class="control-label"></label>
+                        <input asp-for="Matches[i].AwayPlayerScore" class="form-control" />
+                        <span asp-validation-for="Matches[0].AwayPlayerScore" class="text-danger"></span>
+                    </div>
+                    counter += 1;
+                };
+            }
+            <div class="form-group">
+                <label asp-for="Fixture.HomeTeamBonus" class="control-label"></label>
+                <input asp-for="Fixture.HomeTeamBonus" class="form-control" />
+                <span asp-validation-for="Fixture.HomeTeamBonus" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="HomePlayerID" class="control-label"></label>
-                <select asp-for="HomePlayerID" class ="form-control" asp-items="ViewBag.HomePlayerID"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="AwayPlayerID" class="control-label"></label>
-                <select asp-for="AwayPlayerID" class ="form-control" asp-items="ViewBag.AwayPlayerID"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="HomePlayerScore" class="control-label"></label>
-                <input asp-for="HomePlayerScore" class="form-control" />
-                <span asp-validation-for="HomePlayerScore" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AwayPlayerScore" class="control-label"></label>
-                <input asp-for="AwayPlayerScore" class="form-control" />
-                <span asp-validation-for="AwayPlayerScore" class="text-danger"></span>
+                <label asp-for="Fixture.AwayTeamBonus" class="control-label"></label>
+                <input asp-for="Fixture.AwayTeamBonus" class="form-control" />
+                <span asp-validation-for="Fixture.AwayTeamBonus" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </form>
     </div>
+    
 </div>
 
 <div>

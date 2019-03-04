@@ -48,12 +48,42 @@ namespace SquashNiagara.Controllers
         }
 
         // GET: Matches/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create(int? id)
         {
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            int nPositions = 4;
+
+            //var fixture = await _context.Fixtures.FindAsync(id);
+            var fixture = await _context.Fixtures
+                .Include(f => f.AwayTeam)
+                .Include(f => f.CaptainApprove)
+                .Include(f => f.CaptainResult)
+                .Include(f => f.Division)
+                .Include(f => f.HomeTeam)
+                .Include(f => f.Season)
+                .Include(f => f.Venue)
+                .FirstOrDefaultAsync(m => m.ID == id);
+
+            if (fixture == null)
+            {
+                return NotFound();
+            }
+
+            FixtureMatch fixtureMatch = new FixtureMatch();
+            fixtureMatch.Fixture = fixture;
+
+            
+            //.FirstOrDefaultAsync(m => m.ID == fixture.DivisionID);
+            
             ViewData["AwayPlayerID"] = new SelectList(_context.Players, "ID", "Email");
-            ViewData["FixtureID"] = new SelectList(_context.Fixtures, "ID", "ID");
             ViewData["HomePlayerID"] = new SelectList(_context.Players, "ID", "Email");
-            return View();
+            ViewData["nPositions"] = nPositions;
+            return View(fixtureMatch);
         }
 
         // POST: Matches/Create
@@ -61,18 +91,37 @@ namespace SquashNiagara.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,FixtureID,HomePlayerID,AwayPlayerID,HomePlayerScore,AwayPlayerScore")] Match match)
+        public async Task<IActionResult> Create(FixtureMatch fixtureMatch)
         {
+            int nPositions = 4;
+                       
             if (ModelState.IsValid)
             {
-                _context.Add(match);
+                Fixture fixture = fixtureMatch.Fixture;
+                fixture.HomeTeamScore = 0;
+                fixture.AwayTeamScore = 0;
+
+                for (int i =0; i < nPositions; i++)
+                {
+                    Match match = fixtureMatch.Matches[i];
+
+                    if (match.HomePlayerScore > match.AwayPlayerScore)
+                        fixture.HomeTeamScore += 1;
+                    else
+                        fixture.AwayTeamScore += 1;
+
+                    _context.Add(match);
+                }
+               
+                _context.Update(fixture);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                return RedirectToAction("Index", "Fixtures");
             }
-            ViewData["AwayPlayerID"] = new SelectList(_context.Players, "ID", "Email", match.AwayPlayerID);
-            ViewData["FixtureID"] = new SelectList(_context.Fixtures, "ID", "ID", match.FixtureID);
-            ViewData["HomePlayerID"] = new SelectList(_context.Players, "ID", "Email", match.HomePlayerID);
-            return View(match);
+            ViewData["AwayPlayerID"] = new SelectList(_context.Players, "ID", "Email");
+            ViewData["HomePlayerID"] = new SelectList(_context.Players, "ID", "Email");
+            ViewData["nPositions"] = nPositions;
+            return View(fixtureMatch);
         }
 
         // GET: Matches/Edit/5
