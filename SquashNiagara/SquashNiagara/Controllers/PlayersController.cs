@@ -25,7 +25,7 @@ namespace SquashNiagara.Controllers
         // GET: Players
         public async Task<IActionResult> Index()
         {
-            var squashNiagaraContext = _context.Players.Include(t => t.TeamCaptains).Include(t => t.PlayerPositions);
+            var squashNiagaraContext = _context.Players.Include(t => t.TeamCaptains).Include(t => t.PlayerPositions).Include(t => t.PlayerTeams);
             return View(await _context.Players.ToListAsync());
         }
 
@@ -40,6 +40,7 @@ namespace SquashNiagara.Controllers
             var player = await _context.Players
                 .Include(t => t.TeamCaptains)
                 .Include(t => t.PlayerPositions)
+                .Include(t => t.PlayerTeams)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (player == null)
             {
@@ -52,8 +53,12 @@ namespace SquashNiagara.Controllers
         // GET: Players/Create
         public IActionResult Create()
         {
-            ViewData["TeamCaptains"] = new SelectList(_context.Players, "ID", "Email");
-            ViewData["PlayerPositions"] = new SelectList(_context.Venues, "ID", "Name");
+            // ***********??????
+            //var player = new Player(); 
+
+            ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email");
+            ViewData["PositionID"] = new SelectList(_context.Positions, "ID", "Name");
+            ViewData["TeamID"] = new SelectList(_context.Teams, "ID", "Name");
             return View();
         }
 
@@ -62,16 +67,28 @@ namespace SquashNiagara.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,Email,DOB")] Player player)
+        public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,Email,DOB")] Player player, string[] selectedPosition)
         {
+            //if(selectedPosition != null)
+            //{
+            //    player.PlayerPositions = new List<PlayerPosition>();
+            //    foreach(var pos in selectedPosition)
+            //    {
+            //        var posToAdd = new PlayerPosition { PlayerID = player.ID };
+            //        player.PlayerPositions.Add(posToAdd);
+            //    }
+            //}
+
             if (ModelState.IsValid)
             {
                 _context.Add(player);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TeamCaptains"] = new SelectList(_context.Players, "ID", "Email");
-            ViewData["PlayerPositions"] = new SelectList(_context.Venues, "ID", "Name");
+            ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email");
+            ViewData["PositionID"] = new SelectList(_context.Positions, "ID", "Name");
+            ViewData["TeamID"] = new SelectList(_context.Teams, "ID", "Name");
+            //PopulateDropDownListPosition(player);
             return View(player);
         }
 
@@ -88,8 +105,9 @@ namespace SquashNiagara.Controllers
             {
                 return NotFound();
             }
-            ViewData["TeamCaptains"] = new SelectList(_context.Players, "ID", "Email");
-            ViewData["PlayerPositions"] = new SelectList(_context.Venues, "ID", "Name");
+            ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email");
+            ViewData["PositionID"] = new SelectList(_context.Positions, "ID", "Name");
+            ViewData["TeamID"] = new SelectList(_context.Positions, "ID", "Name");
             return View(player);
         }
 
@@ -98,7 +116,7 @@ namespace SquashNiagara.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,FirstName,LastName,Email,DOB")] Player player)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,FirstName,LastName,Email,DOB,CaptainID,PositionID,TeamID")] Player player)
         {
             if (id != player.ID)
             {
@@ -125,8 +143,9 @@ namespace SquashNiagara.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TeamCaptains"] = new SelectList(_context.Players, "ID", "Email");
-            ViewData["PlayerPositions"] = new SelectList(_context.Venues, "ID", "Name");
+            ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email");
+            ViewData["PositionID"] = new SelectList(_context.Positions, "ID", "Name");
+            ViewData["TeamID"] = new SelectList(_context.Positions, "ID", "Name");
             return View(player);
         }
 
@@ -141,6 +160,7 @@ namespace SquashNiagara.Controllers
             var player = await _context.Players
                 .Include(t => t.TeamCaptains)
                 .Include(t => t.PlayerPositions)
+                .Include(t => t.PlayerTeams)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (player == null)
             {
@@ -197,6 +217,14 @@ namespace SquashNiagara.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        //private void PopulateDropDownListPosition(Player player = null)
+        //{
+        //    var dQuery = from d in _context.Positions
+        //                 orderby d.Name
+        //                 select d;
+        //    ViewData["PositionID"] = new SelectList(dQuery, "ID", "Name", player?.PlayerPositions);
+        //}
 
         private bool PlayerExists(int id)
         {
