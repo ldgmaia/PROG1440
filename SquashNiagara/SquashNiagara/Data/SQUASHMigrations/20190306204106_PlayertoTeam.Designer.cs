@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SquashNiagara.Data;
 
 namespace SquashNiagara.Data.SQUASHMigrations
 {
     [DbContext(typeof(SquashNiagaraContext))]
-    partial class SquashNiagaraContextModelSnapshot : ModelSnapshot
+    [Migration("20190306204106_PlayertoTeam")]
+    partial class PlayertoTeam
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -157,11 +159,11 @@ namespace SquashNiagara.Data.SQUASHMigrations
                 {
                     b.Property<int>("PlayerID");
 
+                    b.Property<int>("MatchID");
+
                     b.Property<int>("PositionID");
 
-                    b.Property<int?>("MatchID");
-
-                    b.HasKey("PlayerID", "PositionID");
+                    b.HasKey("PlayerID", "MatchID", "PositionID");
 
                     b.HasIndex("MatchID");
 
@@ -230,7 +232,7 @@ namespace SquashNiagara.Data.SQUASHMigrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CaptainID");
+                    b.Property<int>("CaptainID");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -340,9 +342,10 @@ namespace SquashNiagara.Data.SQUASHMigrations
 
             modelBuilder.Entity("SquashNiagara.Models.PlayerPosition", b =>
                 {
-                    b.HasOne("SquashNiagara.Models.Match")
+                    b.HasOne("SquashNiagara.Models.Match", "Match")
                         .WithMany("PlayerPositions")
-                        .HasForeignKey("MatchID");
+                        .HasForeignKey("MatchID")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SquashNiagara.Models.Player", "Player")
                         .WithMany("PlayerPositions")

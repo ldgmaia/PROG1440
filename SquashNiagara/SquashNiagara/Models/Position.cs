@@ -10,7 +10,7 @@ namespace SquashNiagara.Models
     {
         public Position()
         {
-            PlayerTeams = new HashSet<PlayerTeam>();
+            //PlayerTeams = new HashSet<PlayerTeam>();
             PlayerPositions = new HashSet<PlayerPosition>();
         }
 
@@ -21,7 +21,7 @@ namespace SquashNiagara.Models
         [StringLength(10, ErrorMessage = "Position name cannot be more than 10 characters long.")]
         public string Name { get; set; }
 
-        public virtual ICollection<PlayerTeam> PlayerTeams { get; set; }
+        //public virtual ICollection<PlayerTeam> PlayerTeams { get; set; }
 
         public virtual ICollection<PlayerPosition> PlayerPositions { get; set; }
     }

@@ -11,7 +11,8 @@ namespace SquashNiagara.Models
         public Team()
         {
             SeasonDivisionTeams = new HashSet<SeasonDivisionTeam>();
-            PlayerTeams = new HashSet<PlayerTeam>();
+            //PlayerTeams = new HashSet<PlayerTeam>();
+            Players = new HashSet<Player>();
             HomeFixtures = new HashSet<Fixture>();
             AwayFixtures = new HashSet<Fixture>();
         }
@@ -24,7 +25,7 @@ namespace SquashNiagara.Models
         public string Name { get; set; }
 
         [Display(Name = "Captain")]
-        public int CaptainID { get; set; }
+        public int? CaptainID { get; set; }
         public virtual Player Captain { get; set; }
 
         [Display(Name = "Venue")]
@@ -33,7 +34,8 @@ namespace SquashNiagara.Models
               
         public ICollection<SeasonDivisionTeam> SeasonDivisionTeams { get; set; }
 
-        public virtual ICollection<PlayerTeam> PlayerTeams { get; set; }
+        //public virtual ICollection<PlayerTeam> PlayerTeams { get; set; }
+        public virtual ICollection<Player> Players { get; set; }
 
         public virtual ICollection<Fixture> HomeFixtures { get; set; }
 

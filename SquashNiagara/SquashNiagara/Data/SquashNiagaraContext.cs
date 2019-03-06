@@ -21,7 +21,7 @@ namespace SquashNiagara.Data
         public DbSet<Venue> Venues { get; set; }
         public DbSet<Team> Teams { get; set; }
         public DbSet<SeasonDivisionTeam> SeasonDivisionTeams { get; set; }
-        public DbSet<PlayerTeam> PlayerTeams { get; set; }
+        //public DbSet<PlayerTeam> PlayerTeams { get; set; }
         public DbSet<Fixture> Fixtures { get; set; }
         public DbSet<Match> Matches { get; set; }
         public DbSet<PlayerPosition> PlayerPositions { get; set; }
@@ -35,13 +35,13 @@ namespace SquashNiagara.Data
             modelBuilder.Entity<SeasonDivisionTeam>()
             .HasKey(p => new { p.SeasonID, p.DivisionID, p.TeamID });
 
-            //Many to Many Primary Key
-            modelBuilder.Entity<PlayerTeam>()
-            .HasKey(p => new { p.PlayerID, p.TeamID, p.PositionID});
+            ////Many to Many Primary Key
+            //modelBuilder.Entity<PlayerTeam>()
+            //.HasKey(p => new { p.PlayerID, p.TeamID, p.PositionID});
 
             //Many to Many Primary Key
             modelBuilder.Entity<PlayerPosition>()
-            .HasKey(p => new { p.PlayerID, p.MatchID, p.PositionID });
+            .HasKey(p => new { p.PlayerID, /*p.MatchID,*/ p.PositionID });
 
             //Add a unique index to the Player e-Mail
             modelBuilder.Entity<Player>()
@@ -87,25 +87,32 @@ namespace SquashNiagara.Data
                 .HasForeignKey(c => c.TeamID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            //Prevent Cascade Delete Player to PlayerTeam
-            modelBuilder.Entity<Player>()
-                .HasMany<PlayerTeam>(p => p.PlayerTeams)
-                .WithOne(c => c.Player)
-                .HasForeignKey(c => c.PlayerID)
-                .OnDelete(DeleteBehavior.Restrict);
+            ////Prevent Cascade Delete Player to PlayerTeam
+            //modelBuilder.Entity<Player>()
+            //    .HasMany<PlayerTeam>(p => p.PlayerTeams)
+            //    .WithOne(c => c.Player)
+            //    .HasForeignKey(c => c.PlayerID)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
-            //Prevent Cascade Delete Team to PlayerTeam
+            ////Prevent Cascade Delete Team to PlayerTeam
+            //modelBuilder.Entity<Team>()
+            //    .HasMany<PlayerTeam>(p => p.PlayerTeams)
+            //    .WithOne(c => c.Team)
+            //    .HasForeignKey(c => c.TeamID)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
+            ////Prevent Cascade Delete Position to PlayerTeam
+            //modelBuilder.Entity<Position>()
+            //    .HasMany<PlayerTeam>(p => p.PlayerTeams)
+            //    .WithOne(c => c.Position)
+            //    .HasForeignKey(c => c.PositionID)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
+            //Prevent Cascade Delete Player to PlayerPosition
             modelBuilder.Entity<Team>()
-                .HasMany<PlayerTeam>(p => p.PlayerTeams)
+                .HasMany<Player>(p => p.Players)
                 .WithOne(c => c.Team)
                 .HasForeignKey(c => c.TeamID)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            //Prevent Cascade Delete Position to PlayerTeam
-            modelBuilder.Entity<Position>()
-                .HasMany<PlayerTeam>(p => p.PlayerTeams)
-                .WithOne(c => c.Position)
-                .HasForeignKey(c => c.PositionID)
                 .OnDelete(DeleteBehavior.Restrict);
 
             //Prevent Cascade Delete Player to PlayerPosition
@@ -122,12 +129,12 @@ namespace SquashNiagara.Data
                 .HasForeignKey(c => c.PositionID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            //Prevent Cascade Delete Match to PlayerPosition
-            modelBuilder.Entity<Match>()
-                .HasMany<PlayerPosition>(p => p.PlayerPositions)
-                .WithOne(c => c.Match)
-                .HasForeignKey(c => c.MatchID)
-                .OnDelete(DeleteBehavior.Restrict);
+            ////Prevent Cascade Delete Match to PlayerPosition
+            //modelBuilder.Entity<Match>()
+            //    .HasMany<PlayerPosition>(p => p.PlayerPositions)
+            //    .WithOne(c => c.Match)
+            //    .HasForeignKey(c => c.MatchID)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
             //Prevent Cascade Delete Venue to Team
             modelBuilder.Entity<Venue>()

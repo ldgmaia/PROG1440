@@ -38,27 +38,39 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="TeamCaptains" class="control-label"></label>
-                <select asp-for="TeamCaptains" class="form-control" asp-items="ViewBag.CaptainID">
-                    <option>Select a Captain</option>
-                </select>
-                <span asp-validation-for="TeamCaptains" class="text-danger"></span>
-            </div>
+                <label class="control-label">Positions</label>
+                <div class="col-md-offset-1">
+                    <table>
+                        <tr>
+                            @{
+                                int cnt = 0;
+                                List<SquashNiagara.ViewModels.PlayerPositionVM> posit = ViewBag.Positions;
+                                foreach (var pos in posit)
+                                {
+                                    if (cnt++ % 3 == 0)
+                                    {
+                                    @:</tr><tr>
+                                    }
+                                    @:<td>
+                                        <input type="checkbox"
+                                               name="selectedPosition"
+                                               value="@pos.PositionID"
+                                               @(Html.Raw(pos.Assigned ? "checked=\"checked\"" : "")) />
+                                        @pos.PositionName @:&nbsp;&nbsp;
+                                    @:</td>
+                                }
+                            @:</tr>
+                            }
+                        </table>
+                    </div>
+                </div>
 
             <div class="form-group">
-                <label asp-for="PlayerPositions" class="control-label"></label>
-                <select asp-for="PlayerPositions" class="form-control" asp-items="ViewBag.PositionID">
-                    <option>Select a Position</option>
-                </select>
-                <span asp-validation-for="PlayerPositions" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="PlayerTeams" class="control-label"></label>
-                <select asp-for="PlayerTeams" class="form-control" asp-items="ViewBag.TeamID">
+                <label asp-for="TeamID" class="control-label"></label>
+                <select asp-for="TeamID" class="form-control" asp-items="ViewBag.TeamID">
                     <option>Select a Team</option>
                 </select>
-                <span asp-validation-for="PlayerTeams" class="text-danger"></span>
+                <span asp-validation-for="TeamID" class="text-danger"></span>
             </div>
 
             <div class="form-group">
