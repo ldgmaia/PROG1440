@@ -151,19 +151,19 @@ namespace SquashNiagara.Data
                     context.SaveChanges();
                 }
 
-                //Add sample data Table PlayerTeam
-                if (!context.PlayerTeams.Any())
-                {
-                    context.PlayerTeams.AddRange(
-                        new PlayerTeam
-                        {
-                            TeamID = 1,
-                            PlayerID = 1,
-                            PositionID = 1
-                        }
-                    );
-                    context.SaveChanges();
-                }
+                ////Add sample data Table PlayerTeam
+                //if (!context.PlayerTeams.Any())
+                //{
+                //    context.PlayerTeams.AddRange(
+                //        new PlayerTeam
+                //        {
+                //            TeamID = 1,
+                //            PlayerID = 1,
+                //            PositionID = 1
+                //        }
+                //    );
+                //    context.SaveChanges();
+                //}
 
                 //Add sample data Table Fixture
                 if (!context.Fixtures.Any())
@@ -204,7 +204,7 @@ namespace SquashNiagara.Data
                         new PlayerPosition
                         {
                             PlayerID = 1,
-                            MatchID = 1,
+                            //MatchID = 1,
                             PositionID = 1
                         }
                     );

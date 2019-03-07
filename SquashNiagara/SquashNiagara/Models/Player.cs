@@ -11,7 +11,7 @@ namespace SquashNiagara.Models
         public Player()
         {
             TeamCaptains = new HashSet<Team>();
-            PlayerTeams = new HashSet<PlayerTeam>();
+            //PlayerTeams = new HashSet<PlayerTeam>();
             FixtureCaptainResults = new HashSet<Fixture>();
             FixtureCaptainApproves = new HashSet<Fixture>();
             HomeMatches = new HashSet<Match>();
@@ -44,12 +44,14 @@ namespace SquashNiagara.Models
         public DateTime? DOB { get; set; }
 
         [Display(Name = "Teams Captain")]
-        [Range(1, int.MaxValue, ErrorMessage = "You must select a Captain!")]
         public virtual ICollection<Team> TeamCaptains { get; set; }
 
-        [Display(Name = "Players Team")]
-        [Range(1, int.MaxValue, ErrorMessage = "You must select a Team!")]
-        public virtual ICollection<PlayerTeam> PlayerTeams { get; set; }
+        //[Display(Name = "Players Team")]
+        //[Range(1, int.MaxValue, ErrorMessage = "You must select a Team!")]
+        //public virtual ICollection<PlayerTeam> PlayerTeams { get; set; }
+
+        public int TeamID { get; set; }
+        public virtual Team Team { get; set; }
 
         public virtual ICollection<Fixture> FixtureCaptainResults { get; set; }
 
@@ -60,7 +62,6 @@ namespace SquashNiagara.Models
         public virtual ICollection<Match> AwayMatches { get; set; }
 
         [Display(Name = "Players Positions")]
-        [Range(1, int.MaxValue, ErrorMessage = "You must select a Position!")]
         public virtual ICollection<PlayerPosition> PlayerPositions { get; set; }
     }
 }
