@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace SquashNiagara.Migrations
+namespace SquashNiagara.Data.SQUASHMigrations
 {
-    public partial class addTeamPicture : Migration
+    public partial class Mazinisawesome : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

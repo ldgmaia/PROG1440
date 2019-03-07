@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SquashNiagara.Data;
 
-namespace SquashNiagara.Migrations
+namespace SquashNiagara.Data.SQUASHMigrations
 {
     [DbContext(typeof(SquashNiagaraContext))]
-    [Migration("20190307001831_addTeamPicture")]
-    partial class addTeamPicture
+    [Migration("20190307015606_Mazinisawesome")]
+    partial class Mazinisawesome
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

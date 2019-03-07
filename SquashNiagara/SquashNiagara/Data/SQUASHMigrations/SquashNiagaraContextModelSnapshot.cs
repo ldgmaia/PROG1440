@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SquashNiagara.Data;
 
-namespace SquashNiagara.Migrations
+namespace SquashNiagara.Data.SQUASHMigrations
 {
     [DbContext(typeof(SquashNiagaraContext))]
     partial class SquashNiagaraContextModelSnapshot : ModelSnapshot
