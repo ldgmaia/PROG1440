@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using SquashNiagara.Data;
 using SquashNiagara.Models;
+using SquashNiagara.ViewModels;
 
 namespace SquashNiagara.Controllers
 {
@@ -56,7 +57,7 @@ namespace SquashNiagara.Controllers
             // ***********??????
             //var player = new Player(); 
 
-            ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email");
+           
             ViewData["PositionID"] = new SelectList(_context.Positions, "ID", "Name");
             ViewData["TeamID"] = new SelectList(_context.Teams, "ID", "Name");
             return View();
@@ -67,7 +68,7 @@ namespace SquashNiagara.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,Email,DOB")] Player player, string[] selectedPosition)
+        public async Task<IActionResult> Create(PlayerTeamPositionVM playerToCreate)
         {
             //if(selectedPosition != null)
             //{
@@ -78,18 +79,24 @@ namespace SquashNiagara.Controllers
             //        player.PlayerPositions.Add(posToAdd);
             //    }
             //}
+            Player player = playerToCreate.Player;
+            //PlayerTeam playerTeam = new PlayerTeam();
+            //playerTeam.PlayerID = player.ID;
+            //playerTeam.PositionID = playerToCreate.Position;
+            //playerTeam.TeamID = playerToCreate.Team;
 
             if (ModelState.IsValid)
             {
+                
                 _context.Add(player);
+                //_context.Add(playerTeam);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email");
             ViewData["PositionID"] = new SelectList(_context.Positions, "ID", "Name");
             ViewData["TeamID"] = new SelectList(_context.Teams, "ID", "Name");
             //PopulateDropDownListPosition(player);
-            return View(player);
+            return View(playerToCreate);
         }
 
         // GET: Players/Edit/5

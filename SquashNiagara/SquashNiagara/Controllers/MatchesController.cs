@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SquashNiagara.Data;
 using SquashNiagara.Models;
+using SquashNiagara.ViewModels;
 
 namespace SquashNiagara.Controllers
 {
@@ -75,7 +76,7 @@ namespace SquashNiagara.Controllers
                 return NotFound();
             }
 
-            FixtureMatch fixtureMatch = new FixtureMatch();
+            FixtureMatchVM fixtureMatch = new FixtureMatchVM();
             fixtureMatch.Fixture = fixture;
 
             
@@ -92,7 +93,7 @@ namespace SquashNiagara.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(FixtureMatch fixtureMatch)
+        public async Task<IActionResult> Create(FixtureMatchVM fixtureMatch)
         {
             //int nPositions = 4;
             int nPositions = _context.Divisions.FirstOrDefault(d => d.ID == fixtureMatch.Fixture.DivisionID).PositionNo;
