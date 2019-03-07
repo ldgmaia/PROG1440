@@ -116,11 +116,11 @@ namespace SquashNiagara.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             //Prevent Cascade Delete Player to PlayerPosition
-            modelBuilder.Entity<Player>()
-                .HasMany<PlayerPosition>(p => p.PlayerPositions)
-                .WithOne(c => c.Player)
-                .HasForeignKey(c => c.PlayerID)
-                .OnDelete(DeleteBehavior.Restrict);
+            //modelBuilder.Entity<Player>()
+            //    .HasMany<PlayerPosition>(p => p.PlayerPositions)
+            //    .WithOne(c => c.Player)
+            //    .HasForeignKey(c => c.PlayerID)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
             //Prevent Cascade Delete Position to PlayerPosition
             modelBuilder.Entity<Position>()
@@ -200,11 +200,11 @@ namespace SquashNiagara.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             //Prevent Cascade Delete Player (captain) to Team
-            modelBuilder.Entity<Player>()
-                .HasMany<Team>(p => p.TeamCaptains)
-                .WithOne(c => c.Captain)
-                .HasForeignKey(c => c.CaptainID)
-                .OnDelete(DeleteBehavior.Restrict);
+            //modelBuilder.Entity<Player>()
+            //    .HasMany<Team>(p => p.TeamCaptains)
+            //    .WithOne(c => c.Captain)
+            //    .HasForeignKey(c => c.CaptainID)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
             //Prevent Cascade Delete Player (CaptainResult) to Fixture
             modelBuilder.Entity<Player>()

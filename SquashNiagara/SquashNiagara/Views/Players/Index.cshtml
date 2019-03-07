@@ -29,7 +29,7 @@
             </th>
 
             <th>
-                @Html.DisplayNameFor(model => model.PlayerPositions)
+                @Html.DisplayNameFor(model => model.Position)
             </th>
             <th></th>
         </tr>
@@ -53,14 +53,8 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Team.Name)
             </td>
-
             <td>
-
-                @foreach (var pos in item.PlayerPositions)
-                {
-                    @pos.Position.Name<br />
-                }
-
+                @Html.DisplayFor(modelItem => item.Position.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |

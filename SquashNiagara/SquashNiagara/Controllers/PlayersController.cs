@@ -28,11 +28,17 @@ namespace SquashNiagara.Controllers
         // GET: Players
         public async Task<IActionResult> Index()
         {
+            //var context = from p in _context.Players
+            //              .Include(p => p.Team)
+            //              .Include(p => p.Positions)
+            //              .ThenInclude(t => t.Position)
+            //              select p;
+
             var context = from p in _context.Players
                           .Include(p => p.Team)
-                          .Include(p => p.PlayerPositions)
-                          .ThenInclude(t => t.Position)
+                          .Include(p => p.Position)
                           select p;
+
             return View(await context.ToListAsync());
         }
 
@@ -45,8 +51,8 @@ namespace SquashNiagara.Controllers
             }
 
             var player = await _context.Players
-                .Include(t => t.TeamCaptains)
-                .Include(t => t.PlayerPositions)
+                .Include(t => t.Team)
+                .Include(t => t.Position)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (player == null)
             {
@@ -60,12 +66,13 @@ namespace SquashNiagara.Controllers
         public IActionResult Create()
         {
             var player = new Player();
-            player.PlayerPositions = new List<PlayerPosition>();
-            PopulateAssignedPositionData(player);
+            //player.PlayerPositions = new List<PlayerPosition>();
+            //PopulateAssignedPositionData(player);
 
-            ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email");
-            ViewData["PositionID"] = new SelectList(_context.Positions, "ID", "Name");
+            //ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email");
+            //ViewData["PositionID"] = new SelectList(_context.Positions, "ID", "Name");
             PopulateDropDownListTeam();
+            PopulateDropDownListPosition();
             return View();
         }
 
@@ -74,20 +81,22 @@ namespace SquashNiagara.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,Email,DOB,TeamID")] Player player, string[] selectedPosition)
+        public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,Email,DOB")] Player player)
         {
             try
             {
                 //Add the selected conditions
-                if (selectedPosition != null)
-                {
-                    player.PlayerPositions = new List<PlayerPosition>();
-                    foreach (var pos in selectedPosition)
-                    {
-                        var posToAdd = new PlayerPosition { PlayerID = player.ID, PositionID = int.Parse(pos) };
-                        player.PlayerPositions.Add(posToAdd);
-                    }
-                }
+                //if (selectedPosition != null)
+                //{
+                //    //player.PlayerPositions = new List<PlayerPosition>();
+                //    //foreach (var pos in selectedPosition)
+                //    //{
+                //    //    var posToAdd = new PlayerPosition { PlayerID = player.ID, PositionID = int.Parse(pos) };
+                //    //    player.PlayerPositions.Add(posToAdd);
+                //    //}
+                //}
+
+
                 if (ModelState.IsValid)
                 {
                     _context.Add(player);
@@ -110,11 +119,13 @@ namespace SquashNiagara.Controllers
                 ModelState.AddModelError("", "Unable to spit");
             }
 
-            PopulateAssignedPositionData(player);         
-        
-            ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email");
-            ViewData["PositionID"] = new SelectList(_context.Positions, "ID", "Name");
-            ViewData["TeamID"] = new SelectList(_context.Teams, "ID", "Name");
+            //PopulateAssignedPositionData(player);         
+
+            //ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email");
+            //ViewData["PositionID"] = new SelectList(_context.Positions, "ID", "Name");
+            //ViewData["TeamID"] = new SelectList(_context.Teams, "ID", "Name");
+            PopulateDropDownListTeam();
+            PopulateDropDownListPosition();
             //PopulateDropDownListPosition(player);
             return View(player);
         }
@@ -122,20 +133,21 @@ namespace SquashNiagara.Controllers
         // GET: Players/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            var player = await _context.Players
-                .Include(p => p.PlayerPositions).ThenInclude(p => p.Position)
-                .AsNoTracking()
-                .SingleOrDefaultAsync(p => p.ID == id);
+            //var player = await _context.Players
+            //    .Include(p => p.PlayerPositions).ThenInclude(p => p.Position)
+            //    .AsNoTracking()
+            //    .SingleOrDefaultAsync(p => p.ID == id);
 
-            if (player == null)
-            {
-                return NotFound();
-            }
+            //if (player == null)
+            //{
+            //    return NotFound();
+            //}
 
-            ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email");
-            ViewData["PositionID"] = new SelectList(_context.Positions, "ID", "Name");
-            PopulateDropDownListTeam(player);
-            return View(player);
+            //ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email");
+            //ViewData["PositionID"] = new SelectList(_context.Positions, "ID", "Name");
+            //PopulateDropDownListTeam(player);
+            //return View(player);
+            return View();
         }
 
         // POST: Players/Edit/5
@@ -143,61 +155,61 @@ namespace SquashNiagara.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, string[] selectedPositions)
+        public async Task<IActionResult> Edit(int id /*string[] selectedPositions*/)
         {
             //Go get the player to update
-            var playerToUpdate = await _context.Players
-                .Include(p => p.PlayerPositions).ThenInclude(p => p.Position)
-                .SingleOrDefaultAsync(p => p.ID == id);
+            //var playerToUpdate = await _context.Players
+            //    .Include(p => p.Position).ThenInclude(p => p.Team)
+            //    .SingleOrDefaultAsync(p => p.ID == id);
 
             //Check that you got it or exit with a not found error
-            if (playerToUpdate == null)
-            {
-                return NotFound();
-            }
+            //if (playerToUpdate == null)
+            //{
+            //    return NotFound();
+            //}
 
             //Update the medical history
-            UpdatePlayerPosition(selectedPositions, playerToUpdate);
+            //UpdatePlayerPosition(selectedPositions, playerToUpdate);
 
             //Try updating it with the values posted
-            if (await TryUpdateModelAsync<Player>(playerToUpdate, "",
-                p => p.FirstName, p => p.LastName, p => p.Email, p => p.DOB))
-            {
-                try
-                {
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (RetryLimitExceededException /* dex */)
-                {
-                    ModelState.AddModelError("", "Unable to save changes after multiple attempts. Try again, and if the problem persists, see your system administrator.");
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PlayerExists(playerToUpdate.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                catch (DbUpdateException dex)
-                {
-                    if (dex.InnerException.Message.Contains("IX_Players_OHIP"))
-                    {
-                        ModelState.AddModelError("OHIP", "Unable to save changes. Remember, you cannot have duplicate OHIP numbers.");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
-                    }
-                }
-            }
-            //Validaiton Error so give the user another chance.
-            PopulateAssignedPositionData(playerToUpdate);
-            return View(playerToUpdate);
+            //if (await TryUpdateModelAsync<Player>(playerToUpdate, "",
+            //    p => p.FirstName, p => p.LastName, p => p.Email, p => p.DOB))
+            //{
+            //    try
+            //    {
+            //        await _context.SaveChangesAsync();
+            //        return RedirectToAction(nameof(Index));
+            //    }
+            //    catch (RetryLimitExceededException /* dex */)
+            //    {
+            //        ModelState.AddModelError("", "Unable to save changes after multiple attempts. Try again, and if the problem persists, see your system administrator.");
+            //    }
+            //    catch (DbUpdateConcurrencyException)
+            //    {
+            //        if (!PlayerExists(playerToUpdate.ID))
+            //        {
+            //            return NotFound();
+            //        }
+            //        else
+            //        {
+            //            throw;
+            //        }
+            //    }
+            //    catch (DbUpdateException dex)
+            //    {
+            //        if (dex.InnerException.Message.Contains("IX_Players_OHIP"))
+            //        {
+            //            ModelState.AddModelError("OHIP", "Unable to save changes. Remember, you cannot have duplicate OHIP numbers.");
+            //        }
+            //        else
+            //        {
+            //            ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+            //        }
+            //    }
+            //}
+            ////Validaiton Error so give the user another chance.
+            //PopulateAssignedPositionData(playerToUpdate);
+            return View();
         }
 
         // GET: Players/Delete/5
@@ -209,8 +221,8 @@ namespace SquashNiagara.Controllers
             }
 
             var player = await _context.Players
-                .Include(t => t.TeamCaptains)
-                .Include(t => t.PlayerPositions)
+                .Include(t => t.Team)
+                .Include(t => t.Position)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (player == null)
             {
@@ -268,53 +280,53 @@ namespace SquashNiagara.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private void PopulateAssignedPositionData(Player player)
-        {
-            var allPositions = _context.Positions;
-            var pPositions = new HashSet<int>(player.PlayerPositions.Select(b => b.PositionID));
-            var viewModel = new List<PlayerPositionVM>();
-            foreach (var pos in allPositions)
-            {
-                viewModel.Add(new PlayerPositionVM
-                {
-                    PositionID = pos.ID,
-                    PositionName = pos.Name,
-                    Assigned = pPositions.Contains(pos.ID)
-                });
-            }
-            ViewData["Positions"] = viewModel;
-        }
+        //private void PopulateAssignedPositionData(Player player)
+        //{
+        //    var allPositions = _context.Positions;
+        //    var pPositions = new HashSet<int>(player.PlayerPositions.Select(b => b.PositionID));
+        //    var viewModel = new List<PlayerPositionVM>();
+        //    foreach (var pos in allPositions)
+        //    {
+        //        viewModel.Add(new PlayerPositionVM
+        //        {
+        //            PositionID = pos.ID,
+        //            PositionName = pos.Name,
+        //            Assigned = pPositions.Contains(pos.ID)
+        //        });
+        //    }
+        //    ViewData["Positions"] = viewModel;
+        //}
 
-        private void UpdatePlayerPosition(string[] selectedPositions, Player playerToUpdate)
-        {
-            if (selectedPositions == null)
-            {
-                playerToUpdate.PlayerPositions = new List<PlayerPosition>();
-                return;
-            }
+        //private void UpdatePlayerPosition(string[] selectedPositions, Player playerToUpdate)
+        //{
+        //    if (selectedPositions == null)
+        //    {
+        //        playerToUpdate.PlayerPositions = new List<PlayerPosition>();
+        //        return;
+        //    }
 
-            var selectedPositionHS = new HashSet<string>(selectedPositions);
-            var playerPos = new HashSet<int>
-                (playerToUpdate.PlayerPositions.Select(c => c.PositionID));//IDs of the currently selected
-            foreach (var pos in _context.Positions)
-            {
-                if (selectedPositionHS.Contains(pos.ID.ToString()))
-                {
-                    if (!playerPos.Contains(pos.ID))
-                    {
-                        playerToUpdate.PlayerPositions.Add(new PlayerPosition { PlayerID = playerToUpdate.ID, PositionID = pos.ID });
-                    }
-                }
-                else
-                {
-                    if (playerPos.Contains(pos.ID))
-                    {
-                        PlayerPosition positionToRemove = playerToUpdate.PlayerPositions.SingleOrDefault(c => c.PositionID == pos.ID);
-                        _context.Remove(positionToRemove);
-                    }
-                }
-            }
-        }
+        //    var selectedPositionHS = new HashSet<string>(selectedPositions);
+        //    var playerPos = new HashSet<int>
+        //        (playerToUpdate.PlayerPositions.Select(c => c.PositionID));//IDs of the currently selected
+        //    foreach (var pos in _context.Positions)
+        //    {
+        //        if (selectedPositionHS.Contains(pos.ID.ToString()))
+        //        {
+        //            if (!playerPos.Contains(pos.ID))
+        //            {
+        //                playerToUpdate.PlayerPositions.Add(new PlayerPosition { PlayerID = playerToUpdate.ID, PositionID = pos.ID });
+        //            }
+        //        }
+        //        else
+        //        {
+        //            if (playerPos.Contains(pos.ID))
+        //            {
+        //                PlayerPosition positionToRemove = playerToUpdate.PlayerPositions.SingleOrDefault(c => c.PositionID == pos.ID);
+        //                _context.Remove(positionToRemove);
+        //            }
+        //        }
+        //    }
+        //}
 
         private void PopulateDropDownListTeam(Player player = null)
         {
@@ -323,6 +335,15 @@ namespace SquashNiagara.Controllers
                          select d;
             ViewData["TeamID"] = new SelectList(dQuery, "ID", "Name", player?.Team);
         }
+
+        private void PopulateDropDownListPosition(Player player = null)
+        {
+            var dQuery = from d in _context.Positions
+                         orderby d.Name
+                         select d;
+            ViewData["PositionID"] = new SelectList(dQuery, "ID", "Name", player?.Position);
+        }
+
 
         private bool PlayerExists(int id)
         {

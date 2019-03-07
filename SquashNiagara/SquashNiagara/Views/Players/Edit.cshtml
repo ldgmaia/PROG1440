@@ -34,36 +34,40 @@
                 <span asp-validation-for="DOB" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TeamCaptains" class="control-label"></label>
-                <select asp-for="TeamCaptains" class="form-control" asp-items="ViewBag.TeamCaptains"></select>
+                <label asp-for="PositionID" class="control-label"></label>
+                <select asp-for="PositionID" class="form-control" asp-items="ViewBag.PositionID"></select>
             </div>
             <div class="form-group">
-                <label class="control-label">Positions</label>
-                <div class="col-md-offset-1">
-                    <table>
-                        <tr>
-                            @{
-                                int cnt = 0;
-                                List<SquashNiagara.ViewModels.PlayerPositionVM> posit = ViewBag.Positions;
-                                foreach (var pos in posit)
+                <label asp-for="TeamID" class="control-label"></label>
+                <select asp-for="TeamID" class="form-control" asp-items="ViewBag.TeamID"></select>
+            </div>
+            <div class="form-group">
+                @*<label class="control-label">Positions</label>
+            <div class="col-md-offset-1">
+                <table>
+                    <tr>
+                        @{
+                            int cnt = 0;
+                            List<SquashNiagara.ViewModels.PlayerPositionVM> posit = ViewBag.Positions;
+                            foreach (var pos in posit)
+                            {
+                                if (cnt++ % 3 == 0)
                                 {
-                                    if (cnt++ % 3 == 0)
-                                    {
-                                    @:</tr><tr>
-                                    }
-                                    @:<td>
-                                        <input type="checkbox"
-                                               name="selectedPositions"
-                                               value="@pos.PositionID"
-                                               @(Html.Raw(pos.Assigned ? "checked=\"checked\"" : "")) />
-                                        @pos.PositionName @:&nbsp;&nbsp;
-                                    @:</td>
+                                @:</tr><tr>
                                 }
-                            @:</tr>
+                                @:<td>
+                                    <input type="checkbox"
+                                           name="selectedPositions"
+                                           value="@pos.PositionID"
+                                           @(Html.Raw(pos.Assigned ? "checked=\"checked\"" : "")) />
+                                    @pos.PositionName @:&nbsp;&nbsp;
+                                @:</td>
                             }
-                        </table>
-                    </div>
-                </div>
+                        @:</tr>
+                        }
+                    </table>
+                </div>*@
+            </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>

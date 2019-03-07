@@ -10,8 +10,8 @@ using SquashNiagara.Data;
 namespace SquashNiagara.Data.SQUASHMigrations
 {
     [DbContext(typeof(SquashNiagaraContext))]
-    [Migration("20190307015606_Mazinisawesome")]
-    partial class Mazinisawesome
+    [Migration("20190307195001_PlayerChanges")]
+    partial class PlayerChanges
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -143,12 +143,16 @@ namespace SquashNiagara.Data.SQUASHMigrations
                         .IsRequired()
                         .HasMaxLength(50);
 
+                    b.Property<int>("PositionID");
+
                     b.Property<int>("TeamID");
 
                     b.HasKey("ID");
 
                     b.HasIndex("Email")
                         .IsUnique();
+
+                    b.HasIndex("PositionID");
 
                     b.HasIndex("TeamID");
 
@@ -161,7 +165,7 @@ namespace SquashNiagara.Data.SQUASHMigrations
 
                     b.Property<int>("PositionID");
 
-                    b.Property<int?>("MatchID");
+                    b.Property<int>("MatchID");
 
                     b.HasKey("PlayerID", "PositionID");
 
@@ -342,6 +346,11 @@ namespace SquashNiagara.Data.SQUASHMigrations
 
             modelBuilder.Entity("SquashNiagara.Models.Player", b =>
                 {
+                    b.HasOne("SquashNiagara.Models.Position", "Position")
+                        .WithMany("Players")
+                        .HasForeignKey("PositionID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("SquashNiagara.Models.Team", "Team")
                         .WithMany("Players")
                         .HasForeignKey("TeamID")
@@ -350,14 +359,15 @@ namespace SquashNiagara.Data.SQUASHMigrations
 
             modelBuilder.Entity("SquashNiagara.Models.PlayerPosition", b =>
                 {
-                    b.HasOne("SquashNiagara.Models.Match")
+                    b.HasOne("SquashNiagara.Models.Match", "Match")
                         .WithMany("PlayerPositions")
-                        .HasForeignKey("MatchID");
+                        .HasForeignKey("MatchID")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("SquashNiagara.Models.Player", "Player")
-                        .WithMany("PlayerPositions")
+                        .WithMany()
                         .HasForeignKey("PlayerID")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("SquashNiagara.Models.Position", "Position")
                         .WithMany("PlayerPositions")
@@ -386,9 +396,8 @@ namespace SquashNiagara.Data.SQUASHMigrations
             modelBuilder.Entity("SquashNiagara.Models.Team", b =>
                 {
                     b.HasOne("SquashNiagara.Models.Player", "Captain")
-                        .WithMany("TeamCaptains")
-                        .HasForeignKey("CaptainID")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .WithMany()
+                        .HasForeignKey("CaptainID");
 
                     b.HasOne("SquashNiagara.Models.Venue", "Venue")
                         .WithMany("Teams")

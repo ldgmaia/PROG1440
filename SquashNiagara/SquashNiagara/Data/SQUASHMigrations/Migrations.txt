@@ -1,0 +1,3 @@
+﻿Add-Migration -Context SquashNiagaraContext -o Data\SQUASHMigrations Initial
+
+Update-Database -Context SquashNiagaraContext
