@@ -53,6 +53,12 @@ namespace SquashNiagara.Models
         public int? PositionID { get; set; }
         public Position Position { get; set; }
 
+        [Display(Name = "Player")]
+        public string FullName
+        {
+            get { return FirstName + " " + LastName; }            
+        }
+
         public virtual ICollection<Fixture> FixtureCaptainResults { get; set; }
 
         public virtual ICollection<Fixture> FixtureCaptainApproves { get; set; }
@@ -60,6 +66,9 @@ namespace SquashNiagara.Models
         public virtual ICollection<Match> HomeMatches { get; set; }
 
         public virtual ICollection<Match> AwayMatches { get; set; }
+
+        
+
 
         //[Display(Name = "Teams Captain")]
         //public virtual ICollection<Team> TeamCaptains { get; set; }

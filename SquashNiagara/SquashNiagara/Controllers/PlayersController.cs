@@ -81,7 +81,7 @@ namespace SquashNiagara.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,Email,DOB")] Player player)
+        public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,Email,DOB,TeamID?,PositionID?")] Player player)
         {
             try
             {

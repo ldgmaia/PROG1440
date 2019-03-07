@@ -8,21 +8,16 @@
 
 <div>
     <p>
-        <div class="col-md-3">
-            @{
-                if (Model.imageContent != null && Model.imageMimeType.Contains("image"))
-                {
-                    string imageBase64 = Convert.ToBase64String(Model.imageContent);
-                    string imageSrc = string.Format("data:" + Model.imageMimeType + ";base64,{0}", imageBase64);
-                    <img src="@imageSrc" style="max-width: 150px; max-height: 150px" class="img-responsive img-rounded" />
-                }
-            }
-        </div>
-        <div class="col-md-9" vertical-align="centre">
+        <div class="col-md-12" vertical-align="centre">
             <h2>Details for Team: @Model.Name</h2>
         </div>
     </p>
-    <hr />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Name)
@@ -34,7 +29,7 @@
             @Html.DisplayNameFor(model => model.Captain)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Captain.Email)
+            @Html.DisplayFor(model => model.Captain.FullName)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Venue)
@@ -47,6 +42,19 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Profile)
+        </dd>
+        <dt>
+            Picture:
+        </dt>
+        <dd>
+            @{
+                if (Model.imageContent != null && Model.imageMimeType.Contains("image"))
+                {
+                    string imageBase64 = Convert.ToBase64String(Model.imageContent);
+                    string imageSrc = string.Format("data:" + Model.imageMimeType + ";base64,{0}", imageBase64);
+                    <img src="@imageSrc" style="max-width: 150px; max-height: 150px" class="img-responsive img-rounded" />
+                }
+            }
         </dd>
     </dl>
 </div>

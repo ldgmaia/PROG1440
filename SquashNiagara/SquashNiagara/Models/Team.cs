@@ -29,7 +29,7 @@ namespace SquashNiagara.Models
         public virtual Player Captain { get; set; }
 
         [Display(Name = "Venue")]
-        public int VenueID { get; set; }
+        public int? VenueID { get; set; }
         public virtual Venue Venue { get; set; }
 
         [ScaffoldColumn(false)]
