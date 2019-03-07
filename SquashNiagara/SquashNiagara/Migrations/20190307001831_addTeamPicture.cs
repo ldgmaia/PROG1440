@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace SquashNiagara.Data.SQUASHMigrations
+namespace SquashNiagara.Migrations
 {
-    public partial class Initial : Migration
+    public partial class addTeamPicture : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -24,23 +24,6 @@ namespace SquashNiagara.Data.SQUASHMigrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Divisions", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Players",
-                schema: "SQUASH",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    FirstName = table.Column<string>(maxLength: 50, nullable: false),
-                    LastName = table.Column<string>(maxLength: 50, nullable: false),
-                    Email = table.Column<string>(maxLength: 255, nullable: false),
-                    DOB = table.Column<DateTime>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Players", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -92,80 +75,30 @@ namespace SquashNiagara.Data.SQUASHMigrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Teams",
-                schema: "SQUASH",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(maxLength: 50, nullable: false),
-                    CaptainID = table.Column<int>(nullable: false),
-                    VenueID = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Teams", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Teams_Players_CaptainID",
-                        column: x => x.CaptainID,
-                        principalSchema: "SQUASH",
-                        principalTable: "Players",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Teams_Venues_VenueID",
-                        column: x => x.VenueID,
-                        principalSchema: "SQUASH",
-                        principalTable: "Venues",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Fixtures",
                 schema: "SQUASH",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    SeasonID = table.Column<int>(nullable: false),
                     DivisionID = table.Column<int>(nullable: false),
                     HomeTeamID = table.Column<int>(nullable: false),
                     AwayTeamID = table.Column<int>(nullable: false),
                     Date = table.Column<DateTime>(nullable: false),
                     Time = table.Column<DateTime>(nullable: false),
                     VenueID = table.Column<int>(nullable: false),
-                    HomeTeamScore = table.Column<short>(nullable: false),
-                    AwayTeamScore = table.Column<short>(nullable: false),
-                    HomeTeamBonus = table.Column<short>(nullable: false),
-                    AwayTeamBonus = table.Column<short>(nullable: false),
-                    CaptainResultID = table.Column<int>(nullable: false),
-                    CaptainApproveID = table.Column<int>(nullable: false),
-                    Approved = table.Column<bool>(nullable: false)
+                    HomeTeamScore = table.Column<short>(nullable: true),
+                    AwayTeamScore = table.Column<short>(nullable: true),
+                    HomeTeamBonus = table.Column<short>(nullable: true),
+                    AwayTeamBonus = table.Column<short>(nullable: true),
+                    CaptainResultID = table.Column<int>(nullable: true),
+                    CaptainApproveID = table.Column<int>(nullable: true),
+                    Approved = table.Column<bool>(nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Fixtures", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Fixtures_Teams_AwayTeamID",
-                        column: x => x.AwayTeamID,
-                        principalSchema: "SQUASH",
-                        principalTable: "Teams",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Fixtures_Players_CaptainApproveID",
-                        column: x => x.CaptainApproveID,
-                        principalSchema: "SQUASH",
-                        principalTable: "Players",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Fixtures_Players_CaptainResultID",
-                        column: x => x.CaptainResultID,
-                        principalSchema: "SQUASH",
-                        principalTable: "Players",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Fixtures_Divisions_DivisionID",
                         column: x => x.DivisionID,
@@ -174,10 +107,10 @@ namespace SquashNiagara.Data.SQUASHMigrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Fixtures_Teams_HomeTeamID",
-                        column: x => x.HomeTeamID,
+                        name: "FK_Fixtures_Seasons_SeasonID",
+                        column: x => x.SeasonID,
                         principalSchema: "SQUASH",
-                        principalTable: "Teams",
+                        principalTable: "Seasons",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -185,41 +118,6 @@ namespace SquashNiagara.Data.SQUASHMigrations
                         column: x => x.VenueID,
                         principalSchema: "SQUASH",
                         principalTable: "Venues",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PlayerTeams",
-                schema: "SQUASH",
-                columns: table => new
-                {
-                    PlayerID = table.Column<int>(nullable: false),
-                    TeamID = table.Column<int>(nullable: false),
-                    PositionID = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PlayerTeams", x => new { x.PlayerID, x.TeamID, x.PositionID });
-                    table.ForeignKey(
-                        name: "FK_PlayerTeams_Players_PlayerID",
-                        column: x => x.PlayerID,
-                        principalSchema: "SQUASH",
-                        principalTable: "Players",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_PlayerTeams_Positions_PositionID",
-                        column: x => x.PositionID,
-                        principalSchema: "SQUASH",
-                        principalTable: "Positions",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_PlayerTeams_Teams_TeamID",
-                        column: x => x.TeamID,
-                        principalSchema: "SQUASH",
-                        principalTable: "Teams",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -250,13 +148,6 @@ namespace SquashNiagara.Data.SQUASHMigrations
                         principalTable: "Seasons",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_SeasonDivisionTeams_Teams_TeamID",
-                        column: x => x.TeamID,
-                        principalSchema: "SQUASH",
-                        principalTable: "Teams",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -269,31 +160,17 @@ namespace SquashNiagara.Data.SQUASHMigrations
                     FixtureID = table.Column<int>(nullable: false),
                     HomePlayerID = table.Column<int>(nullable: false),
                     AwayPlayerID = table.Column<int>(nullable: false),
-                    HomePlayerScore = table.Column<short>(nullable: false),
-                    AwayPlayerScore = table.Column<short>(nullable: false)
+                    HomePlayerScore = table.Column<short>(nullable: true),
+                    AwayPlayerScore = table.Column<short>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Matches", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Matches_Players_AwayPlayerID",
-                        column: x => x.AwayPlayerID,
-                        principalSchema: "SQUASH",
-                        principalTable: "Players",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_Matches_Fixtures_FixtureID",
                         column: x => x.FixtureID,
                         principalSchema: "SQUASH",
                         principalTable: "Fixtures",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Matches_Players_HomePlayerID",
-                        column: x => x.HomePlayerID,
-                        principalSchema: "SQUASH",
-                        principalTable: "Players",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -304,12 +181,12 @@ namespace SquashNiagara.Data.SQUASHMigrations
                 columns: table => new
                 {
                     PlayerID = table.Column<int>(nullable: false),
-                    MatchID = table.Column<int>(nullable: false),
-                    PositionID = table.Column<int>(nullable: false)
+                    PositionID = table.Column<int>(nullable: false),
+                    MatchID = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PlayerPositions", x => new { x.PlayerID, x.MatchID, x.PositionID });
+                    table.PrimaryKey("PK_PlayerPositions", x => new { x.PlayerID, x.PositionID });
                     table.ForeignKey(
                         name: "FK_PlayerPositions_Matches_MatchID",
                         column: x => x.MatchID,
@@ -318,17 +195,61 @@ namespace SquashNiagara.Data.SQUASHMigrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_PlayerPositions_Players_PlayerID",
-                        column: x => x.PlayerID,
-                        principalSchema: "SQUASH",
-                        principalTable: "Players",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_PlayerPositions_Positions_PositionID",
                         column: x => x.PositionID,
                         principalSchema: "SQUASH",
                         principalTable: "Positions",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Teams",
+                schema: "SQUASH",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    CaptainID = table.Column<int>(nullable: true),
+                    VenueID = table.Column<int>(nullable: false),
+                    imageContent = table.Column<byte[]>(nullable: true),
+                    imageMimeType = table.Column<string>(maxLength: 256, nullable: true),
+                    imageFileName = table.Column<string>(maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Teams", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Teams_Venues_VenueID",
+                        column: x => x.VenueID,
+                        principalSchema: "SQUASH",
+                        principalTable: "Venues",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Players",
+                schema: "SQUASH",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    FirstName = table.Column<string>(maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(maxLength: 50, nullable: false),
+                    Email = table.Column<string>(maxLength: 255, nullable: false),
+                    DOB = table.Column<DateTime>(nullable: true),
+                    TeamID = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Players", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Players_Teams_TeamID",
+                        column: x => x.TeamID,
+                        principalSchema: "SQUASH",
+                        principalTable: "Teams",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -356,6 +277,12 @@ namespace SquashNiagara.Data.SQUASHMigrations
                 schema: "SQUASH",
                 table: "Fixtures",
                 column: "HomeTeamID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Fixtures_SeasonID",
+                schema: "SQUASH",
+                table: "Fixtures",
+                column: "SeasonID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Fixtures_VenueID",
@@ -409,15 +336,9 @@ namespace SquashNiagara.Data.SQUASHMigrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_PlayerTeams_PositionID",
+                name: "IX_Players_TeamID",
                 schema: "SQUASH",
-                table: "PlayerTeams",
-                column: "PositionID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PlayerTeams_TeamID",
-                schema: "SQUASH",
-                table: "PlayerTeams",
+                table: "Players",
                 column: "TeamID");
 
             migrationBuilder.CreateIndex(
@@ -450,16 +371,107 @@ namespace SquashNiagara.Data.SQUASHMigrations
                 schema: "SQUASH",
                 table: "Teams",
                 column: "VenueID");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Fixtures_Teams_AwayTeamID",
+                schema: "SQUASH",
+                table: "Fixtures",
+                column: "AwayTeamID",
+                principalSchema: "SQUASH",
+                principalTable: "Teams",
+                principalColumn: "ID",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Fixtures_Teams_HomeTeamID",
+                schema: "SQUASH",
+                table: "Fixtures",
+                column: "HomeTeamID",
+                principalSchema: "SQUASH",
+                principalTable: "Teams",
+                principalColumn: "ID",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Fixtures_Players_CaptainApproveID",
+                schema: "SQUASH",
+                table: "Fixtures",
+                column: "CaptainApproveID",
+                principalSchema: "SQUASH",
+                principalTable: "Players",
+                principalColumn: "ID",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Fixtures_Players_CaptainResultID",
+                schema: "SQUASH",
+                table: "Fixtures",
+                column: "CaptainResultID",
+                principalSchema: "SQUASH",
+                principalTable: "Players",
+                principalColumn: "ID",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_SeasonDivisionTeams_Teams_TeamID",
+                schema: "SQUASH",
+                table: "SeasonDivisionTeams",
+                column: "TeamID",
+                principalSchema: "SQUASH",
+                principalTable: "Teams",
+                principalColumn: "ID",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Matches_Players_AwayPlayerID",
+                schema: "SQUASH",
+                table: "Matches",
+                column: "AwayPlayerID",
+                principalSchema: "SQUASH",
+                principalTable: "Players",
+                principalColumn: "ID",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Matches_Players_HomePlayerID",
+                schema: "SQUASH",
+                table: "Matches",
+                column: "HomePlayerID",
+                principalSchema: "SQUASH",
+                principalTable: "Players",
+                principalColumn: "ID",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_PlayerPositions_Players_PlayerID",
+                schema: "SQUASH",
+                table: "PlayerPositions",
+                column: "PlayerID",
+                principalSchema: "SQUASH",
+                principalTable: "Players",
+                principalColumn: "ID",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Teams_Players_CaptainID",
+                schema: "SQUASH",
+                table: "Teams",
+                column: "CaptainID",
+                principalSchema: "SQUASH",
+                principalTable: "Players",
+                principalColumn: "ID",
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "PlayerPositions",
-                schema: "SQUASH");
+            migrationBuilder.DropForeignKey(
+                name: "FK_Players_Teams_TeamID",
+                schema: "SQUASH",
+                table: "Players");
 
             migrationBuilder.DropTable(
-                name: "PlayerTeams",
+                name: "PlayerPositions",
                 schema: "SQUASH");
 
             migrationBuilder.DropTable(
@@ -475,19 +487,19 @@ namespace SquashNiagara.Data.SQUASHMigrations
                 schema: "SQUASH");
 
             migrationBuilder.DropTable(
-                name: "Seasons",
-                schema: "SQUASH");
-
-            migrationBuilder.DropTable(
                 name: "Fixtures",
                 schema: "SQUASH");
 
             migrationBuilder.DropTable(
-                name: "Teams",
+                name: "Divisions",
                 schema: "SQUASH");
 
             migrationBuilder.DropTable(
-                name: "Divisions",
+                name: "Seasons",
+                schema: "SQUASH");
+
+            migrationBuilder.DropTable(
+                name: "Teams",
                 schema: "SQUASH");
 
             migrationBuilder.DropTable(

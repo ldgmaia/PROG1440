@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -59,10 +61,30 @@ namespace SquashNiagara.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name,CaptainID,VenueID")] Team team)
+        public async Task<IActionResult> Create([Bind("ID,Name,CaptainID,VenueID")] Team team,
+            IFormFile thePicture)
         {
             if (ModelState.IsValid)
             {
+                if (thePicture != null)
+                {
+                    string mimeType = thePicture.ContentType;
+                    long fileLength = thePicture.Length;
+                    if (!(mimeType == "" || fileLength == 0))
+                    {
+                        if (mimeType.Contains("image"))
+                        {
+                            using (var memoryStream = new MemoryStream())
+                            {
+                                await thePicture.CopyToAsync(memoryStream);
+                                team.imageContent = memoryStream.ToArray();
+                            }
+                            team.imageMimeType = mimeType;
+                            team.imageFileName = thePicture.FileName;
+                        }
+                    }
+                }
+
                 _context.Add(team);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -95,7 +117,8 @@ namespace SquashNiagara.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,CaptainID,VenueID")] Team team)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,CaptainID,VenueID")] Team team
+            , string chkRemoveImage, IFormFile thePicture)
         {
             if (id != team.ID)
             {
@@ -106,6 +129,33 @@ namespace SquashNiagara.Controllers
             {
                 try
                 {
+                    if (chkRemoveImage != null)
+                    {
+                        team.imageContent = null;
+                        team.imageMimeType = null;
+                        team.imageFileName = null;
+                    }
+                    else
+                    {
+                        if (thePicture != null)
+                        {
+                            string mimeType = thePicture.ContentType;
+                            long fileLength = thePicture.Length;
+                            if (!(mimeType == "" || fileLength == 0))
+                            {
+                                if (mimeType.Contains("image"))
+                                {
+                                    using (var memoryStream = new MemoryStream())
+                                    {
+                                        await thePicture.CopyToAsync(memoryStream);
+                                        team.imageContent = memoryStream.ToArray();
+                                    }
+                                    team.imageMimeType = mimeType;
+                                    team.imageFileName = thePicture.FileName;
+                                }
+                            }
+                        }
+                    }
                     _context.Update(team);
                     await _context.SaveChangesAsync();
                 }

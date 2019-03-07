@@ -7,18 +7,18 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SquashNiagara.Data;
 
-namespace SquashNiagara.Data.SQUASHMigrations
+namespace SquashNiagara.Migrations
 {
     [DbContext(typeof(SquashNiagaraContext))]
-    [Migration("20190306204106_PlayertoTeam")]
-    partial class PlayertoTeam
+    [Migration("20190307001831_addTeamPicture")]
+    partial class addTeamPicture
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("SQUASH")
-                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
+                .HasAnnotation("ProductVersion", "2.1.8-servicing-32085")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -159,11 +159,11 @@ namespace SquashNiagara.Data.SQUASHMigrations
                 {
                     b.Property<int>("PlayerID");
 
-                    b.Property<int>("MatchID");
-
                     b.Property<int>("PositionID");
 
-                    b.HasKey("PlayerID", "MatchID", "PositionID");
+                    b.Property<int?>("MatchID");
+
+                    b.HasKey("PlayerID", "PositionID");
 
                     b.HasIndex("MatchID");
 
@@ -232,13 +232,21 @@ namespace SquashNiagara.Data.SQUASHMigrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CaptainID");
+                    b.Property<int?>("CaptainID");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50);
 
                     b.Property<int>("VenueID");
+
+                    b.Property<byte[]>("imageContent");
+
+                    b.Property<string>("imageFileName")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("imageMimeType")
+                        .HasMaxLength(256);
 
                     b.HasKey("ID");
 
@@ -342,10 +350,9 @@ namespace SquashNiagara.Data.SQUASHMigrations
 
             modelBuilder.Entity("SquashNiagara.Models.PlayerPosition", b =>
                 {
-                    b.HasOne("SquashNiagara.Models.Match", "Match")
+                    b.HasOne("SquashNiagara.Models.Match")
                         .WithMany("PlayerPositions")
-                        .HasForeignKey("MatchID")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("MatchID");
 
                     b.HasOne("SquashNiagara.Models.Player", "Player")
                         .WithMany("PlayerPositions")

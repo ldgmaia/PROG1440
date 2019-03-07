@@ -31,7 +31,20 @@ namespace SquashNiagara.Models
         [Display(Name = "Venue")]
         public int VenueID { get; set; }
         public virtual Venue Venue { get; set; }
-              
+
+        [ScaffoldColumn(false)]
+        public byte[] imageContent { get; set; }
+
+        [StringLength(256)]
+        [ScaffoldColumn(false)]
+        public string imageMimeType { get; set; }
+
+        [Display(Name = "File Name")]
+        [StringLength(100, ErrorMessage = "File name too long")]
+        [ScaffoldColumn(false)]
+        public string imageFileName { get; set; }
+
+
         public ICollection<SeasonDivisionTeam> SeasonDivisionTeams { get; set; }
 
         //public virtual ICollection<PlayerTeam> PlayerTeams { get; set; }
