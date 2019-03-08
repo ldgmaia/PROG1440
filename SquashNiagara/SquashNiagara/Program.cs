@@ -29,6 +29,9 @@ namespace SquashNiagara
                     var context = services.GetRequiredService<SquashNiagaraContext>();
                     context.Database.Migrate();
                     SQUASHSeedData.Initialize(services);
+                    var identityContext = services.GetRequiredService<ApplicationDbContext>();
+                    identityContext.Database.Migrate();//Added to migrate when run
+                    ApplicationSeedData.SeedAsync(identityContext, services).Wait();
                 }
                 catch (Exception ex)
                 {
