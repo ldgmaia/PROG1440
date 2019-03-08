@@ -43,6 +43,18 @@ namespace SquashNiagara.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? DOB { get; set; }
 
+        [ScaffoldColumn(false)]
+        public byte[] imageContent { get; set; }
+
+        [StringLength(256)]
+        [ScaffoldColumn(false)]
+        public string imageMimeType { get; set; }
+
+        [Display(Name = "File Name")]
+        [StringLength(100, ErrorMessage = "File name too long")]
+        [ScaffoldColumn(false)]
+        public string imageFileName { get; set; }
+
         //[Display(Name = "Players Team")]
         //[Range(1, int.MaxValue, ErrorMessage = "You must select a Team!")]
         //public virtual ICollection<PlayerTeam> PlayerTeams { get; set; }

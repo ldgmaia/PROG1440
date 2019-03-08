@@ -39,6 +39,16 @@
         {
         <tr>
             <td>
+                @{
+                    if (item.imageContent != null && item.imageMimeType.Contains("image"))
+                    {
+                        string imageBase64 = Convert.ToBase64String(item.imageContent);
+                        string imageSrc = string.Format("data:" + item.imageMimeType + ";base64,{0}", imageBase64);
+                        <img src="@imageSrc" alt="Player Picture" title="Player Picture" style="max-height: 100px; max-width: 120px" class="img-responsive img-rounded" />
+                    }
+                }
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.FirstName)
             </td>
             <td>

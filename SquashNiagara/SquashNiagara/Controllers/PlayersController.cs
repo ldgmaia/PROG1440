@@ -81,7 +81,7 @@ namespace SquashNiagara.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,Email,DOB,TeamID?,PositionID?")] Player player)
+        public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,Email,DOB,TeamID?,PositionID?")] Player player, string chkRemoveImage, IFormFile thePicture)
         {
             try
             {
@@ -95,10 +95,26 @@ namespace SquashNiagara.Controllers
                 //    //    player.PlayerPositions.Add(posToAdd);
                 //    //}
                 //}
-
-
                 if (ModelState.IsValid)
                 {
+                    if (thePicture != null)
+                    {
+                        string mimeType = thePicture.ContentType;
+                        long fileLength = thePicture.Length;
+                        if (!(mimeType == "" || fileLength == 0))
+                        {
+                            if (mimeType.Contains("image"))
+                            {
+                                using (var memoryStream = new MemoryStream())
+                                {
+                                    await thePicture.CopyToAsync(memoryStream);
+                                    player.imageContent = memoryStream.ToArray();
+                                }
+                                player.imageMimeType = mimeType;
+                                player.imageFileName = thePicture.FileName;
+                            }
+                        }
+                    }
                     _context.Add(player);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
@@ -161,32 +177,54 @@ namespace SquashNiagara.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,FirstName,LastName,Email,DOB,TeamID?,PositionID?")] Player player)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,FirstName,LastName,Email,DOB,TeamID?,PositionID?")] Player player, string chkRemoveImage, IFormFile thePicture)
         {
-            if (id != player.ID)
+            if (ModelState.IsValid)
             {
-                return NotFound();
-            }
-
-            try
-            {
-                if (ModelState.IsValid)
+                try
                 {
-                    _context.Add(player);
+                    if (chkRemoveImage != null)
+                    {
+                        player.imageContent = null;
+                        player.imageMimeType = null;
+                        player.imageFileName = null;
+                    }
+                    else
+                    {
+                        if (thePicture != null)
+                        {
+                            string mimeType = thePicture.ContentType;
+                            long fileLength = thePicture.Length;
+                            if (!(mimeType == "" || fileLength == 0))
+                            {
+                                if (mimeType.Contains("image"))
+                                {
+                                    using (var memoryStream = new MemoryStream())
+                                    {
+                                        await thePicture.CopyToAsync(memoryStream);
+                                        player.imageContent = memoryStream.ToArray();
+                                    }
+                                    player.imageMimeType = mimeType;
+                                    player.imageFileName = thePicture.FileName;
+                                }
+                            }
+                        }
+                    }
+                    _context.Update(player);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
                 }
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PlayerExists(player.ID))
+                catch (DbUpdateConcurrencyException)
                 {
-                    return NotFound();
+                    if (!PlayerExists(player.ID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
-                else
-                {
-                    throw;
-                }
+                return RedirectToAction(nameof(Index));
             }
             PopulateDropDownListTeam(player);
             PopulateDropDownListPosition(player);
