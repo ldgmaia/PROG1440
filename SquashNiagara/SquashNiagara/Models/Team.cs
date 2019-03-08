@@ -29,7 +29,7 @@ namespace SquashNiagara.Models
         public virtual Player Captain { get; set; }
 
         [Display(Name = "Venue")]
-        public int VenueID { get; set; }
+        public int? VenueID { get; set; }
         public virtual Venue Venue { get; set; }
 
         [ScaffoldColumn(false)]
@@ -44,6 +44,9 @@ namespace SquashNiagara.Models
         [ScaffoldColumn(false)]
         public string imageFileName { get; set; }
 
+        [Display(Name = "Profile")]
+        [StringLength(1000, ErrorMessage = "Profile cannot be more than 1000 characters long.")]
+        public string Profile { get; set; }
 
         public ICollection<SeasonDivisionTeam> SeasonDivisionTeams { get; set; }
 

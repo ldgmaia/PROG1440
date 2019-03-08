@@ -40,21 +40,38 @@
                     @*<li><a asp-area="" asp-controller="Home" asp-action="Index">Home<i class="fas fa-user"></i></a></li>
         <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
         <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>*@
-                    <li class="dropdown">
-                        <a href="#" data-toggle="dropdown" class="dropdown-toggle">Admin <i class="fas fa-user"></i><b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a asp-area="" asp-controller="Seasons" asp-action="Index">Seasons</a></li>
-                            <li><a asp-area="" asp-controller="Divisions" asp-action="Index">Divisions</a></li>
-                            <li><a asp-area="" asp-controller="Teams" asp-action="Index">Teams</a></li>
-                            <li class="divider"></li>
-                            <li><a asp-area="" asp-controller="Players" asp-action="Index">Players</a></li>
-                            <li class="divider"></li>
-                            <li><a asp-area="" asp-controller="Fixtures" asp-action="Index">Fixtures</a></li>
-                            <li><a asp-area="" asp-controller="Venues" asp-action="Index">Venues</a></li>
-                            <li class="divider"></li>
-                            <li><a asp-area="Identity" asp-page="/Account/Register">Register Users</a></li>
-                        </ul>
-                    </li>
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        if (User.IsInRole("Admin"))
+                        {
+                            <li class="dropdown">
+                                <a href="#" data-toggle="dropdown" class="dropdown-toggle">Admin <i class="fas fa-user"></i><b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a asp-area="" asp-controller="Seasons" asp-action="Index">Seasons</a></li>
+                                    <li><a asp-area="" asp-controller="Divisions" asp-action="Index">Divisions</a></li>
+                                    <li><a asp-area="" asp-controller="Teams" asp-action="Index">Teams</a></li>
+                                    <li class="divider"></li>
+                                    <li><a asp-area="" asp-controller="Players" asp-action="Index">Players</a></li>
+                                    <li class="divider"></li>
+                                    <li><a asp-area="" asp-controller="Fixtures" asp-action="Index">Fixtures</a></li>
+                                    <li><a asp-area="" asp-controller="Venues" asp-action="Index">Venues</a></li>
+                                    <li class="divider"></li>
+                                    <li><a asp-area="Identity" asp-page="/Account/Register">Register Users</a></li>
+                                </ul>
+                            </li>
+                        }
+                        else if (User.IsInRole("Captain"))
+                        {
+                            <li class="dropdown">
+                                <a href="#" data-toggle="dropdown" class="dropdown-toggle">Admin <i class="fas fa-user"></i><b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a asp-area="" asp-controller="Teams" asp-action="Index">Teams</a></li>
+                                </ul>
+                            </li>
+                        }
+                    }
+                    
                     <li class="dropdown">
                         <a href="#" data-toggle="dropdown" class="dropdown-toggle">Squash Results <i class="far fa-list-alt"></i><b class="caret"></b></a>
                         <ul class="dropdown-menu">

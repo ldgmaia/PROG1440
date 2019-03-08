@@ -51,7 +51,8 @@ namespace SquashNiagara.Controllers
         // GET: Teams/Create
         public IActionResult Create()
         {
-            ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email");
+            //ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email");
+            PopulateDropDownListCaptain();
             ViewData["VenueID"] = new SelectList(_context.Venues, "ID", "Name");
             return View();
         }
@@ -61,35 +62,42 @@ namespace SquashNiagara.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name,CaptainID,VenueID")] Team team,
+        public async Task<IActionResult> Create([Bind("ID,Name, CaptainID?, VenueID?, Profile")] Team team,  
             IFormFile thePicture)
         {
-            if (ModelState.IsValid)
-            {
-                if (thePicture != null)
+            try {
+                if (ModelState.IsValid)
                 {
-                    string mimeType = thePicture.ContentType;
-                    long fileLength = thePicture.Length;
-                    if (!(mimeType == "" || fileLength == 0))
+                    if (thePicture != null)
                     {
-                        if (mimeType.Contains("image"))
+                        string mimeType = thePicture.ContentType;
+                        long fileLength = thePicture.Length;
+                        if (!(mimeType == "" || fileLength == 0))
                         {
-                            using (var memoryStream = new MemoryStream())
+                            if (mimeType.Contains("image"))
                             {
-                                await thePicture.CopyToAsync(memoryStream);
-                                team.imageContent = memoryStream.ToArray();
+                                using (var memoryStream = new MemoryStream())
+                                {
+                                    await thePicture.CopyToAsync(memoryStream);
+                                    team.imageContent = memoryStream.ToArray();
+                                }
+                                team.imageMimeType = mimeType;
+                                team.imageFileName = thePicture.FileName;
                             }
-                            team.imageMimeType = mimeType;
-                            team.imageFileName = thePicture.FileName;
                         }
                     }
-                }
 
-                _context.Add(team);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                    _context.Add(team);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email", team.CaptainID);
+            catch (Exception err)
+            {
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator." + err.ToString());
+            }
+            //ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email", team.CaptainID);
+            PopulateDropDownListCaptain(team);
             ViewData["VenueID"] = new SelectList(_context.Venues, "ID", "Name", team.VenueID);
             return View(team);
         }
@@ -107,7 +115,8 @@ namespace SquashNiagara.Controllers
             {
                 return NotFound();
             }
-            ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email", team.CaptainID);
+            //ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email", team.CaptainID);
+            PopulateDropDownListCaptain(team);
             ViewData["VenueID"] = new SelectList(_context.Venues, "ID", "Name", team.VenueID);
             return View(team);
         }
@@ -117,7 +126,7 @@ namespace SquashNiagara.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,CaptainID,VenueID")] Team team
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Name, CaptainID, VenueID, Profile")] Team team
             , string chkRemoveImage, IFormFile thePicture)
         {
             if (id != team.ID)
@@ -172,7 +181,8 @@ namespace SquashNiagara.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email", team.CaptainID);
+            //ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email", team.CaptainID);
+            PopulateDropDownListCaptain(team);
             ViewData["VenueID"] = new SelectList(_context.Venues, "ID", "Name", team.VenueID);
             return View(team);
         }
@@ -212,5 +222,14 @@ namespace SquashNiagara.Controllers
         {
             return _context.Teams.Any(e => e.ID == id);
         }
+
+        private void PopulateDropDownListCaptain(Team team = null)
+        {
+            var dQuery = from d in _context.Players
+                         orderby d.FirstName, d.LastName                       
+                         select d;
+            ViewData["CaptainID"] = new SelectList(dQuery, "ID", "FullName", team?.Captain);
+        }
+
     }
 }
