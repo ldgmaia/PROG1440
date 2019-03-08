@@ -111,7 +111,7 @@ namespace SquashNiagara.Controllers
             catch (DataException dex)
             {
 
-                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
             }
             catch (Exception e)
             {
@@ -124,8 +124,8 @@ namespace SquashNiagara.Controllers
             //ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email");
             //ViewData["PositionID"] = new SelectList(_context.Positions, "ID", "Name");
             //ViewData["TeamID"] = new SelectList(_context.Teams, "ID", "Name");
-            PopulateDropDownListTeam();
-            PopulateDropDownListPosition();
+            PopulateDropDownListTeam(player);
+            PopulateDropDownListPosition(player);
             //PopulateDropDownListPosition(player);
             return View(player);
         }
@@ -137,17 +137,23 @@ namespace SquashNiagara.Controllers
             //    .Include(p => p.PlayerPositions).ThenInclude(p => p.Position)
             //    .AsNoTracking()
             //    .SingleOrDefaultAsync(p => p.ID == id);
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-            //if (player == null)
-            //{
-            //    return NotFound();
-            //}
+            var player = await _context.Players.FindAsync(id);
+            if (player == null)
+            {
+                return NotFound();
+            }
 
             //ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email");
             //ViewData["PositionID"] = new SelectList(_context.Positions, "ID", "Name");
-            //PopulateDropDownListTeam(player);
+            PopulateDropDownListTeam(player);
+            PopulateDropDownListPosition(player);
             //return View(player);
-            return View();
+            return View(player);
         }
 
         // POST: Players/Edit/5
@@ -155,8 +161,36 @@ namespace SquashNiagara.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id /*string[] selectedPositions*/)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,FirstName,LastName,Email,DOB,TeamID?,PositionID?")] Player player)
         {
+            if (id != player.ID)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _context.Add(player);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PlayerExists(player.ID))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            PopulateDropDownListTeam(player);
+            PopulateDropDownListPosition(player);
+            return View(player);
             //Go get the player to update
             //var playerToUpdate = await _context.Players
             //    .Include(p => p.Position).ThenInclude(p => p.Team)
@@ -209,7 +243,6 @@ namespace SquashNiagara.Controllers
             //}
             ////Validaiton Error so give the user another chance.
             //PopulateAssignedPositionData(playerToUpdate);
-            return View();
         }
 
         // GET: Players/Delete/5
