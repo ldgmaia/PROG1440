@@ -34,10 +34,12 @@ namespace SquashNiagara.Controllers
             //              .ThenInclude(t => t.Position)
             //              select p;
 
-            var context = from p in _context.Players
-                          .Include(p => p.Team)
-                          .Include(p => p.Position)
-                          select p;
+            //var context = from p in _context.Players
+            //              .Include(p => p.Team)
+            //              .Include(p => p.Position)
+            //              select p;
+
+            var context = _context.Players.Include(t => t.Position).Include(t => t.Team);
 
             return View(await context.ToListAsync());
         }

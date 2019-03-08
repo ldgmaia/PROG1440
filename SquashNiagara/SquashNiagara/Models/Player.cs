@@ -63,7 +63,7 @@ namespace SquashNiagara.Models
         public virtual Team Team { get; set; }
 
         public int? PositionID { get; set; }
-        public Position Position { get; set; }
+        public virtual Position Position { get; set; }
 
         [Display(Name = "Player")]
         public string FullName
