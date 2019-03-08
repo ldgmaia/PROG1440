@@ -1445,17 +1445,17 @@ dd {
   margin-left: 0;
 }
 @media (min-width: 768px) {
-  .dl-horizontal dt {
-    float: left;
-    width: 160px;
-    clear: left;
-    text-align: right;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+    .dl-horizontal dt {
+        float: left;
+        width: 140px;
+        clear: left;
+        /*text-align: left;  Also Changed width to 120px instead of 160px and changed margin left for  .dl-horizontal dd to 120px insead of 160px */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
   .dl-horizontal dd {
-    margin-left: 180px;
+    margin-left: 120px;
   }
 }
 abbr[title],

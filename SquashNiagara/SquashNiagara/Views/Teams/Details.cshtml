@@ -4,11 +4,87 @@
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
+<h2>Details for Team: @Model.Name</h2>
 
 <div>
-    <p>
+    <div class="row text-center">
+
+        <div class="col-sm-offset-4 col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading"> @Model.Name's Next Match </div>
+                <div class="panel-body">
+                    BACC VS Brock2
+                    <p>
+                        <span class="fo"></span>
+                        <span class="fa fa-calendar fa-lg colored-tex"></span>
+                        19 March, 2019
+                        <span class="fa fa-clock-o fa-lg colored-tex"></span>
+                        (<small>15:30 local | 09:30 GMT</small>)
+                    </p>
+                    <p><small>Venue @Html.DisplayFor(model => model.Venue.Name)</small></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-offset-4 col-md-4">
+            <div class="panel panel-danger">
+                <div class="panel-heading"> @Model.Name's Last Match   </div>
+                <div class="panel-body">
+                    <p class="text-success">    @Model.Name won (5 - 1) Against BROCK1</p>
+
+                    <p>
+                        <span class="fo"></span>
+                        <span class="fa fa-calendar fa-lg colored-tex"></span>
+                        3 March, 2019
+                        <span class="fa fa-clock-o fa-lg colored-tex"></span>
+                        (<small>15:30 local | 09:30 GMT</small>)
+                    </p>
+
+                    <p><small>Venue @Html.DisplayFor(model => model.Venue.Name)</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row text-center">
+
+        <div class=" col-md-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">@Model.Name's Total Points <i class="fas fa-bullseye"></i> </div>
+                <div class="panel-body">
+                    <p class="lead"><strong> 235</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class=" col-md-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">@Model.Name's Total personal wins <i class="fas fa-award"></i> </div>
+                <div class="panel-body">
+                    <p class="lead"><strong> 15</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class=" col-md-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Team's Total Fixture's won <i class="fas fa-trophy"></i> </div>
+                <div class="panel-body">
+                    <p class="lead"><strong> 37</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class=" col-md-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Team's Total Fixture's lost <i class="fas fa-flag-checkered"></i> </div>
+                <div class="panel-body">
+                    <p class="lead"><strong> 16</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
         <div class="col-md-3">
+            <strong>Team Picture</strong>
             @{
                 if (Model.imageContent != null && Model.imageMimeType.Contains("image"))
                 {
@@ -18,32 +94,35 @@
                 }
             }
         </div>
-        <div class="col-md-9" vertical-align="centre">
-            <h2>Details for Team: @Model.Name</h2>
         </div>
-    </p>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Captain)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Captain.Email)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Venue)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Venue.Name)
-        </dd>
-    </dl>
-</div>
+        @*<div class="col-md-9" vertical-align="centre">
+            <h2>Details for Team: @Model.Name</h2>
+        </div>*@
+
+        <hr />
+
+        <dl class="dl-horizontal text-align: left">
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Captain)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Captain.Email)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Venue)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Venue.Name)
+            </dd>
+        </dl>
+    </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
     <a asp-action="Index">Back to List</a>
