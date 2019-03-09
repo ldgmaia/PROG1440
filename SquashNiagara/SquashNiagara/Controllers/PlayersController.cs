@@ -28,8 +28,18 @@ namespace SquashNiagara.Controllers
         // GET: Players
         public async Task<IActionResult> Index()
         {
-            var playersList = _context.Players.Include(t => t.Position).Include(t => t.Team);
+            
+            if (User.IsInRole("Captain") || User.IsInRole("User"))
+            {
+                var email = User.Identity.Name;
+                var player = await _context.Players
+                .Include(t => t.Team)
+                .Include(t => t.Position)
+                .FirstOrDefaultAsync(m => m.Email == User.Identity.Name);
+                return RedirectToAction("Details", new { id = player.ID });
 
+            }
+            var playersList = _context.Players.Include(t => t.Position).Include(t => t.Team);
             return View(await playersList.ToListAsync());
         }
 

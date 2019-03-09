@@ -25,8 +25,32 @@ namespace SquashNiagara.Controllers
         // GET: Teams
         public async Task<IActionResult> Index()
         {
+            if (User.IsInRole("Captain") || User.IsInRole("User"))
+            {
+                var email = User.Identity.Name;
+                var player = _context.Players
+                .Include(t => t.Team)
+                .Include(t => t.Position)
+                .FirstOrDefault(m => m.Email == User.Identity.Name);
+                if (player.TeamID.HasValue)
+                {
+                    return RedirectToAction("Details", new { id = player.TeamID }); 
+                }
+                else
+                {
+                    return View("NoTeamAssigned");
+                }
+               
+
+            }
+
             var squashNiagaraContext = _context.Teams.Include(t => t.Captain).Include(t => t.Venue);
             return View(await squashNiagaraContext.ToListAsync());
+        }
+
+        public IActionResult NoTeamAssigned()
+        {
+            return View();
         }
 
         // GET: Teams/Details/5
