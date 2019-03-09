@@ -100,20 +100,35 @@
             <h4 class="text-center">Position @counter</h4>
             <div class="form-group row">
                 <input type="hidden" asp-for="Matches[i].FixtureID" value=@ViewBag.FixtureID />
-                <label asp-for="Matches[i].HomePlayerID" class="col-sm-2  control-label"></label>
+                <label asp-for="Matches[i].HomePlayerID" class="col-sm-1  control-label"></label>
 
                 <div class="col-sm-3">
                     <select asp-for="Matches[i].HomePlayerID" class="form-control" asp-items="ViewBag.HomePlayerID"></select>
                 </div>
-                <div class="col-sm-2 lead text-center">VS.</div>
-                <label asp-for="Matches[i].AwayPlayerID" class="col-sm-2  control-label"></label>
+
+                <div class="col-sm-1">
+                    @*<label asp-for="Matches[i].HomePlayerScore" class="control-label"></label>*@
+                    <input asp-for="Matches[i].HomePlayerScore" class="form-control" />
+                    <span asp-validation-for="Matches[i].HomePlayerScore" class="text-danger"></span>
+                </div>
+
+
+                <div class="col-sm-1 lead text-center">VS.</div>
+                <label asp-for="Matches[i].AwayPlayerID" class="col-sm-1  control-label"></label>
                 <div class="col-sm-3">
                     <select asp-for="Matches[i].AwayPlayerID" class="form-control" asp-items="ViewBag.AwayPlayerID"></select>
+                </div>
+
+                <div class="col-sm-1">
+                    @*<label asp-for="Matches[i].AwayPlayerScore" class="control-label"></label>*@
+                    <input asp-for="Matches[i].AwayPlayerScore" class="form-control" />
+                    <span asp-validation-for="Matches[0].AwayPlayerScore" class="text-danger"></span>
                 </div>
             </div>
                     counter += 1;
                 };
             }
+
             @*@{ int counter = 1;
                 for (int i = 0; i < ViewBag.nPositions; i++)
                 {
@@ -167,7 +182,8 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-area="" asp-controller="Fixtures" asp-action="Index"></a>
+        @*<a asp-action="Index">Back to List</a>*@
 </div>
 
 @section Scripts {
