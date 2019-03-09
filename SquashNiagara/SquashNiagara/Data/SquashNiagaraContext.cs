@@ -41,7 +41,7 @@ namespace SquashNiagara.Data
 
             //Many to Many Primary Key
             modelBuilder.Entity<PlayerPosition>()
-            .HasKey(p => new { p.PlayerID, /*p.MatchID,*/ p.PositionID });
+            .HasKey(p => new { p.PlayerID, p.MatchID, p.PositionID });
 
             //Add a unique index to the Player e-Mail
             modelBuilder.Entity<Player>()
@@ -108,7 +108,7 @@ namespace SquashNiagara.Data
             //    .HasForeignKey(c => c.PositionID)
             //    .OnDelete(DeleteBehavior.Restrict);
 
-            //Prevent Cascade Delete Player to PlayerPosition
+            //Prevent Cascade Delete Player to Team
             modelBuilder.Entity<Team>()
                 .HasMany<Player>(p => p.Players)
                 .WithOne(c => c.Team)

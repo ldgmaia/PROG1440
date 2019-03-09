@@ -17,7 +17,7 @@ namespace SquashNiagara.Models
         public int ID { get; set; }
 
         [Required(ErrorMessage = "You cannot leave the Division Name blank.")]
-        [Display(Name = "Season Name")]
+        [Display(Name = "Division Name")]
         [StringLength(50, ErrorMessage = "Division name cannot be more than 50 characters long.")]
         public string Name { get; set; }
 

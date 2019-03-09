@@ -54,7 +54,8 @@ namespace SquashNiagara.Controllers
         {
             //ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email");
             PopulateDropDownListCaptain();
-            ViewData["VenueID"] = new SelectList(_context.Venues, "ID", "Name");
+            PopulateDropDownListVenue();
+            //ViewData["VenueID"] = new SelectList(_context.Venues, "ID", "Name");
             return View();
         }
 
@@ -63,9 +64,17 @@ namespace SquashNiagara.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name, CaptainID?, VenueID?, Profile")] Team team,  
+        public async Task<IActionResult> Create([Bind("ID,Name, CaptainID, VenueID, Profile")] Team team,  
             IFormFile thePicture)
         {
+            if (team.CaptainID == 0)
+            {
+                team.CaptainID = null;
+            }
+            if (team.VenueID == 0)
+            {
+                team.VenueID = null;
+            }
             try {
                 if (ModelState.IsValid)
                 {
@@ -99,7 +108,8 @@ namespace SquashNiagara.Controllers
             }
             //ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email", team.CaptainID);
             PopulateDropDownListCaptain(team);
-            ViewData["VenueID"] = new SelectList(_context.Venues, "ID", "Name", team.VenueID);
+            PopulateDropDownListVenue(team);
+            //ViewData["VenueID"] = new SelectList(_context.Venues, "ID", "Name", team.VenueID);
             return View(team);
         }
 
@@ -116,9 +126,9 @@ namespace SquashNiagara.Controllers
             {
                 return NotFound();
             }
-            //ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email", team.CaptainID);
             PopulateDropDownListCaptain(team);
-            ViewData["VenueID"] = new SelectList(_context.Venues, "ID", "Name", team.VenueID);
+            PopulateDropDownListVenue(team);
+           // ViewData["VenueID"] = new SelectList(_context.Venues, "ID", "Name", team.VenueID);
             return View(team);
         }
 
@@ -127,21 +137,25 @@ namespace SquashNiagara.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, /*[Bind("ID,Name, CaptainID, VenueID, Profile")] */Team team
-            , string chkRemoveImage, IFormFile thePicture)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Name, CaptainID, VenueID, Profile")] Team team, string chkRemoveImage, IFormFile thePicture)
         {
-            var teamToUpdate = await _context.Teams
-                .SingleOrDefaultAsync(d => d.ID == id);
+            if (team.CaptainID == 0)
+            {
+                team.CaptainID = null;
+            }
+            if (team.VenueID == 0)
+            {
+                team.VenueID = null;
+            }
 
-            if (teamToUpdate == null)
+            if (team == null)
             {
                 return NotFound();
             }
-
-            if (await TryUpdateModelAsync<Team>(teamToUpdate, "",
-                d => d.Name, d => d.CaptainID, d => d.VenueID, d => d.Profile))
+                       
+            try
             {
-                try
+                if (ModelState.IsValid)
                 {
                     if (chkRemoveImage != null)
                     {
@@ -173,96 +187,30 @@ namespace SquashNiagara.Controllers
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
-                catch (RetryLimitExceededException /* dex */)
-                {
-                    ModelState.AddModelError("", "Unable to save changes after multiple attempts. Try again, and if the problem persists, see your system administrator.");
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TeamExists(teamToUpdate.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                catch (DbUpdateException)
-                {
-                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
-                }
-
-                //if (id != team.ID)
-                //{
-                //    return NotFound();
-                //}
-
-                //Player playerToUpdate = new Player();
-
-                //if (team.CaptainID != null)
-                //{
-                //    //Go get the Doctor to update
-                //    playerToUpdate = await _context.Players
-                //        .SingleOrDefaultAsync(p => p.ID == team.CaptainID);
-                //    playerToUpdate.TeamID = id;
-                //}
-
-
-            //    if (ModelState.IsValid)
-            //{
-            //    try
-            //    {
-            //        if (chkRemoveImage != null)
-            //        {
-            //            team.imageContent = null;
-            //            team.imageMimeType = null;
-            //            team.imageFileName = null;
-            //        }
-            //        else
-            //        {
-            //            if (thePicture != null)
-            //            {
-            //                string mimeType = thePicture.ContentType;
-            //                long fileLength = thePicture.Length;
-            //                if (!(mimeType == "" || fileLength == 0))
-            //                {
-            //                    if (mimeType.Contains("image"))
-            //                    {
-            //                        using (var memoryStream = new MemoryStream())
-            //                        {
-            //                            await thePicture.CopyToAsync(memoryStream);
-            //                            team.imageContent = memoryStream.ToArray();
-            //                        }
-            //                        team.imageMimeType = mimeType;
-            //                        team.imageFileName = thePicture.FileName;
-            //                    }
-            //                }
-            //            }
-            //        }
-            //        _context.Update(team);
-            //        //if (playerToUpdate != null)
-            //        //{
-            //        //    _context.Update(playerToUpdate);
-            //        //}   
-            //        await _context.SaveChangesAsync();
-            //    }
-            //    catch (DbUpdateConcurrencyException)
-            //    {
-            //        if (!TeamExists(team.ID))
-            //        {
-            //            return NotFound();
-            //        }
-            //        else
-            //        {
-            //            throw;
-            //        }
-            //    }
-            //    return RedirectToAction(nameof(Index));
             }
-            //ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email", team.CaptainID);
+            catch (RetryLimitExceededException /* dex */)
+            {
+                ModelState.AddModelError("", "Unable to save changes after multiple attempts. Try again, and if the problem persists, see your system administrator.");
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TeamExists(team.ID))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+            }
+
             PopulateDropDownListCaptain(team);
-            ViewData["VenueID"] = new SelectList(_context.Venues, "ID", "Name", team.VenueID);
+            PopulateDropDownListVenue(team);
+            //ViewData["VenueID"] = new SelectList(_context.Venues, "ID", "Name", team.VenueID);
             return View(team);
         }
 
@@ -308,6 +256,14 @@ namespace SquashNiagara.Controllers
                          orderby d.FirstName, d.LastName                       
                          select d;
             ViewData["CaptainID"] = new SelectList(dQuery, "ID", "FullName", team?.Captain);
+        }
+
+        private void PopulateDropDownListVenue(Team team = null)
+        {
+            var dQuery = from d in _context.Venues
+                         orderby d.Name
+                         select d;
+            ViewData["VenueID"] = new SelectList(dQuery, "ID", "Name", team?.Venue);
         }
 
     }

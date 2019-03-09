@@ -30,32 +30,32 @@ namespace SquashNiagara.Data
                 }
 
                 //Add sample data Table Division
-                //if (!context.Divisions.Any())
-                //{
-                //    context.Divisions.AddRange(
-                //        new Division
-                //        {
-                //            Name = "Men's Division 1/2",
-                //            PositionNo = 4
-                //        },
-                //        new Division
-                //        {
-                //            Name = "Men's Division 3",
-                //            PositionNo = 4
-                //        },
-                //        new Division
-                //        {
-                //            Name = "Men's Division 4",
-                //            PositionNo = 4
-                //        },
-                //        new Division
-                //        {
-                //            Name = "Woment's Division",
-                //            PositionNo = 5
-                //        }
-                //    );
-                //    context.SaveChanges();
-                //}
+                if (!context.Divisions.Any())
+                {
+                    context.Divisions.AddRange(
+                        new Division
+                        {
+                            Name = "Men's Division 1/2",
+                            PositionNo = 4
+                        },
+                        new Division
+                        {
+                            Name = "Men's Division 3",
+                            PositionNo = 4
+                        },
+                        new Division
+                        {
+                            Name = "Men's Division 4",
+                            PositionNo = 4
+                        },
+                        new Division
+                        {
+                            Name = "Women's Division",
+                            PositionNo = 5
+                        }
+                    );
+                    context.SaveChanges();
+                }
 
                 //Add sample data Table Position
                 if (!context.Positions.Any())
@@ -112,30 +112,74 @@ namespace SquashNiagara.Data
                         new Venue
                         {
                             Name = "BAC"
+                        },
+                        new Venue
+                        {
+                            Name = "Brock"
+                        },
+                        new Venue
+                        {
+                            Name = "YMCA"
+                        },
+                        new Venue
+                        {
+                            Name = "NFY"
+                        },
+                        new Venue
+                        {
+                            Name = "WO"
                         }
                     );
                     context.SaveChanges();
                 }
 
                 //Add sample data Table Team
-                //if (!context.Teams.Any())
-                //{
-                //    context.Teams.AddRange(
-                //        new Team
-                //        {
-                //            Name = "BAC 1",
-                //            VenueID = 1,
-                //            CaptainID = 1
-                //        },
-                //        new Team
-                //        {
-                //            Name = "BAC 2",
-                //            VenueID = 1,
-                //            CaptainID = 2
-                //        }
-                //    );
-                //    context.SaveChanges();
-                //}
+                if (!context.Teams.Any())
+                {
+                    context.Teams.AddRange(
+                        new Team
+                        {
+                            Name = "BAC 1"
+                        },
+                        new Team
+                        {
+                            Name = "Brock"
+                        },
+                        new Team
+                        {
+                            Name = "YMCA 2"
+                        },
+                        new Team
+                        {
+                            Name = "YMCA 4"
+                        },
+                        new Team
+                        {
+                            Name = "NFY 3"
+                        },
+                        new Team
+                        {
+                            Name = "BAC 2"
+                        },
+                        new Team
+                        {
+                            Name = "RID 1"
+                        },
+                        new Team
+                        {
+                            Name = "WO 1"
+                        },
+                        new Team
+                        {
+                            Name = "WO 2"
+                        },
+                        new Team
+                        {
+                            Name = "YMCA 3"
+                        }
+                    );
+                    context.SaveChanges();
+                }
 
                 //Add sample data Table SeasonDivisionTeam
                 //if (!context.SeasonDivisionTeams.Any())

@@ -19,8 +19,13 @@ namespace SquashNiagara.Models
             //Positions = new HashSet<Position>();
         }
 
-        public int ID { get; set; }
+        [Display(Name = "Player")]
+        public string FullName
+        {
+            get { return FirstName + " " + LastName; }
+        }
 
+        public int ID { get; set; }
 
         [Required(ErrorMessage = "You cannot leave the first name blank.")]
         [Display(Name = "First Name")]
@@ -65,11 +70,7 @@ namespace SquashNiagara.Models
         public int? PositionID { get; set; }
         public virtual Position Position { get; set; }
 
-        [Display(Name = "Player")]
-        public string FullName
-        {
-            get { return FirstName + " " + LastName; }            
-        }
+        
 
         public virtual ICollection<Fixture> FixtureCaptainResults { get; set; }
 
@@ -79,13 +80,5 @@ namespace SquashNiagara.Models
 
         public virtual ICollection<Match> AwayMatches { get; set; }
 
-        
-
-
-        //[Display(Name = "Teams Captain")]
-        //public virtual ICollection<Team> TeamCaptains { get; set; }
-
-        //[Display(Name = "Players Positions")]
-        //public virtual ICollection<Position>Positions { get; set; }
     }
 }

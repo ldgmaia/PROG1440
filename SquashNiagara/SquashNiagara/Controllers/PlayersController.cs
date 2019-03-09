@@ -28,20 +28,9 @@ namespace SquashNiagara.Controllers
         // GET: Players
         public async Task<IActionResult> Index()
         {
-            //var context = from p in _context.Players
-            //              .Include(p => p.Team)
-            //              .Include(p => p.Positions)
-            //              .ThenInclude(t => t.Position)
-            //              select p;
+            var playersList = _context.Players.Include(t => t.Position).Include(t => t.Team);
 
-            //var context = from p in _context.Players
-            //              .Include(p => p.Team)
-            //              .Include(p => p.Position)
-            //              select p;
-
-            var context = _context.Players.Include(t => t.Position).Include(t => t.Team);
-
-            return View(await context.ToListAsync());
+            return View(await playersList.ToListAsync());
         }
 
         // GET: Players/Details/5
@@ -67,12 +56,6 @@ namespace SquashNiagara.Controllers
         // GET: Players/Create
         public IActionResult Create()
         {
-            var player = new Player();
-            //player.PlayerPositions = new List<PlayerPosition>();
-            //PopulateAssignedPositionData(player);
-
-            //ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email");
-            //ViewData["PositionID"] = new SelectList(_context.Positions, "ID", "Name");
             PopulateDropDownListTeam();
             PopulateDropDownListPosition();
             return View();
@@ -83,20 +66,20 @@ namespace SquashNiagara.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,Email,DOB,TeamID?,PositionID?")] Player player, string chkRemoveImage, IFormFile thePicture)
+        public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,Email,DOB,TeamID,PositionID")] Player player, string chkRemoveImage, IFormFile thePicture)
         {
+
+            //if (player.PositionID == 0)
+            //{
+            //player.PositionID == null;
+            //}
+
+            if (player == null)
+            {
+                return NotFound();
+            }
             try
             {
-                //Add the selected conditions
-                //if (selectedPosition != null)
-                //{
-                //    //player.PlayerPositions = new List<PlayerPosition>();
-                //    //foreach (var pos in selectedPosition)
-                //    //{
-                //    //    var posToAdd = new PlayerPosition { PlayerID = player.ID, PositionID = int.Parse(pos) };
-                //    //    player.PlayerPositions.Add(posToAdd);
-                //    //}
-                //}
                 if (ModelState.IsValid)
                 {
                     if (thePicture != null)
@@ -122,20 +105,24 @@ namespace SquashNiagara.Controllers
                     return RedirectToAction(nameof(Index));
                 }
             }
-            catch (RetryLimitExceededException /* dex */)
+            catch (Exception err)
             {
-                ModelState.AddModelError("", "Unable to save changes after multiple attempts. Try again, and if the problem persists, see your system administrator.");
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator." + err.ToString());
             }
-            catch (DataException dex)
-            {
+            //catch (RetryLimitExceededException /* dex */)
+            //{
+            //    ModelState.AddModelError("", "Unable to save changes after multiple attempts. Try again, and if the problem persists, see your system administrator.");
+            //}
+            //catch (DataException dex)
+            //{
 
-                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
-            }
-            catch (Exception e)
-            {
+            //    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+            //}
+            //catch (Exception e)
+            //{
 
-                ModelState.AddModelError("", "Unable to spit");
-            }
+            //    ModelState.AddModelError("", "Unable to spit");
+            //}
 
             //PopulateAssignedPositionData(player);         
 
@@ -151,10 +138,6 @@ namespace SquashNiagara.Controllers
         // GET: Players/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            //var player = await _context.Players
-            //    .Include(p => p.PlayerPositions).ThenInclude(p => p.Position)
-            //    .AsNoTracking()
-            //    .SingleOrDefaultAsync(p => p.ID == id);
             if (id == null)
             {
                 return NotFound();
@@ -165,12 +148,8 @@ namespace SquashNiagara.Controllers
             {
                 return NotFound();
             }
-
-            //ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email");
-            //ViewData["PositionID"] = new SelectList(_context.Positions, "ID", "Name");
             PopulateDropDownListTeam(player);
             PopulateDropDownListPosition(player);
-            //return View(player);
             return View(player);
         }
 
@@ -179,9 +158,19 @@ namespace SquashNiagara.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,FirstName,LastName,Email,DOB,TeamID?,PositionID?")] Player player, string chkRemoveImage, IFormFile thePicture)
+        public async Task<IActionResult> Edit(int id, /*[Bind("ID,FirstName,LastName,Email,DOB,TeamID?,PositionID?")]*/ Player player, string chkRemoveImage, IFormFile thePicture)
         {
-            if (ModelState.IsValid)
+            var playerToUpdate = await _context.Players
+                .SingleOrDefaultAsync(d => d.ID == id);
+
+            if (playerToUpdate == null)
+            {
+                return NotFound();
+            }
+            
+
+            if (await TryUpdateModelAsync<Player>(playerToUpdate, "",
+                d => d.FirstName, d => d.LastName, d => d.Email, d => d.TeamID, d => d.PositionID))
             {
                 try
                 {
@@ -212,12 +201,16 @@ namespace SquashNiagara.Controllers
                             }
                         }
                     }
-                    _context.Update(player);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (RetryLimitExceededException /* dex */)
+                {
+                    ModelState.AddModelError("", "Unable to save changes after multiple attempts. Try again, and if the problem persists, see your system administrator.");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PlayerExists(player.ID))
+                    if (!PlayerExists(playerToUpdate.ID))
                     {
                         return NotFound();
                     }
@@ -226,63 +219,14 @@ namespace SquashNiagara.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                catch (DbUpdateException)
+                {
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
             }
             PopulateDropDownListTeam(player);
             PopulateDropDownListPosition(player);
             return View(player);
-            //Go get the player to update
-            //var playerToUpdate = await _context.Players
-            //    .Include(p => p.Position).ThenInclude(p => p.Team)
-            //    .SingleOrDefaultAsync(p => p.ID == id);
-
-            //Check that you got it or exit with a not found error
-            //if (playerToUpdate == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //Update the medical history
-            //UpdatePlayerPosition(selectedPositions, playerToUpdate);
-
-            //Try updating it with the values posted
-            //if (await TryUpdateModelAsync<Player>(playerToUpdate, "",
-            //    p => p.FirstName, p => p.LastName, p => p.Email, p => p.DOB))
-            //{
-            //    try
-            //    {
-            //        await _context.SaveChangesAsync();
-            //        return RedirectToAction(nameof(Index));
-            //    }
-            //    catch (RetryLimitExceededException /* dex */)
-            //    {
-            //        ModelState.AddModelError("", "Unable to save changes after multiple attempts. Try again, and if the problem persists, see your system administrator.");
-            //    }
-            //    catch (DbUpdateConcurrencyException)
-            //    {
-            //        if (!PlayerExists(playerToUpdate.ID))
-            //        {
-            //            return NotFound();
-            //        }
-            //        else
-            //        {
-            //            throw;
-            //        }
-            //    }
-            //    catch (DbUpdateException dex)
-            //    {
-            //        if (dex.InnerException.Message.Contains("IX_Players_OHIP"))
-            //        {
-            //            ModelState.AddModelError("OHIP", "Unable to save changes. Remember, you cannot have duplicate OHIP numbers.");
-            //        }
-            //        else
-            //        {
-            //            ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
-            //        }
-            //    }
-            //}
-            ////Validaiton Error so give the user another chance.
-            //PopulateAssignedPositionData(playerToUpdate);
         }
 
         // GET: Players/Delete/5
