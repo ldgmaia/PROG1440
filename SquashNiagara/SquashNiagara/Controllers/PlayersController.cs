@@ -282,14 +282,33 @@ namespace SquashNiagara.Controllers
             var end = workSheet.Dimension.End;
             for (int row = start.Row; row <= end.Row; row++)
             {
-                // Row by row...
-                Player player = new Player
+                Player player = new Player();
+                player.FirstName = workSheet.Cells[row, 1].Text;
+                player.LastName = workSheet.Cells[row, 2].Text;
+                player.Email = workSheet.Cells[row, 3].Text;
+                player.DOB = Convert.ToDateTime(workSheet.Cells[row, 4].Value);
+
+                if (!String.IsNullOrWhiteSpace(workSheet.Cells[row, 5].Text))
                 {
-                    FirstName = workSheet.Cells[row, 1].Text,
-                    LastName = workSheet.Cells[row, 2].Text,
-                    Email = workSheet.Cells[row, 3].Text,
-                    DOB = Convert.ToDateTime(workSheet.Cells[row, 4].Value)
-                };
+                    player.PositionID = _context.Positions.FirstOrDefault(d => d.Name == workSheet.Cells[row, 5].Text).ID;
+                }
+
+                if (!String.IsNullOrWhiteSpace(workSheet.Cells[row, 6].Text))
+                {
+                    player.TeamID = _context.Teams.FirstOrDefault(d => d.Name == workSheet.Cells[row, 6].Text).ID;
+                }
+                
+                // Row by row...
+                //Player player = new Player
+                //{
+                //    FirstName = workSheet.Cells[row, 1].Text,
+                //    LastName = workSheet.Cells[row, 2].Text,
+                //    Email = workSheet.Cells[row, 3].Text,
+                //    DOB = Convert.ToDateTime(workSheet.Cells[row, 4].Value),
+                //    PositionID = _context.Positions.FirstOrDefault(d => d.Name == workSheet.Cells[row, 5].Text).ID,
+                //    TeamID = _context.Teams.FirstOrDefault(d => d.Name == workSheet.Cells[row, 6].Text).ID
+                //};
+
                 _context.Players.Add(player);
             };
             _context.SaveChanges();
@@ -297,53 +316,7 @@ namespace SquashNiagara.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        //private void PopulateAssignedPositionData(Player player)
-        //{
-        //    var allPositions = _context.Positions;
-        //    var pPositions = new HashSet<int>(player.PlayerPositions.Select(b => b.PositionID));
-        //    var viewModel = new List<PlayerPositionVM>();
-        //    foreach (var pos in allPositions)
-        //    {
-        //        viewModel.Add(new PlayerPositionVM
-        //        {
-        //            PositionID = pos.ID,
-        //            PositionName = pos.Name,
-        //            Assigned = pPositions.Contains(pos.ID)
-        //        });
-        //    }
-        //    ViewData["Positions"] = viewModel;
-        //}
-
-        //private void UpdatePlayerPosition(string[] selectedPositions, Player playerToUpdate)
-        //{
-        //    if (selectedPositions == null)
-        //    {
-        //        playerToUpdate.PlayerPositions = new List<PlayerPosition>();
-        //        return;
-        //    }
-
-        //    var selectedPositionHS = new HashSet<string>(selectedPositions);
-        //    var playerPos = new HashSet<int>
-        //        (playerToUpdate.PlayerPositions.Select(c => c.PositionID));//IDs of the currently selected
-        //    foreach (var pos in _context.Positions)
-        //    {
-        //        if (selectedPositionHS.Contains(pos.ID.ToString()))
-        //        {
-        //            if (!playerPos.Contains(pos.ID))
-        //            {
-        //                playerToUpdate.PlayerPositions.Add(new PlayerPosition { PlayerID = playerToUpdate.ID, PositionID = pos.ID });
-        //            }
-        //        }
-        //        else
-        //        {
-        //            if (playerPos.Contains(pos.ID))
-        //            {
-        //                PlayerPosition positionToRemove = playerToUpdate.PlayerPositions.SingleOrDefault(c => c.PositionID == pos.ID);
-        //                _context.Remove(positionToRemove);
-        //            }
-        //        }
-        //    }
-        //}
+        
 
         private void PopulateDropDownListTeam(Player player = null)
         {

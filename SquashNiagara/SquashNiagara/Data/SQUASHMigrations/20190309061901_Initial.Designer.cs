@@ -10,7 +10,7 @@ using SquashNiagara.Data;
 namespace SquashNiagara.Data.SQUASHMigrations
 {
     [DbContext(typeof(SquashNiagaraContext))]
-    [Migration("20190309022420_Initial")]
+    [Migration("20190309061901_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -171,11 +171,11 @@ namespace SquashNiagara.Data.SQUASHMigrations
                 {
                     b.Property<int>("PlayerID");
 
-                    b.Property<int>("PositionID");
-
                     b.Property<int>("MatchID");
 
-                    b.HasKey("PlayerID", "PositionID");
+                    b.Property<int>("PositionID");
+
+                    b.HasKey("PlayerID", "MatchID", "PositionID");
 
                     b.HasIndex("MatchID");
 

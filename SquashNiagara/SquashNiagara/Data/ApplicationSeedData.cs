@@ -40,6 +40,39 @@ namespace SquashNiagara.Data
                     userManager.AddToRoleAsync(user, "Admin").Wait();
                 }
             }
+
+            if (userManager.FindByEmailAsync("captain@squashniagara.org").Result == null)
+            {
+                IdentityUser user = new IdentityUser
+                {
+                    UserName = "captain@squashniagara.org",
+                    Email = "captain@squashniagara.org"
+                };
+
+                IdentityResult result = userManager.CreateAsync(user, "password").Result;
+
+                if (result.Succeeded)
+                {
+                    userManager.AddToRoleAsync(user, "Captain").Wait();
+                }
+            }
+
+            if (userManager.FindByEmailAsync("player@squashniagara.org").Result == null)
+            {
+                IdentityUser user = new IdentityUser
+                {
+                    UserName = "player@squashniagara.org",
+                    Email = "player@squashniagara.org"
+                };
+
+                IdentityResult result = userManager.CreateAsync(user, "password").Result;
+
+                if (result.Succeeded)
+                {
+                    userManager.AddToRoleAsync(user, "User").Wait();
+                }
+            }
+
             //if (userManager.FindByEmailAsync("super1@outlook.com").Result == null)
             //{
             //    IdentityUser user = new IdentityUser
@@ -64,7 +97,7 @@ namespace SquashNiagara.Data
             //    };
 
             //    IdentityResult result = userManager.CreateAsync(user, "password").Result;
-                //Not in any role
+            //Not in any role
             //}
         }
     }
