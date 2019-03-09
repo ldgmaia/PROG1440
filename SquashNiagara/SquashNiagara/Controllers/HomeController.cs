@@ -4,14 +4,29 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using SquashNiagara.Data;
 using SquashNiagara.Models;
 
 namespace SquashNiagara.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly SquashNiagaraContext _context;
+
+        public HomeController(SquashNiagaraContext context)
+        {
+            _context = context;
+        }
+
         public IActionResult Index()
         {
+            if (User.IsInRole("Captain") || User.IsInRole("User"))
+            {
+                var player = _context.Players
+                .FirstOrDefault(m => m.Email == User.Identity.Name);
+                return RedirectToAction("Details", "Players", new { id = player.ID });
+            }
+
             return View();
         }
 

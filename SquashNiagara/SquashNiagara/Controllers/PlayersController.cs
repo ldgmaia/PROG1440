@@ -30,8 +30,7 @@ namespace SquashNiagara.Controllers
         {
             
             if (User.IsInRole("Captain") || User.IsInRole("User"))
-            {
-                var email = User.Identity.Name;
+            {                
                 var player = await _context.Players
                 .Include(t => t.Team)
                 .Include(t => t.Position)

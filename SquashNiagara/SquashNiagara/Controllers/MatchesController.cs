@@ -79,11 +79,21 @@ namespace SquashNiagara.Controllers
             FixtureMatchVM fixtureMatch = new FixtureMatchVM();
             fixtureMatch.Fixture = fixture;
 
-            
+
             //.FirstOrDefaultAsync(m => m.ID == fixture.DivisionID);
-            
-            ViewData["AwayPlayerID"] = new SelectList(_context.Players, "ID", "Email");
-            ViewData["HomePlayerID"] = new SelectList(_context.Players, "ID", "Email");
+
+            var dQueryHome = from d in _context.Players
+                         orderby d.FirstName, d.LastName
+                         where d.TeamID == fixture.HomeTeamID
+                         select d;
+
+            var dQueryAway = from d in _context.Players
+                             orderby d.FirstName, d.LastName
+                             where d.TeamID == fixture.AwayTeamID
+                             select d;
+
+            ViewData["AwayPlayerID"] = new SelectList(dQueryAway, "ID", "FullName");
+            ViewData["HomePlayerID"] = new SelectList(dQueryHome, "ID", "FullName");
             ViewData["nPositions"] = nPositions;
             return View(fixtureMatch);
         }

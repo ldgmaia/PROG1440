@@ -61,13 +61,13 @@
                                 </ul>
                             </li>
                         }
-                        else if (User.IsInRole("Captain"))
+                        else if (User.IsInRole("Captain") || User.IsInRole("User"))
                         {
                             <li class="dropdown">
-                                <a href="#" data-toggle="dropdown" class="dropdown-toggle">Admin <i class="fas fa-user"></i><b class="caret"></b></a>
+                                <a href="#" data-toggle="dropdown" class="dropdown-toggle">Profiles<i class="fas fa-user"></i><b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a asp-area="" asp-controller="Players" asp-action="Index">Players</a></li>
-                                    <li><a asp-area="" asp-controller="Teams" asp-action="Index">Teams</a></li>
+                                    <li><a asp-area="" asp-controller="Players" asp-action="Index">My Profile</a></li>
+                                    <li><a asp-area="" asp-controller="Teams" asp-action="Index">My Team</a></li>
                                 </ul>
                             </li>
                         }
