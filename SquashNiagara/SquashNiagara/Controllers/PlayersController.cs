@@ -185,9 +185,9 @@ namespace SquashNiagara.Controllers
                 {
                     if (chkRemoveImage != null)
                     {
-                        player.imageContent = null;
-                        player.imageMimeType = null;
-                        player.imageFileName = null;
+                        playerToUpdate.imageContent = null;
+                        playerToUpdate.imageMimeType = null;
+                        playerToUpdate.imageFileName = null;
                     }
                     else
                     {
@@ -202,10 +202,10 @@ namespace SquashNiagara.Controllers
                                     using (var memoryStream = new MemoryStream())
                                     {
                                         await thePicture.CopyToAsync(memoryStream);
-                                        player.imageContent = memoryStream.ToArray();
+                                        playerToUpdate.imageContent = memoryStream.ToArray();
                                     }
-                                    player.imageMimeType = mimeType;
-                                    player.imageFileName = thePicture.FileName;
+                                    playerToUpdate.imageMimeType = mimeType;
+                                    playerToUpdate.imageFileName = thePicture.FileName;
                                 }
                             }
                         }

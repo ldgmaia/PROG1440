@@ -6,12 +6,20 @@
 
 <h2> @Html.DisplayFor(model => model.FirstName)'s Player Details</h2>
 
-<div>
+<div class="row">
+    <div class="col-md-4">
+        @{
+            if (Model.imageContent != null && Model.imageMimeType.Contains("image"))
+            {
+                string imageBase64 = Convert.ToBase64String(Model.imageContent);
+                string imageSrc = string.Format("data:" + Model.imageMimeType + ";base64,{0}", imageBase64);
+                <img src="@imageSrc" style="max-width: 150px; max-height: 150px" class="img-responsive img-rounded" />
+            }
+        }
+    </div>
+    @*<div class="row text-center">*@
 
-
-    <div class="row text-center">
-
-        <div class="col-sm-offset-4 col-md-4">
+        <div class="col-md-4">
             <div class="panel panel-primary">
                 <div class="panel-heading">@Html.DisplayFor(model => model.FirstName)'s Next Match </div>
                 <div class="panel-body">
@@ -48,7 +56,15 @@
                 </div>
             </div>
         </div>
-    </div>
+    @*</div>*@
+
+</div>
+
+
+<div>
+
+
+    
 
     <div class="row text-center">
 
@@ -86,17 +102,7 @@
         </div>
 
     </div>
-    <div class="col-md-3">
-        <strong>Player Picture</strong>
-        @{
-            if (Model.imageContent != null && Model.imageMimeType.Contains("image"))
-            {
-                string imageBase64 = Convert.ToBase64String(Model.imageContent);
-                string imageSrc = string.Format("data:" + Model.imageMimeType + ";base64,{0}", imageBase64);
-                <img src="@imageSrc" style="max-width: 150px; max-height: 150px" class="img-responsive img-rounded" />
-            }
-        }
-    </div>
+    
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -124,16 +130,16 @@
             @Html.DisplayFor(model => model.DOB)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Position)
+            @Html.DisplayNameFor(model => model.Position.Name)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Position)
+            @Html.DisplayFor(model => model.Position.Name)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Team)
+            @Html.DisplayNameFor(model => model.Team.Name)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Team)
+            @Html.DisplayFor(model => model.Team.Name)
         </dd>
     </dl>
 </div>

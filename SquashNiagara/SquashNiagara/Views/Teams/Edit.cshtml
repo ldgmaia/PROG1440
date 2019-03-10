@@ -12,11 +12,11 @@
     <div class="col-md-4">
         <form asp-action="Edit" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger col-md-8"></div>
+            <input type="hidden" asp-for="ID" />
             <div class="form-group">
                 <label class="control-label">Picture File:</label>
                 <input type="file" class="" name="thePicture" /><br />
             </div>
-            <input type="hidden" asp-for="ID" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
