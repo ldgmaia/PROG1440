@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -19,10 +20,12 @@ namespace SquashNiagara.Controllers
     public class PlayersController : Controller
     {
         private readonly SquashNiagaraContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public PlayersController(SquashNiagaraContext context)
+        public PlayersController(SquashNiagaraContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Players
@@ -75,7 +78,7 @@ namespace SquashNiagara.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,Email,DOB,TeamID,PositionID")] Player player, string chkRemoveImage, IFormFile thePicture)
+        public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,Email,DOB,TeamID,IsEnabled,PositionID")] Player player, string chkRemoveImage, IFormFile thePicture)
         {
 
             //if (player.PositionID == 0)
@@ -109,6 +112,23 @@ namespace SquashNiagara.Controllers
                             }
                         }
                     }
+
+                    //create user Identity for player - BEGIN
+                    IdentityUser newUser = new IdentityUser
+                    {
+                        UserName = player.Email,
+                        Email = player.Email
+                    };                    
+
+                    IdentityResult result = _userManager.CreateAsync(newUser, "password").Result;
+
+                    if (result.Succeeded)
+                        _userManager.AddToRoleAsync(newUser, "User").Wait();
+
+                    if (!player.IsEnabled)
+                        await _userManager.SetLockoutEndDateAsync(newUser, DateTimeOffset.MaxValue);
+                    //create user Identity for player - END
+
                     _context.Add(player);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
@@ -210,6 +230,11 @@ namespace SquashNiagara.Controllers
                             }
                         }
                     }
+                    var user = await _userManager.FindByEmailAsync(playerToUpdate.Email);
+
+                    if (!player.IsEnabled)
+                        await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MaxValue);
+
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
@@ -306,7 +331,7 @@ namespace SquashNiagara.Controllers
                 {
                     player.TeamID = _context.Teams.FirstOrDefault(d => d.Name == workSheet.Cells[row, 6].Text).ID;
                 }
-                
+
                 // Row by row...
                 //Player player = new Player
                 //{
@@ -317,6 +342,20 @@ namespace SquashNiagara.Controllers
                 //    PositionID = _context.Positions.FirstOrDefault(d => d.Name == workSheet.Cells[row, 5].Text).ID,
                 //    TeamID = _context.Teams.FirstOrDefault(d => d.Name == workSheet.Cells[row, 6].Text).ID
                 //};
+
+                //create user Identity for player - BEGIN
+                IdentityUser newUser = new IdentityUser
+                {
+                    UserName = player.Email,
+                    Email = player.Email
+                };
+
+                IdentityResult result = _userManager.CreateAsync(newUser, "password").Result;
+
+                if (result.Succeeded)
+                    _userManager.AddToRoleAsync(newUser, "User").Wait();
+                //create user Identity for player - END
+
 
                 _context.Players.Add(player);
             };

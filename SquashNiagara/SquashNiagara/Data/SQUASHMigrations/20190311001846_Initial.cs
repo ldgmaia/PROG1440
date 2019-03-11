@@ -240,6 +240,7 @@ namespace SquashNiagara.Data.SQUASHMigrations
                     FirstName = table.Column<string>(maxLength: 50, nullable: false),
                     LastName = table.Column<string>(maxLength: 50, nullable: false),
                     Email = table.Column<string>(maxLength: 255, nullable: false),
+                    IsEnabled = table.Column<bool>(nullable: false),
                     DOB = table.Column<DateTime>(nullable: true),
                     imageContent = table.Column<byte[]>(nullable: true),
                     imageMimeType = table.Column<string>(maxLength: 256, nullable: true),

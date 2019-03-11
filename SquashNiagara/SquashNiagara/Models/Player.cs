@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -42,6 +43,10 @@ namespace SquashNiagara.Models
         [StringLength(255)]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
+
+        [Display(Name = "Enabled")]
+        [DefaultValue("true")]
+        public bool IsEnabled { get; set; }
 
         [Display(Name = "Date of Birth")]
         [DataType(DataType.Date)]

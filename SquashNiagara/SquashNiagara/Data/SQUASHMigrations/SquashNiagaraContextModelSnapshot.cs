@@ -137,6 +137,8 @@ namespace SquashNiagara.Data.SQUASHMigrations
                         .IsRequired()
                         .HasMaxLength(50);
 
+                    b.Property<bool>("IsEnabled");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50);

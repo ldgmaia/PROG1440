@@ -10,16 +10,19 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using SquashNiagara.Data;
 using SquashNiagara.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace SquashNiagara.Controllers
 {
     public class TeamsController : Controller
     {
         private readonly SquashNiagaraContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public TeamsController(SquashNiagaraContext context)
+        public TeamsController(SquashNiagaraContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Teams
@@ -174,6 +177,14 @@ namespace SquashNiagara.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, /*[Bind("ID, Name, CaptainID, VenueID, Profile")]*/ Team team, string chkRemoveImage, IFormFile thePicture)
         {
+            //Add Role to captain - BEGIN
+            var userToUpdate = await _context.Players
+                .SingleOrDefaultAsync(d => d.TeamID == id && d.ID == team.CaptainID);
+
+            var user = await _userManager.FindByEmailAsync(userToUpdate.Email);
+
+            var newRoleToCaptain = _userManager.AddToRoleAsync(user, "Captain");
+            //Add Role to captain - END
 
             var teamToUpdate = await _context.Teams
                 .SingleOrDefaultAsync(d => d.ID == id);
