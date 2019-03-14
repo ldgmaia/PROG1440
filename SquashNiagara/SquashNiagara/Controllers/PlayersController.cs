@@ -127,6 +127,8 @@ namespace SquashNiagara.Controllers
 
                     if (!player.IsEnabled)
                         await _userManager.SetLockoutEndDateAsync(newUser, DateTimeOffset.MaxValue);
+                    else
+                        await _userManager.SetLockoutEndDateAsync(newUser, null);
                     //create user Identity for player - END
 
                     _context.Add(player);
@@ -234,6 +236,8 @@ namespace SquashNiagara.Controllers
 
                     if (!player.IsEnabled)
                         await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MaxValue);
+                    else
+                        await _userManager.SetLockoutEndDateAsync(user, null);
 
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
