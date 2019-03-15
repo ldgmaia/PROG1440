@@ -10,7 +10,7 @@ using SquashNiagara.Data;
 namespace SquashNiagara.Data.SQUASHMigrations
 {
     [DbContext(typeof(SquashNiagaraContext))]
-    [Migration("20190311001846_Initial")]
+    [Migration("20190314231259_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -184,6 +184,44 @@ namespace SquashNiagara.Data.SQUASHMigrations
                     b.HasIndex("PositionID");
 
                     b.ToTable("PlayerPositions");
+                });
+
+            modelBuilder.Entity("SquashNiagara.Models.PlayerRanking", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("Average");
+
+                    b.Property<int>("DivisionID");
+
+                    b.Property<int>("LostGames");
+
+                    b.Property<int>("LostMatches");
+
+                    b.Property<int>("Played");
+
+                    b.Property<int>("PlayerID");
+
+                    b.Property<int>("Points");
+
+                    b.Property<int>("SeasonID");
+
+                    b.Property<int>("WonGames");
+
+                    b.Property<int>("WonMatches");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("DivisionID");
+
+                    b.HasIndex("SeasonID");
+
+                    b.HasIndex("PlayerID", "SeasonID", "DivisionID")
+                        .IsUnique();
+
+                    b.ToTable("PlayerRankings");
                 });
 
             modelBuilder.Entity("SquashNiagara.Models.Position", b =>
@@ -385,6 +423,24 @@ namespace SquashNiagara.Data.SQUASHMigrations
                         .WithMany("PlayerPositions")
                         .HasForeignKey("PositionID")
                         .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("SquashNiagara.Models.PlayerRanking", b =>
+                {
+                    b.HasOne("SquashNiagara.Models.Division", "Division")
+                        .WithMany("PlayerRankings")
+                        .HasForeignKey("DivisionID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SquashNiagara.Models.Player", "Player")
+                        .WithMany("PlayerRankings")
+                        .HasForeignKey("PlayerID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SquashNiagara.Models.Season", "Season")
+                        .WithMany("PlayerRankings")
+                        .HasForeignKey("SeasonID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("SquashNiagara.Models.SeasonDivisionTeam", b =>
