@@ -6,21 +6,29 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
+using SquashNiagara.Data;
+using SquashNiagara.Models;
+
 namespace SquashNiagara.Areas.Identity.Pages.Account.Manage
 {
     public class ChangePasswordModel : PageModel
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly SquashNiagaraContext _context;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<ChangePasswordModel> _logger;
 
         public ChangePasswordModel(
             UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+            SquashNiagaraContext context,
+        SignInManager<IdentityUser> signInManager,
             ILogger<ChangePasswordModel> logger)
         {
             _userManager = userManager;
+            _context = context;
             _signInManager = signInManager;
             _logger = logger;
         }
@@ -89,6 +97,53 @@ namespace SquashNiagara.Areas.Identity.Pages.Account.Manage
                 }
                 return Page();
             }
+
+
+
+
+
+
+            var playerToUpdate = _context.Players
+                .SingleOrDefault(d => d.Email == user.Email);
+
+            if (playerToUpdate == null)
+            {
+                return NotFound();
+            }
+
+
+            if (await TryUpdateModelAsync<Player>(playerToUpdate, "",
+                d => d.FirstName, d => d.LastName, d => d.Email, d => d.TeamID, d => d.PositionID))
+            {
+                try
+                {
+
+                    playerToUpdate.firstLogin = false;
+
+                    await _context.SaveChangesAsync();
+                    
+                }
+                catch (RetryLimitExceededException /* dex */)
+                {
+                    ModelState.AddModelError("", "Unable to save changes after multiple attempts. Try again, and if the problem persists, see your system administrator.");
+                }
+                catch (DbUpdateException)
+                {
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
+            }
+
+
+
+
+
+
+
+            //var player = _context.Players
+            //    .SingleOrDefault(d => d.Email == user.Email);
+
+            //if (player.firstLogin)
+            //    player.firstLogin = false;
 
             await _signInManager.RefreshSignInAsync(user);
             _logger.LogInformation("User changed their password successfully.");

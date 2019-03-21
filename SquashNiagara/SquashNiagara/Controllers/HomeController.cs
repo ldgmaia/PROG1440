@@ -24,6 +24,10 @@ namespace SquashNiagara.Controllers
             {
                 var player = _context.Players
                 .FirstOrDefault(m => m.Email == User.Identity.Name);
+
+                if (player != null && player.firstLogin)
+                    return Redirect("identity/Account/Manage/ChangePassword");
+
                 return RedirectToAction("Details", "Players", new { id = player.ID });
             }
 

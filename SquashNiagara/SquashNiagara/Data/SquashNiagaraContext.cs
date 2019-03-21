@@ -239,6 +239,14 @@ namespace SquashNiagara.Data
             modelBuilder.Entity<Fixture>()
             .Property(b => b.Approved)
             .HasDefaultValue(bool.Parse("False"));
+
+            modelBuilder.Entity<Player>()
+            .Property(b => b.IsEnabled)
+            .HasDefaultValue(bool.Parse("True"));
+
+            modelBuilder.Entity<Player>()
+            .Property(b => b.firstLogin)
+            .HasDefaultValue(bool.Parse("True"));
         }
 
     }

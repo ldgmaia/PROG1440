@@ -44,8 +44,12 @@ namespace SquashNiagara.Models
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        [Display(Name = "Enabled")]
-        [DefaultValue("true")]
+        [Display(Name = "First Login")]
+        [DefaultValue(true)]
+        public bool firstLogin { get; set; }
+
+        [ScaffoldColumn(false)]
+        [DefaultValue(true)]
         public bool IsEnabled { get; set; }
 
         [Display(Name = "Date of Birth")]

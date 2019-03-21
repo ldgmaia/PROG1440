@@ -10,7 +10,7 @@ using SquashNiagara.Data;
 namespace SquashNiagara.Data.SQUASHMigrations
 {
     [DbContext(typeof(SquashNiagaraContext))]
-    [Migration("20190311001846_Initial")]
+    [Migration("20190321183102_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -139,7 +139,9 @@ namespace SquashNiagara.Data.SQUASHMigrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<bool>("IsEnabled");
+                    b.Property<bool>("IsEnabled")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(true);
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -148,6 +150,10 @@ namespace SquashNiagara.Data.SQUASHMigrations
                     b.Property<int?>("PositionID");
 
                     b.Property<int?>("TeamID");
+
+                    b.Property<bool>("firstLogin")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(true);
 
                     b.Property<byte[]>("imageContent");
 

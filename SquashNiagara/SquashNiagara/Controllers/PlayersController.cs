@@ -30,8 +30,7 @@ namespace SquashNiagara.Controllers
 
         // GET: Players
         public async Task<IActionResult> Index()
-        {
-            
+        {   
             if (User.IsInRole("Captain") || User.IsInRole("User"))
             {                
                 var player = await _context.Players
@@ -235,9 +234,16 @@ namespace SquashNiagara.Controllers
                     var user = await _userManager.FindByEmailAsync(playerToUpdate.Email);
 
                     if (!player.IsEnabled)
+                    {
                         await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MaxValue);
+                        playerToUpdate.IsEnabled = false;
+                    }
                     else
+                    {
                         await _userManager.SetLockoutEndDateAsync(user, null);
+                        playerToUpdate.IsEnabled = true;
+                    }
+                        
 
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
@@ -375,6 +381,7 @@ namespace SquashNiagara.Controllers
             var dQuery = from d in _context.Teams
                          orderby d.Name
                          select d;
+
             ViewData["TeamID"] = new SelectList(dQuery, "ID", "Name", player?.Team);
         }
 

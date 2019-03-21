@@ -137,7 +137,9 @@ namespace SquashNiagara.Data.SQUASHMigrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<bool>("IsEnabled");
+                    b.Property<bool>("IsEnabled")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(true);
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -146,6 +148,10 @@ namespace SquashNiagara.Data.SQUASHMigrations
                     b.Property<int?>("PositionID");
 
                     b.Property<int?>("TeamID");
+
+                    b.Property<bool>("firstLogin")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(true);
 
                     b.Property<byte[]>("imageContent");
 
