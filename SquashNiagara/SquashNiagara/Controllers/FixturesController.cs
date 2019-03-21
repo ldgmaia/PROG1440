@@ -23,10 +23,57 @@ namespace SquashNiagara.Controllers
         }
 
         // GET: Fixtures
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? SeasonID, string DivisionID)
         {
-            var squashNiagaraContext = _context.Fixtures.Include(f => f.AwayTeam).Include(f => f.CaptainApprove).Include(f => f.CaptainResult).Include(f => f.Division).Include(f => f.HomeTeam).Include(f => f.Season).Include(f => f.Venue);
-            return View(await squashNiagaraContext.ToListAsync());
+           
+                
+
+            var fixtures = from f in _context.Fixtures
+                .Include(f => f.AwayTeam)
+                .Include(f => f.CaptainApprove)
+                .Include(f => f.CaptainResult)
+                .Include(f => f.Division)
+                .Include(f => f.HomeTeam)
+                .Include(f => f.Season)
+                .Include(f => f.Venue)
+                select f;
+
+            if (SeasonID.HasValue)
+            {
+                fixtures = fixtures.Where(p => p.SeasonID == SeasonID);
+            }else
+            {
+                SeasonID = ((from d in _context.Seasons
+                             orderby d.EndDate descending
+                             select d.ID).FirstOrDefault());
+            }
+
+            if (DivisionID != null)
+            {
+                fixtures = fixtures.Where(p => p.DivisionID == Convert.ToInt32(DivisionID));
+            }else
+            {
+                fixtures = fixtures.Where(p => p.DivisionID == 0);
+            }
+
+            PopulateDropDownListSeason();
+            
+            ViewData["DivisionID"] = from d in _context.Divisions
+                                         select d;
+
+            if (User.IsInRole("Captain"))
+            {
+                //var captainID = from d in _context.Players
+                //                where d.Email == User.Identity.Name
+                //                select d;
+
+                var captainID = _context.Players.FirstOrDefault(d => d.Email == User.Identity.Name).ID;
+                var teamID = _context.Teams.FirstOrDefault(d => d.CaptainID == captainID).ID;
+
+                fixtures = fixtures.Where(p => p.HomeTeamID == teamID || p.AwayTeamID == teamID);
+            }
+
+            return View(await fixtures.ToListAsync());
         }
 
         // GET: Fixtures/Details/5
@@ -400,6 +447,21 @@ namespace SquashNiagara.Controllers
             _context.SaveChanges();
 
             return RedirectToAction(nameof(Index));
+        }
+
+        private void PopulateDropDownListSeason(Fixture fixture = null)
+        {
+            var dQuery = from d in _context.Seasons
+                         orderby d.EndDate descending
+                         select d;
+            ViewData["SeasonID"] = new SelectList(dQuery, "ID", "Name", fixture?.Season);
+        }
+
+        private void PopulateDropDownListDivision(Fixture fixture = null)
+        {
+            var dQuery = from d in _context.Divisions
+                         select d;
+            ViewData["DivisionID"] = new SelectList(dQuery, "ID", "Name", fixture?.Division);
         }
 
         private bool FixtureExists(int id)
