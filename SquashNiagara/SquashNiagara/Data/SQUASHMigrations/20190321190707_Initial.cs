@@ -132,13 +132,13 @@ namespace SquashNiagara.Data.SQUASHMigrations
                     PlayerID = table.Column<int>(nullable: false),
                     SeasonID = table.Column<int>(nullable: false),
                     DivisionID = table.Column<int>(nullable: false),
-                    Average = table.Column<decimal>(nullable: false),
+                    Average = table.Column<double>(nullable: false),
                     Played = table.Column<int>(nullable: false),
                     WonMatches = table.Column<int>(nullable: false),
                     LostMatches = table.Column<int>(nullable: false),
                     WonGames = table.Column<int>(nullable: false),
                     LostGames = table.Column<int>(nullable: false),
-                    Points = table.Column<int>(nullable: false)
+                    Points = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {

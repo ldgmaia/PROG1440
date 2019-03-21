@@ -44,7 +44,7 @@
         {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Player.FullName)
+                @Html.ActionLink(item.Player.FullName, "Details", "Players", new { id = item.Player.ID })
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Average)
