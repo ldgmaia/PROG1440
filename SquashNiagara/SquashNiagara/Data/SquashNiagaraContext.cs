@@ -25,6 +25,7 @@ namespace SquashNiagara.Data
         public DbSet<Fixture> Fixtures { get; set; }
         public DbSet<Match> Matches { get; set; }
         public DbSet<PlayerPosition> PlayerPositions { get; set; }
+        public DbSet<PlayerRanking> PlayerRankings { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -64,6 +65,11 @@ namespace SquashNiagara.Data
             //FixtureID, HomePlayerID, AwayPlayerID
             modelBuilder.Entity<Match>()
             .HasIndex(a => new { a.FixtureID, a.HomePlayerID, a.AwayPlayerID })
+            .IsUnique();
+
+            //Add a unique index to the Player e-Mail
+            modelBuilder.Entity<PlayerRanking>()
+            .HasIndex(p => new { p.PlayerID, p.SeasonID, p.DivisionID })
             .IsUnique();
 
             //Prevent Cascade Delete Season to SeasonDivisionTeam

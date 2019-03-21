@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SquashNiagara.Data;
 using SquashNiagara.Models;
 
@@ -68,9 +69,15 @@ namespace SquashNiagara.Controllers
             return View();
         }
 
-        public IActionResult PlayerRanking()
+        //public IActionResult PlayerRanking()
+        //{
+        //    return View();
+        //}
+        // GET: Matches
+        public async Task<IActionResult> PlayerRanking()
         {
-            return View();
+            var playerRankings = _context.PlayerRankings.Include(p => p.Player).Include(p => p.Season).Include(p => p.Division);
+            return View(await playerRankings.ToListAsync());
         }
 
         public IActionResult Standings()

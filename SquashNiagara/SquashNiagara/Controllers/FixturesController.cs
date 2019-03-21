@@ -377,13 +377,13 @@ namespace SquashNiagara.Controllers
             {
 
 
-                //var a = _context.Seasons.FirstOrDefault(d => d.Name == workSheet.Cells[row, 1].Text).ID;
-                //var b = _context.Divisions.FirstOrDefault(d => d.Name == workSheet.Cells[row, 2].Text).ID;
-                //var c = _context.Teams.FirstOrDefault(d => d.Name == workSheet.Cells[row, 3].Text).ID;
-                //var z = _context.Teams.FirstOrDefault(d => d.Name == workSheet.Cells[row, 4].Text).ID;
-                //var e = Convert.ToDateTime(workSheet.Cells[row, 5].Value);
-                //var f = Convert.ToDateTime(workSheet.Cells[row, 6].Text);
-                //var g = _context.Venues.FirstOrDefault(d => d.Name == workSheet.Cells[row, 7].Text).ID;
+                var a = _context.Seasons.FirstOrDefault(d => d.Name == workSheet.Cells[row, 1].Text).ID;
+                var b = _context.Divisions.FirstOrDefault(d => d.Name == workSheet.Cells[row, 2].Text).ID;
+                var c = _context.Teams.FirstOrDefault(d => d.Name == workSheet.Cells[row, 3].Text).ID;
+                var z = _context.Teams.FirstOrDefault(d => d.Name == workSheet.Cells[row, 4].Text).ID;
+                var e = Convert.ToDateTime(workSheet.Cells[row, 5].Value);
+                var f = Convert.ToDateTime(workSheet.Cells[row, 6].Text);
+                var g = _context.Venues.FirstOrDefault(d => d.Name == workSheet.Cells[row, 7].Text).ID;
                 //Row by row...
                 Fixture fixture = new Fixture
                 {

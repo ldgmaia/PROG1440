@@ -47,6 +47,9 @@
     <Content Update="Views\Home\News.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Views\Home\OriginalFiles\PlayerRanking.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Home\Standings.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
@@ -68,6 +71,9 @@
     <Content Update="Views\Players\ImportPlayers.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Views\Seasons\ImportFullSeason.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Teams\NoTeamAssigned.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
@@ -78,6 +84,10 @@
 
   <ItemGroup>
     <Folder Include="Areas\Identity\Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SquashNiagaraLib\SquashNiagaraLib.csproj" />
   </ItemGroup>
 
 </Project>

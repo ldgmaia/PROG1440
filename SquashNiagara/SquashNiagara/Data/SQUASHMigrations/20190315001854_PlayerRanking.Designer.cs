@@ -10,12 +10,8 @@ using SquashNiagara.Data;
 namespace SquashNiagara.Data.SQUASHMigrations
 {
     [DbContext(typeof(SquashNiagaraContext))]
-<<<<<<< HEAD:SquashNiagara/SquashNiagara/Data/SQUASHMigrations/20190321183102_Initial.Designer.cs
-    [Migration("20190321183102_Initial")]
-=======
-    [Migration("20190314231259_Initial")]
->>>>>>> 8656d7c608a142f44a436f5211e581868c16ad9c:SquashNiagara/SquashNiagara/Data/SQUASHMigrations/20190314231259_Initial.Designer.cs
-    partial class Initial
+    [Migration("20190315001854_PlayerRanking")]
+    partial class PlayerRanking
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -143,9 +139,7 @@ namespace SquashNiagara.Data.SQUASHMigrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<bool>("IsEnabled")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(true);
+                    b.Property<bool>("IsEnabled");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -154,10 +148,6 @@ namespace SquashNiagara.Data.SQUASHMigrations
                     b.Property<int?>("PositionID");
 
                     b.Property<int?>("TeamID");
-
-                    b.Property<bool>("firstLogin")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(true);
 
                     b.Property<byte[]>("imageContent");
 
@@ -202,7 +192,7 @@ namespace SquashNiagara.Data.SQUASHMigrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<decimal>("Average");
+                    b.Property<double>("Average");
 
                     b.Property<int>("DivisionID");
 
@@ -214,7 +204,7 @@ namespace SquashNiagara.Data.SQUASHMigrations
 
                     b.Property<int>("PlayerID");
 
-                    b.Property<int>("Points");
+                    b.Property<double>("Points");
 
                     b.Property<int>("SeasonID");
 

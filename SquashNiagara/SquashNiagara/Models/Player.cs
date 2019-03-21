@@ -18,6 +18,7 @@ namespace SquashNiagara.Models
             HomeMatches = new HashSet<Match>();
             AwayMatches = new HashSet<Match>();
             //Positions = new HashSet<Position>();
+            PlayerRankings = new HashSet<PlayerRanking>();
         }
 
         [Display(Name = "Player")]
@@ -88,6 +89,8 @@ namespace SquashNiagara.Models
         public virtual ICollection<Match> HomeMatches { get; set; }
 
         public virtual ICollection<Match> AwayMatches { get; set; }
+
+        public virtual ICollection<PlayerRanking> PlayerRankings { get; set; }
 
     }
 }
