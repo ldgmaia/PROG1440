@@ -316,6 +316,40 @@ namespace SquashNiagara.Data.SQUASHMigrations
                     b.ToTable("Teams");
                 });
 
+            modelBuilder.Entity("SquashNiagara.Models.TeamRanking", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("DivisionID");
+
+                    b.Property<int>("Lost");
+
+                    b.Property<int>("Played");
+
+                    b.Property<double>("Points");
+
+                    b.Property<int>("SeasonID");
+
+                    b.Property<int>("Strength");
+
+                    b.Property<int>("TeamID");
+
+                    b.Property<int>("Won");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("DivisionID");
+
+                    b.HasIndex("SeasonID");
+
+                    b.HasIndex("TeamID", "SeasonID", "DivisionID")
+                        .IsUnique();
+
+                    b.ToTable("TeamRankings");
+                });
+
             modelBuilder.Entity("SquashNiagara.Models.Venue", b =>
                 {
                     b.Property<int>("ID")
@@ -475,6 +509,24 @@ namespace SquashNiagara.Data.SQUASHMigrations
                         .WithMany("Teams")
                         .HasForeignKey("VenueID")
                         .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("SquashNiagara.Models.TeamRanking", b =>
+                {
+                    b.HasOne("SquashNiagara.Models.Division", "Division")
+                        .WithMany()
+                        .HasForeignKey("DivisionID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SquashNiagara.Models.Season", "Season")
+                        .WithMany()
+                        .HasForeignKey("SeasonID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SquashNiagara.Models.Team", "Team")
+                        .WithMany()
+                        .HasForeignKey("TeamID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

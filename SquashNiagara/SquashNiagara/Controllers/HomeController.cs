@@ -64,10 +64,10 @@ namespace SquashNiagara.Controllers
             return View();
         }
 
-        public IActionResult TeamRanking()
-        {
-            return View();
-        }
+        //public IActionResult TeamRanking()
+        //{
+        //    return View();
+        //}
 
         //public IActionResult PlayerRanking()
         //{
@@ -78,6 +78,12 @@ namespace SquashNiagara.Controllers
         {
             var playerRankings = _context.PlayerRankings.Include(p => p.Player).Include(p => p.Season).Include(p => p.Division);
             return View(await playerRankings.ToListAsync());
+        }
+
+        public async Task<IActionResult> TeamRanking()
+        {
+            var teamRankings = _context.TeamRankings.Include(p => p.Team).Include(p => p.Season).Include(p => p.Division);
+            return View(await teamRankings.ToListAsync());
         }
 
         public IActionResult Standings()

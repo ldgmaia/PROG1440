@@ -188,6 +188,41 @@ namespace SquashNiagara.Data.SQUASHMigrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TeamRankings",
+                schema: "SQUASH",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    TeamID = table.Column<int>(nullable: false),
+                    DivisionID = table.Column<int>(nullable: false),
+                    SeasonID = table.Column<int>(nullable: false),
+                    Points = table.Column<double>(nullable: false),
+                    Played = table.Column<int>(nullable: false),
+                    Won = table.Column<int>(nullable: false),
+                    Lost = table.Column<int>(nullable: false),
+                    Strength = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TeamRankings", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_TeamRankings_Divisions_DivisionID",
+                        column: x => x.DivisionID,
+                        principalSchema: "SQUASH",
+                        principalTable: "Divisions",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TeamRankings_Seasons_SeasonID",
+                        column: x => x.SeasonID,
+                        principalSchema: "SQUASH",
+                        principalTable: "Seasons",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Matches",
                 schema: "SQUASH",
                 columns: table => new
@@ -437,6 +472,25 @@ namespace SquashNiagara.Data.SQUASHMigrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_TeamRankings_DivisionID",
+                schema: "SQUASH",
+                table: "TeamRankings",
+                column: "DivisionID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeamRankings_SeasonID",
+                schema: "SQUASH",
+                table: "TeamRankings",
+                column: "SeasonID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeamRankings_TeamID_SeasonID_DivisionID",
+                schema: "SQUASH",
+                table: "TeamRankings",
+                columns: new[] { "TeamID", "SeasonID", "DivisionID" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Teams_CaptainID",
                 schema: "SQUASH",
                 table: "Teams",
@@ -509,6 +563,16 @@ namespace SquashNiagara.Data.SQUASHMigrations
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
+                name: "FK_TeamRankings_Teams_TeamID",
+                schema: "SQUASH",
+                table: "TeamRankings",
+                column: "TeamID",
+                principalSchema: "SQUASH",
+                principalTable: "Teams",
+                principalColumn: "ID",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_Matches_Players_AwayPlayerID",
                 schema: "SQUASH",
                 table: "Matches",
@@ -566,6 +630,10 @@ namespace SquashNiagara.Data.SQUASHMigrations
 
             migrationBuilder.DropTable(
                 name: "SeasonDivisionTeams",
+                schema: "SQUASH");
+
+            migrationBuilder.DropTable(
+                name: "TeamRankings",
                 schema: "SQUASH");
 
             migrationBuilder.DropTable(
