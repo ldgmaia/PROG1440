@@ -79,7 +79,7 @@ namespace SquashNiagara.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,Email,DOB,TeamID,IsEnabled,PositionID")] Player player, string chkRemoveImage, IFormFile thePicture)
         {
-
+            
             //if (player.PositionID == 0)
             //{
             //player.PositionID == null;
