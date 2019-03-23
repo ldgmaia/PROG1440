@@ -162,6 +162,8 @@ namespace SquashNiagara.Controllers
         public async Task<IActionResult> ImportFullSeason(IFormFile theExcel)
         {
             ExcelPackage excel;
+            int seasonID = 0;
+
             using (var memoryStream = new MemoryStream())
             {
                 await theExcel.CopyToAsync(memoryStream);
@@ -188,6 +190,8 @@ namespace SquashNiagara.Controllers
                         };
                         _context.Seasons.Add(season);
                         _context.SaveChanges();
+
+                        seasonID = _context.Seasons.FirstOrDefault(d => d.Name == workSheet.Cells[row, 2].Text).ID;
                     }
                 }
 
@@ -233,7 +237,21 @@ namespace SquashNiagara.Controllers
                         _context.Teams.Add(team);
                         _context.SaveChanges();
                     }
-                    
+
+                    int teamID = _context.Teams.FirstOrDefault(d => d.Name == workSheet.Cells[row, 2].Text).ID;
+                    int divisionID = _context.Divisions.FirstOrDefault(d => d.Name == workSheet.Cells[row, 6].Text).ID;
+                    var checkExistSeasonDivisionTeam = _context.SeasonDivisionTeams.FirstOrDefault(d => d.SeasonID == seasonID && d.DivisionID == divisionID && d.TeamID == teamID);
+                    if (checkExistSeasonDivisionTeam == null)
+                    {
+                        SeasonDivisionTeam seasonDivisionTeam = new SeasonDivisionTeam
+                        {
+                            SeasonID = seasonID,
+                            DivisionID = divisionID,
+                            TeamID = teamID
+                        };
+                        _context.SeasonDivisionTeams.Add(seasonDivisionTeam);
+                        _context.SaveChanges();
+                    }
                 }
 
                 if (workSheet.Cells[row, 1].Text == "CAPTAIN")

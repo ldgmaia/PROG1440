@@ -424,25 +424,29 @@ namespace SquashNiagara.Controllers
             {
 
 
-                var a = _context.Seasons.FirstOrDefault(d => d.Name == workSheet.Cells[row, 1].Text).ID;
-                var b = _context.Divisions.FirstOrDefault(d => d.Name == workSheet.Cells[row, 2].Text).ID;
-                var c = _context.Teams.FirstOrDefault(d => d.Name == workSheet.Cells[row, 3].Text).ID;
-                var z = _context.Teams.FirstOrDefault(d => d.Name == workSheet.Cells[row, 4].Text).ID;
-                var e = Convert.ToDateTime(workSheet.Cells[row, 5].Value);
-                var f = Convert.ToDateTime(workSheet.Cells[row, 6].Text);
-                var g = _context.Venues.FirstOrDefault(d => d.Name == workSheet.Cells[row, 7].Text).ID;
+                //var a = _context.Seasons.FirstOrDefault(d => d.Name == workSheet.Cells[row, 1].Text).ID;
+                //var b = _context.Divisions.FirstOrDefault(d => d.Name == workSheet.Cells[row, 2].Text).ID;
+                //var c = _context.Teams.FirstOrDefault(d => d.Name == workSheet.Cells[row, 3].Text).ID;
+                //var z = _context.Teams.FirstOrDefault(d => d.Name == workSheet.Cells[row, 4].Text).ID;
+                //var e = Convert.ToDateTime(workSheet.Cells[row, 5].Value);
+                //var f = Convert.ToDateTime(workSheet.Cells[row, 6].Text);
+                //var g = _context.Venues.FirstOrDefault(d => d.Name == workSheet.Cells[row, 7].Text).ID;
                 //Row by row...
-                Fixture fixture = new Fixture
+                if (workSheet.Cells[row, 1].Text == "FIXTURE")
                 {
-                    SeasonID = _context.Seasons.FirstOrDefault(d => d.Name == workSheet.Cells[row, 1].Text).ID,
-                    DivisionID = _context.Divisions.FirstOrDefault(d => d.Name == workSheet.Cells[row, 2].Text).ID,
-                    HomeTeamID = _context.Teams.FirstOrDefault(d => d.Name == workSheet.Cells[row, 3].Text).ID,
-                    AwayTeamID = _context.Teams.FirstOrDefault(d => d.Name == workSheet.Cells[row, 4].Text).ID,
-                    Date = Convert.ToDateTime(workSheet.Cells[row, 5].Value),
-                    Time = Convert.ToDateTime(workSheet.Cells[row, 6].Text),
-                    VenueID = _context.Venues.FirstOrDefault(d => d.Name == workSheet.Cells[row, 7].Text).ID
-                };
-                _context.Fixtures.Add(fixture);
+                    Fixture fixture = new Fixture
+                    {
+                        SeasonID = _context.Seasons.FirstOrDefault(d => d.Name == workSheet.Cells[row, 2].Text).ID,
+                        DivisionID = _context.Divisions.FirstOrDefault(d => d.Name == workSheet.Cells[row, 3].Text).ID,
+                        HomeTeamID = _context.Teams.FirstOrDefault(d => d.Name == workSheet.Cells[row, 4].Text).ID,
+                        AwayTeamID = _context.Teams.FirstOrDefault(d => d.Name == workSheet.Cells[row, 5].Text).ID,
+                        Date = Convert.ToDateTime(workSheet.Cells[row, 6].Value),
+                        Time = Convert.ToDateTime(workSheet.Cells[row, 7].Text),
+                        VenueID = _context.Venues.FirstOrDefault(d => d.Name == workSheet.Cells[row, 8].Text).ID
+                    };
+                    _context.Fixtures.Add(fixture);
+                }
+               
             };
             _context.SaveChanges();
 
