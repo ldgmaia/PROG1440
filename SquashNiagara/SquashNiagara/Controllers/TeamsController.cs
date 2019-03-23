@@ -93,6 +93,8 @@ namespace SquashNiagara.Controllers
             //ViewData["CaptainID"] = new SelectList(_context.Players, "ID", "Email");
             PopulateDropDownListCaptain();
             PopulateDropDownListVenue();
+            PopulateDropDownListSeason();
+            PopulateDropDownListDivision();
             //ViewData["VenueID"] = new SelectList(_context.Venues, "ID", "Name");
             return View();
         }
@@ -103,16 +105,36 @@ namespace SquashNiagara.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,Name, CaptainID, VenueID, Profile")] Team team,  
-            IFormFile thePicture)
+            IFormFile thePicture, int SeasonID, int DivisionID)
         {
-            if (team.CaptainID == 0)
+            bool error = false;
+
+            if (SeasonID == 0)
             {
-                team.CaptainID = null;
-            }
-            if (team.VenueID == 0)
+                if (DivisionID == 0)
+                {
+                    ModelState.AddModelError("", "Please, select a Season and Division");
+                    error = true;
+                } else
+                {
+                    ModelState.AddModelError("", "Please, select a Season");
+                    error = true;
+                }
+            } else if (SeasonID == 0)
             {
-                team.VenueID = null;
+                ModelState.AddModelError("", "Please, select a Division");
+                error = true;
             }
+
+            if (error == true)
+            {
+                PopulateDropDownListCaptain();
+                PopulateDropDownListVenue();
+                PopulateDropDownListSeason();
+                PopulateDropDownListDivision();
+                return View();
+            }
+
             try {
                 if (ModelState.IsValid)
                 {
@@ -137,6 +159,22 @@ namespace SquashNiagara.Controllers
 
                     _context.Add(team);
                     await _context.SaveChangesAsync();
+
+                    int teamID = _context.Teams.FirstOrDefault(d => d.Name == team.Name).ID;
+                    
+                    var checkExistSeasonDivisionTeam = _context.SeasonDivisionTeams.FirstOrDefault(d => d.SeasonID == SeasonID && d.DivisionID == DivisionID && d.TeamID == teamID);
+                    if (checkExistSeasonDivisionTeam == null)
+                    {
+                        SeasonDivisionTeam seasonDivisionTeam = new SeasonDivisionTeam
+                        {
+                            SeasonID = SeasonID,
+                            DivisionID = DivisionID,
+                            TeamID = teamID
+                        };
+                        _context.SeasonDivisionTeams.Add(seasonDivisionTeam);
+                        _context.SaveChanges();
+                    }
+
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -321,6 +359,41 @@ namespace SquashNiagara.Controllers
                          orderby d.Name
                          select d;
             ViewData["VenueID"] = new SelectList(dQuery, "ID", "Name", team?.Venue);
+        }
+
+        private void PopulateDropDownListSeason(Team team = null)
+        {
+            var dQuery = from d in _context.Seasons
+                         orderby d.Name
+                         select d;
+            int seasonID = 0;
+            if (team != null)
+            {
+                seasonID = _context.SeasonDivisionTeams.FirstOrDefault(d => d.TeamID == team.ID).SeasonID;
+                ViewData["SeasonID"] = new SelectList(dQuery, "ID", "Name", seasonID);
+            } else
+            {
+                ViewData["SeasonID"] = new SelectList(dQuery, "ID", "Name");
+            }
+           
+        }
+
+        private void PopulateDropDownListDivision(Team team = null)
+        {
+            var dQuery = from d in _context.Divisions
+                         orderby d.Name
+                         select d;
+
+            int divisionID = 0;
+            if (team != null)
+            {
+                divisionID = _context.SeasonDivisionTeams.FirstOrDefault(d => d.TeamID == team.ID).DivisionID;
+                ViewData["DivisionID"] = new SelectList(dQuery, "ID", "Name", divisionID);
+            } else
+            {
+                ViewData["DivisionID"] = new SelectList(dQuery, "ID", "Name");
+            }
+            
         }
 
     }
