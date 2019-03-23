@@ -56,9 +56,6 @@
     <Content Update="Views\Home\PlayerRanking.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Views\Home\TeamRanking - Copy.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
     <Content Update="Views\Home\TeamRanking.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
