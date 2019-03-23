@@ -93,6 +93,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\images\Default.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SquashNiagaraLib\SquashNiagaraLib.csproj" />
   </ItemGroup>
 
