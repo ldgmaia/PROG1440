@@ -13,18 +13,6 @@
         <form asp-action="Create" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label class="control-label">Season</label>
-                <select class="form-control" asp-items="ViewBag.SeasonID" name="SeasonID">
-                    <option value="0">Select a Season</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label class="control-label">Division</label>
-                <select class="form-control" asp-items="ViewBag.DivisionID" name="DivisionID">
-                    <option value="0">Select a Division</option>
-                </select>
-            </div>
-            <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
@@ -32,18 +20,18 @@
             <div class="form-group">
                 <label asp-for="CaptainID" class="control-label"></label>
                 <select asp-for="CaptainID" class="form-control" asp-items="ViewBag.CaptainID">
-                    <option value="">Select a Captain</option>
+                    <option value="0">Select a Captain</option>
                 </select>
             </div>
             <div class="form-group">
                 <label asp-for="VenueID" class="control-label"></label>
                 <select asp-for="VenueID" class="form-control" asp-items="ViewBag.VenueID">
-                    <option value="">Select a Venue</option>
+                    <option value="0">Select a Venue</option>
                 </select>
             </div>
             <div class="form-group">
                 <label asp-for="Profile" class="control-label"></label>
-                <textarea asp-for="Profile" class="form-control"></textarea>
+                <textarea asp-for="Profile" class="form-control" ></textarea>
                 <span asp-validation-for="Profile" class="text-danger"></span>
             </div>
             <div class="form-group">

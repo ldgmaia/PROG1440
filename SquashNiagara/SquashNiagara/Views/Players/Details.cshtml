@@ -15,6 +15,10 @@
                 string imageSrc = string.Format("data:" + Model.imageMimeType + ";base64,{0}", imageBase64);
                 <img src="@imageSrc" style="max-width: 150px; max-height: 150px" class="img-responsive img-rounded" />
             }
+            if (Model.imageContent == null)
+            {
+                <br /><img src="~/images/Default.png" alt="No Image" style="width: 150px; height: 150px" class="img-responsive img-rounded" />
+            }
         }
     </div>
     
