@@ -26,7 +26,7 @@ namespace SquashNiagara.Controllers
         }
 
         // GET: Teams
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? SeasonID, string DivisionID)
         {
             if (User.IsInRole("Captain") || User.IsInRole("User"))
             {
@@ -47,8 +47,48 @@ namespace SquashNiagara.Controllers
 
             }
 
-            var squashNiagaraContext = _context.Teams.Include(t => t.Captain).Include(t => t.Venue);
-            return View(await squashNiagaraContext.ToListAsync());
+            //var teams = from t in _context.Teams
+            //    .Include(t => t.Captain)
+            //    .Include(t => t.Venue)
+            //            where t.ID == 0
+            //            select t;
+
+            
+
+            var teams = from t in _context.Teams
+                    .Include(t => t.Captain)
+                    .Include(t => t.Venue)
+                    where t.ID == 0
+                    select t;
+
+            if (SeasonID.HasValue && DivisionID != null)
+            {
+                var TeamsIDS = (from t in _context.SeasonDivisionTeams
+                               where t.SeasonID == SeasonID && t.DivisionID == Convert.ToInt32(DivisionID)
+                               select t.TeamID).ToList();
+
+                teams = _context.Teams
+                    .Where(t => TeamsIDS.Contains(t.ID))
+                    .Include(t => t.Captain)
+                    .Include(t => t.Venue);
+
+
+                //teams.ToListAsync().
+            }
+            //else
+            //{
+            //    teams = from t in _context.Teams
+            //        .Include(t => t.Captain)
+            //        .Include(t => t.Venue)
+            //                where t.ID == 0
+            //                select t;
+            //}
+
+            PopulateDropDownListSeason();
+            ViewData["DivisionID"] = from d in _context.Divisions
+                                     select d;
+
+            return View(await teams.ToListAsync());
         }
 
         public IActionResult NoTeamAssigned()

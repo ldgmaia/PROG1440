@@ -8,6 +8,26 @@
 <p>
     <a asp-action="Create" class="btn btn-primary btn-sm">Create New</a>
 </p>
+
+<form asp-action="Index">
+    <div class="form-horizontal">
+        <div class="row well">
+            <div class="form-group col-md-6">
+                @foreach (Division i in @ViewBag.DivisionID)
+                {
+                    <button name="DivisionID" value="@i.ID" class="btn btn-primary btn-sm">@i.Name</button>
+                    @*<a asp-action="Index" asp-route-id="@i.ID" class="btn btn-primary btn-sm">@i.Name</a>
+                        <input type="submit" name="divisionButton" value="@i.Name" id="@i.ID" class="btn btn-default" />*@
+                }
+            </div>
+            <div class="form-group col-md-4">
+                <label class="control-label col-md-6">Season:</label>
+                @Html.DropDownList("SeasonID", (SelectList)ViewBag.SeasonID, new { onchange = "this.form.submit();" })
+            </div>
+        </div>
+    </div>
+</form>
+
 <table id="indxTeam" class="table table-striped table-bordered" style="width: 100%">
     <thead>
         <tr>
