@@ -80,13 +80,27 @@
             Result added by
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.CaptainResult.FullName)
+            @if (Model.CaptainResultID.HasValue)
+            {
+                @Html.DisplayFor(model => model.CaptainResult.FullName)
+            }
+            else if (Model.HomeTeamScore.HasValue || Model.AwayTeamScore.HasValue)
+            {
+                @:Admin
+            }
         </dd>
         <dt>
             Result approved by
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.CaptainApprove.FullName)
+            @if (Model.CaptainApproveID.HasValue)
+            {
+                @Html.DisplayFor(model => model.CaptainApprove.FullName)
+            }
+            else if (Model.Approved == true)
+            {
+                @:Admin
+            }
         </dd>
     </dl>
 </div>

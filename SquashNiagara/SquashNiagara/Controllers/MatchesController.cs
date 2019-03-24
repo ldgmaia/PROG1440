@@ -104,10 +104,25 @@ namespace SquashNiagara.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(FixtureMatchVM fixtureMatch)
+        public async Task<IActionResult> Create(FixtureMatchVM fixtureMatch, string Bonus)
         {
             //get the number of the positions for the division;
             int nPositions = _context.Divisions.FirstOrDefault(d => d.ID == fixtureMatch.Fixture.DivisionID).PositionNo;
+            if (Bonus == "Home")
+            {
+                fixtureMatch.Fixture.HomeTeamBonus = 1d;
+                fixtureMatch.Fixture.AwayTeamBonus = 0d;
+            } else if (Bonus == "Away")
+            {
+                fixtureMatch.Fixture.HomeTeamBonus = 0d;
+                fixtureMatch.Fixture.AwayTeamBonus = 1d;
+            }
+            else if (Bonus == "Tie")
+            {
+                fixtureMatch.Fixture.HomeTeamBonus = 0.5d;
+                fixtureMatch.Fixture.AwayTeamBonus = 0.5d;
+            }
+
             try
             {
                 if (ModelState.IsValid)

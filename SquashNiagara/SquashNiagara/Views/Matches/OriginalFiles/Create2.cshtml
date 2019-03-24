@@ -100,8 +100,6 @@
                 <input type="hidden" asp-for="Fixture.VenueID" />
                 <input type="hidden" asp-for="Fixture.CaptainResultID" />
                 <input type="hidden" asp-for="Fixture.CaptainApproveID" />
-                <input type="hidden" asp-for="Fixture.HomeTeamBonus" />
-                <input type="hidden" asp-for="Fixture.AwayTeamBonus" />
             </div>
             @{ int counter = 1;
                 for (int i = 0; i < ViewBag.nPositions; i++)
@@ -114,43 +112,25 @@
                     <div class="form-group row">
                         <input type="hidden" asp-for="Matches[i].FixtureID" value=@ViewBag.FixtureID />
 
-                        <div class="col-sm-2">
+                        <div class="col-sm-3">
                             <select asp-for="Matches[i].HomePlayerID" class="form-control" asp-items="ViewBag.HomePlayerID"></select>
                         </div>
 
-                        <div class="col-sm-2">
-                            @*<input asp-for="Matches[i].HomePlayerScore" class="form-control" />
-            <span asp-validation-for="Matches[i].HomePlayerScore" class="text-danger"></span>*@
-
-                            @Html.RadioButtonFor(model => model.Matches[i].HomePlayerScore, "0", new { @checked = "checked" })
-                            0&nbsp;&nbsp;
-                            @Html.RadioButtonFor(model => model.Matches[i].HomePlayerScore, "1")
-                            1&nbsp;&nbsp;
-                            @Html.RadioButtonFor(model => model.Matches[i].HomePlayerScore, "2")
-                            2&nbsp;&nbsp;
-                            @Html.RadioButtonFor(model => model.Matches[i].HomePlayerScore, "3")
-                            3
+                        <div class="col-sm-1">
+                            <input asp-for="Matches[i].HomePlayerScore" class="form-control" />
+                            <span asp-validation-for="Matches[i].HomePlayerScore" class="text-danger"></span>
                         </div>
 
 
                         <div class="col-sm-2 lead text-center">VS.</div>
 
-                        <div class="col-sm-2">
+                        <div class="col-sm-3">
                             <select asp-for="Matches[i].AwayPlayerID" class="form-control" asp-items="ViewBag.AwayPlayerID"></select>
                         </div>
 
-                        <div class="col-sm-2">
-                            @*<input asp-for="Matches[i].AwayPlayerScore" class="form-control" />
-            <span asp-validation-for="Matches[i].AwayPlayerScore" class="text-danger"></span>*@
-
-                            @Html.RadioButtonFor(model => model.Matches[i].AwayPlayerScore, "0")
-                            0&nbsp;&nbsp;
-                            @Html.RadioButtonFor(model => model.Matches[i].AwayPlayerScore, "1")
-                            1&nbsp;&nbsp;
-                            @Html.RadioButtonFor(model => model.Matches[i].AwayPlayerScore, "2")
-                            2&nbsp;&nbsp;
-                            @Html.RadioButtonFor(model => model.Matches[i].AwayPlayerScore, "3")
-                            3
+                        <div class="col-sm-1">
+                            <input asp-for="Matches[i].AwayPlayerScore" class="form-control" />
+                            <span asp-validation-for="Matches[i].AwayPlayerScore" class="text-danger"></span>
                         </div>
                     </div>
                     @*<input type="hidden" asp-for="Matches[i].PositionID" />*@
@@ -163,24 +143,12 @@
 
                 <label asp-for="Fixture.HomeTeamBonus" class="col-sm-4  text-center control-label"></label>
                 <div class="col-sm-1">
-                    Home
-                    <input id="Bonus" name="Bonus" value="Home" type="radio">
-                    
-                    @*<input asp-for="Fixture.HomeTeamBonus" class="form-control" />
-        <span asp-validation-for="Fixture.HomeTeamBonus" class="text-danger"></span>*@
+                    <input asp-for="Fixture.HomeTeamBonus" class="form-control" />
+                    <span asp-validation-for="Fixture.HomeTeamBonus" class="text-danger"></span>
                 </div>
                 <div class="col-sm-1">
-                    Tie
-                    <input id="Bonus" name="Bonus" value="Tie" type="radio" checked>
-                    @*<input asp-for="Fixture.HomeTeamBonus" class="form-control" />
-        <span asp-validation-for="Fixture.HomeTeamBonus" class="text-danger"></span>*@
-                </div>
-                <div class="col-sm-1">
-                    @*<input asp-for="Fixture.AwayTeamBonus" class="form-control" />
-                    <span asp-validation-for="Fixture.AwayTeamBonus" class="text-danger"></span>*@
-                    
-                    Away
-                    <input id="Bonus" name="Bonus" value="Away" type="radio">
+                    <input asp-for="Fixture.AwayTeamBonus" class="form-control" />
+                    <span asp-validation-for="Fixture.AwayTeamBonus" class="text-danger"></span>
                 </div>
                 <label asp-for="Fixture.AwayTeamBonus" class="col-sm-4  text-center control-label"></label>
 

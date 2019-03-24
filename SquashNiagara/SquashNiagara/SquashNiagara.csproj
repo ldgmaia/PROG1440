@@ -65,7 +65,10 @@
     <Content Update="Views\Home\OriginalFiles\Index.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Views\Matches\OriginalFiles\Create.cshtml">
+    <Content Update="Views\Matches\OriginalFiles\Create2.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Matches\OriginalFiles\Create1.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Views\Players\ImportPlayers.cshtml">

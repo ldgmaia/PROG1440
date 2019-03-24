@@ -107,17 +107,11 @@
                     <small>
                         @if (User.Identity.IsAuthenticated)
                         {
-                            if (User.IsInRole("Admin"))
-                            {
-                                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> @:|
-                                <a asp-controller="Matches" asp-action="Create" asp-route-id="@item.ID">Add Result</a> @:|
-                                <a asp-action="ApproveResult" asp-route-id="@item.ID">Approve Result</a> @:|
-                            }
-                            else if (User.IsInRole("Captain"))
+                            if (User.IsInRole("Admin") || User.IsInRole("Captain"))
                             {
                                 if (item.Approved == false)
                                 {
-                                    if (!item.CaptainResultID.HasValue)
+                                    if (!item.CaptainResultID.HasValue && !item.HomeTeamScore.HasValue)
                                     {
                                         <a asp-controller="Matches" asp-action="Create" asp-route-id="@item.ID">Add Result</a> @:|
                                     }
@@ -131,6 +125,13 @@
                                         {
                                             <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> @:|
                                         }
+                                    }
+                                }
+                                else
+                                {
+                                    if (User.IsInRole("Admin"))
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> @:|
                                     }
                                 }
                             }
