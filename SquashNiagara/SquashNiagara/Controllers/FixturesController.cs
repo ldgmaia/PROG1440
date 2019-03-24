@@ -294,26 +294,25 @@ namespace SquashNiagara.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
+            //try
+            //{
+                if (ModelState.IsValid)
                 {
                     _context.Update(fixture);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!FixtureExists(fixture.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
+            //} catch (DbUpdateException err)
+            //{
+            //    if (err.InnerException.Message.Contains("IX_Matches_FixtureID_HomePlayerID_AwayPlayerID"))
+            //    {
+            //        ModelState.AddModelError("Player error", "One player cannot play two matches in the same fixture");
+            //    } else
+            //    {
+            //        ModelState.AddModelError("", "Unable to save result. Report this error to the team");
+            //    }
+            //}
+
             ViewData["AwayTeamID"] = new SelectList(_context.Teams, "ID", "Name", fixture.AwayTeamID);
             ViewData["CaptainApproveID"] = new SelectList(_context.Players, "ID", "Email", fixture.CaptainApproveID);
             ViewData["CaptainResultID"] = new SelectList(_context.Players, "ID", "Email", fixture.CaptainResultID);

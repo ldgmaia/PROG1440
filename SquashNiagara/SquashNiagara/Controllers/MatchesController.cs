@@ -108,66 +108,94 @@ namespace SquashNiagara.Controllers
         {
             //get the number of the positions for the division;
             int nPositions = _context.Divisions.FirstOrDefault(d => d.ID == fixtureMatch.Fixture.DivisionID).PositionNo;
-                       
-            if (ModelState.IsValid)
+            try
             {
-                //Get the fixture from model FixtureMatch
-                Fixture fixture = fixtureMatch.Fixture;
-                fixture.HomeTeamScore = 0;
-                fixture.AwayTeamScore = 0;
-                for (int n = 0; n < nPositions; n++)
+                if (ModelState.IsValid)
                 {
-                    if (fixtureMatch.Matches[n].HomePlayerScore > fixtureMatch.Matches[n].AwayPlayerScore)
-                        fixture.HomeTeamScore += 1;
-                    else
-                        fixture.AwayTeamScore += 1;
-
-                    //Save the fixture in the DB
-                    if (User.IsInRole("Captain"))
+                    //Get the fixture from model FixtureMatch
+                    Fixture fixture = fixtureMatch.Fixture;
+                    fixture.HomeTeamScore = 0;
+                    fixture.AwayTeamScore = 0;
+                    for (int n = 0; n < nPositions; n++)
                     {
-                        fixture.CaptainResultID = _context.Players.FirstOrDefault(p => p.Email == User.Identity.Name).ID;
+                        if (fixtureMatch.Matches[n].HomePlayerScore > fixtureMatch.Matches[n].AwayPlayerScore)
+                            fixture.HomeTeamScore += 1;
+                        else
+                            fixture.AwayTeamScore += 1;
+
+                        //Save the fixture in the DB
+                        if (User.IsInRole("Captain"))
+                        {
+                            fixture.CaptainResultID = _context.Players.FirstOrDefault(p => p.Email == User.Identity.Name).ID;
+                        }
+                        _context.Update(fixture);
                     }
-                    _context.Update(fixture);
-                }
 
-                //Loop trough the matches to get the matches results and add in the DB
-                for (int i = 0; i < nPositions; i++)
-                {
-                    //Capture the result of the match and save in the database
-                    Match match = fixtureMatch.Matches[i];
-                    match.PositionID = _context.Positions.FirstOrDefault(d => d.Name.Contains((i + 1).ToString())).ID;
-                   
-                    _context.Add(match);
-
-                    //Add in the DB the PlayerPosition for home player
-                    PlayerPosition playerPositionHome = new PlayerPosition
+                    //Loop trough the matches to get the matches results and add in the DB
+                    for (int i = 0; i < nPositions; i++)
                     {
-                        PlayerID = match.HomePlayerID,
-                        MatchID = match.ID,
-                        PositionID = _context.Positions.FirstOrDefault(d => d.Name.Contains((i + 1).ToString())).ID,
-                    };
+                        //Capture the result of the match and save in the database
+                        Match match = fixtureMatch.Matches[i];
+                        match.PositionID = _context.Positions.FirstOrDefault(d => d.Name.Contains((i + 1).ToString())).ID;
 
-                    _context.Add(playerPositionHome);
+                        _context.Add(match);
 
-                    //Add in the DB the PlayerPosition for away player
-                    PlayerPosition playerPositionAway = new PlayerPosition
-                    {
-                        PlayerID = match.AwayPlayerID,
-                        MatchID = match.ID,
-                        PositionID = _context.Positions.FirstOrDefault(d => d.Name.Contains((i + 1).ToString())).ID,
-                    };
+                        //Add in the DB the PlayerPosition for home player
+                        PlayerPosition playerPositionHome = new PlayerPosition
+                        {
+                            PlayerID = match.HomePlayerID,
+                            MatchID = match.ID,
+                            PositionID = _context.Positions.FirstOrDefault(d => d.Name.Contains((i + 1).ToString())).ID,
+                        };
 
-                    _context.Add(playerPositionAway);
+                        _context.Add(playerPositionHome);
 
+                        //Add in the DB the PlayerPosition for away player
+                        PlayerPosition playerPositionAway = new PlayerPosition
+                        {
+                            PlayerID = match.AwayPlayerID,
+                            MatchID = match.ID,
+                            PositionID = _context.Positions.FirstOrDefault(d => d.Name.Contains((i + 1).ToString())).ID,
+                        };
+                        _context.Add(playerPositionAway);
+                    }
+
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index", "Fixtures");
                 }
-
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction("Index", "Fixtures");
             }
-            ViewData["AwayPlayerID"] = new SelectList(_context.Players, "ID", "Email");
-            ViewData["HomePlayerID"] = new SelectList(_context.Players, "ID", "Email");
-            ViewData["nPositions"] = nPositions;
+            catch (DbUpdateException err)
+            {
+                if (err.InnerException.Message.Contains("IX_Matches_FixtureID_HomePlayerID_AwayPlayerID"))
+                {
+                    ModelState.AddModelError("Player error", "One player cannot play two matches in the same fixture");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Unable to save result. Report this error to the team");
+                }
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError("", "Unable to save result. Report this error to the team");
+            }
+            finally
+            {
+                var dQueryHome = from d in _context.Players
+                                 orderby d.FirstName, d.LastName
+                                 where d.TeamID == fixtureMatch.Fixture.HomeTeamID
+                                 select d;
+
+                var dQueryAway = from d in _context.Players
+                                 orderby d.FirstName, d.LastName
+                                 where d.TeamID == fixtureMatch.Fixture.AwayTeamID
+                                 select d;
+
+                ViewData["AwayPlayerID"] = new SelectList(dQueryAway, "ID", "FullName");
+                ViewData["HomePlayerID"] = new SelectList(dQueryHome, "ID", "FullName");
+                ViewData["nPositions"] = nPositions;
+            }
+            
             return View(fixtureMatch);
         }
 
