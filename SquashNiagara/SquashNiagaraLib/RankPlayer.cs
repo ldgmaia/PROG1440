@@ -39,6 +39,13 @@ namespace SquashNiagaraLib
                     else
                         return 4.5d;
                 }
+                else if (position == 5)
+                {
+                    if (playerType == ResultFor.Home)
+                        return 6d;
+                    else
+                        return 3.5d;
+                }
                 else
                 {
                     throw new ArgumentOutOfRangeException("Invalid position");
@@ -76,6 +83,13 @@ namespace SquashNiagaraLib
                     else
                         return 5d;
                 }
+                else if (position == 5)
+                {
+                    if (playerType == ResultFor.Home)
+                        return 5.5d;
+                    else
+                        return 4d;
+                }
                 else
                 {
                     throw new ArgumentOutOfRangeException("Invalid position");
@@ -112,6 +126,13 @@ namespace SquashNiagaraLib
                     else
                         return 5.5d;
                 }
+                else if (position == 5)
+                {
+                    if (playerType == ResultFor.Home)
+                        return 5d;
+                    else
+                        return 4.5d;
+                }
                 else
                 {
                     throw new ArgumentOutOfRangeException("Invalid position");
@@ -147,6 +168,13 @@ namespace SquashNiagaraLib
                         return 7d;
                     else
                         return 4.5d;
+                }
+                else if (position == 5)
+                {
+                    if (playerType == ResultFor.Away)
+                        return 6d;
+                    else
+                        return 3.5d;
                 }
                 else
                 {
@@ -185,6 +213,13 @@ namespace SquashNiagaraLib
                     else
                         return 5d;
                 }
+                else if (position == 5)
+                {
+                    if (playerType == ResultFor.Away)
+                        return 5.5d;
+                    else
+                        return 4d;
+                }
                 else
                 {
                     throw new ArgumentOutOfRangeException("Invalid position");
@@ -220,6 +255,13 @@ namespace SquashNiagaraLib
                         return 6d;
                     else
                         return 5.5d;
+                }
+                else if (position == 5)
+                {
+                    if (playerType == ResultFor.Away)
+                        return 5d;
+                    else
+                        return 4.5d;
                 }
                 else
                 {
