@@ -39,7 +39,7 @@ namespace SquashNiagaraLib
                     else
                         return 4.5d;
                 }
-                else if (position == 5)
+                else if (position == "Position 5")
                 {
                     if (playerType == ResultFor.Home)
                         return 6d;
@@ -83,7 +83,7 @@ namespace SquashNiagaraLib
                     else
                         return 5d;
                 }
-                else if (position == 5)
+                else if (position == "Position 5")
                 {
                     if (playerType == ResultFor.Home)
                         return 5.5d;
@@ -126,7 +126,7 @@ namespace SquashNiagaraLib
                     else
                         return 5.5d;
                 }
-                else if (position == 5)
+                else if (position == "Position 5")
                 {
                     if (playerType == ResultFor.Home)
                         return 5d;
@@ -169,7 +169,7 @@ namespace SquashNiagaraLib
                     else
                         return 4.5d;
                 }
-                else if (position == 5)
+                else if (position == "Position 5")
                 {
                     if (playerType == ResultFor.Away)
                         return 6d;
@@ -213,7 +213,7 @@ namespace SquashNiagaraLib
                     else
                         return 5d;
                 }
-                else if (position == 5)
+                else if (position == "Position 5")
                 {
                     if (playerType == ResultFor.Away)
                         return 5.5d;
@@ -256,7 +256,7 @@ namespace SquashNiagaraLib
                     else
                         return 5.5d;
                 }
-                else if (position == 5)
+                else if (position == "Position 5")
                 {
                     if (playerType == ResultFor.Away)
                         return 5d;
