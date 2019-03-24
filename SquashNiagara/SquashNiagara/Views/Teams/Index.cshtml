@@ -54,11 +54,11 @@
                     {
                         string imageBase64 = Convert.ToBase64String(item.imageContent);
                         string imageSrc = string.Format("data:" + item.imageMimeType + ";base64,{0}", imageBase64);
-                        <img src="@imageSrc" alt="Team Picture" title="Team Picture" style="max-height: 100px; max-width: 120px" class="img-responsive img-rounded" />
+                        <img src="@imageSrc" alt="Team Picture" title="Team Picture" style="max-height: 100px; max-width: 100px" class="img-responsive img-rounded" />
                     }
                     if (item.imageContent == null)
                     {
-                        <br /><img src="~/images/SquashDefault.png" alt="Player Picture" style="width: 60px; height: 50px" class="img-responsive img-rounded" />
+                        <img src="~/images/SquashDefault.png" alt="Player Picture" style="width: 60px; height: 60px" class="img-responsive img-rounded" />
                     }
                 }
             </td>
