@@ -47,21 +47,9 @@ namespace SquashNiagara.Controllers
                              orderby d.EndDate descending
                              select d.ID).FirstOrDefault());
             }
-
-            if (DivisionID != null)
-            {
-                fixtures = fixtures.Where(p => p.DivisionID == Convert.ToInt32(DivisionID));
-            }else
-            {
-                fixtures = fixtures.Where(p => p.DivisionID == 0);
-            }
-
-            PopulateDropDownListSeason();
-            
-            ViewData["DivisionID"] = from d in _context.Divisions
-                                         select d;
-
+ 
             int captainID = 0;
+            int captainDivision = 0;
 
             if (User.IsInRole("Captain"))
             {
@@ -71,10 +59,30 @@ namespace SquashNiagara.Controllers
 
                 captainID = _context.Players.FirstOrDefault(d => d.Email == User.Identity.Name).ID;
                 var teamID = _context.Teams.FirstOrDefault(d => d.CaptainID == captainID).ID;
+                captainDivision = _context.SeasonDivisionTeams.FirstOrDefault(d => d.TeamID == teamID && d.SeasonID == SeasonID).DivisionID;
 
                 fixtures = fixtures.Where(p => p.HomeTeamID == teamID || p.AwayTeamID == teamID);
             }
+            
+
+            if (DivisionID != null)
+            {
+                fixtures = fixtures.Where(p => p.DivisionID == Convert.ToInt32(DivisionID));
+            }
+            else
+            {
+                fixtures = fixtures.Where(p => p.DivisionID == captainDivision);
+            }
+
+            PopulateDropDownListSeason();
+
             ViewData["CaptainID"] = captainID;
+
+            ViewData["CaptainDivision"] = captainDivision;
+
+            ViewData["DivisionID"] = from d in _context.Divisions
+                                     select d;
+
 
             return View(await fixtures.ToListAsync());
         }
