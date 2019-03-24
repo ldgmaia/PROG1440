@@ -90,8 +90,8 @@ namespace SquashNiagara.Data.SQUASHMigrations
                     VenueID = table.Column<int>(nullable: false),
                     HomeTeamScore = table.Column<short>(nullable: true),
                     AwayTeamScore = table.Column<short>(nullable: true),
-                    HomeTeamBonus = table.Column<short>(nullable: true),
-                    AwayTeamBonus = table.Column<short>(nullable: true),
+                    HomeTeamBonus = table.Column<double>(nullable: true),
+                    AwayTeamBonus = table.Column<double>(nullable: true),
                     CaptainResultID = table.Column<int>(nullable: true),
                     CaptainApproveID = table.Column<int>(nullable: true),
                     Approved = table.Column<bool>(nullable: false, defaultValue: false)

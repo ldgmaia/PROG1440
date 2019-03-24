@@ -513,7 +513,7 @@ namespace SquashNiagara.Controllers
                 teamRankingHome.TeamID = fixture.HomeTeamID;
                 teamRankingHome.DivisionID = fixture.DivisionID;
                 teamRankingHome.SeasonID = fixture.SeasonID;
-                teamRankingHome.Points = (short)(fixture.HomeTeamScore + fixture.HomeTeamBonus);
+                teamRankingHome.Points = (double)(fixture.HomeTeamScore + fixture.HomeTeamBonus);
                 teamRankingHome.Won = (fixture.HomeTeamScore > fixture.AwayTeamScore) ? 1 : 0;
                 teamRankingHome.Lost = (fixture.HomeTeamScore < fixture.AwayTeamScore) ? 1 : 0;
                 teamRankingHome.Played = 1;
@@ -524,7 +524,7 @@ namespace SquashNiagara.Controllers
             else
             {
                 teamRankingHome = teamRankingHomeToUpdate;
-                teamRankingHome.Points += (short)(fixture.HomeTeamScore + fixture.HomeTeamBonus);
+                teamRankingHome.Points += (double)(fixture.HomeTeamScore + fixture.HomeTeamBonus);
                 teamRankingHome.Won += (fixture.HomeTeamScore > fixture.AwayTeamScore) ? 1 : 0;
                 teamRankingHome.Lost += (fixture.HomeTeamScore < fixture.AwayTeamScore) ? 1 : 0;
                 teamRankingHome.Played += 1;
@@ -537,7 +537,7 @@ namespace SquashNiagara.Controllers
                 teamRankingAway.TeamID = fixture.AwayTeamID;
                 teamRankingAway.DivisionID = fixture.DivisionID;
                 teamRankingAway.SeasonID = fixture.SeasonID;
-                teamRankingAway.Points = (short)(fixture.AwayTeamScore + fixture.AwayTeamBonus);
+                teamRankingAway.Points = (double)(fixture.AwayTeamScore + fixture.AwayTeamBonus);
                 teamRankingAway.Won = (fixture.HomeTeamScore < fixture.AwayTeamScore) ? 1 : 0;
                 teamRankingAway.Lost = (fixture.HomeTeamScore > fixture.AwayTeamScore) ? 1 : 0;
                 teamRankingAway.Played = 1;
@@ -548,7 +548,7 @@ namespace SquashNiagara.Controllers
             else
             {
                 teamRankingAway = teamRankingAwayToUpdate;
-                teamRankingAway.Points += (short)(fixture.AwayTeamScore + fixture.AwayTeamBonus);
+                teamRankingAway.Points += (double)(fixture.AwayTeamScore + fixture.AwayTeamBonus);
                 teamRankingAway.Won += (fixture.HomeTeamScore < fixture.AwayTeamScore) ? 1 : 0;
                 teamRankingAway.Lost += (fixture.HomeTeamScore > fixture.AwayTeamScore) ? 1 : 0;
                 teamRankingAway.Played += 1;

@@ -60,13 +60,13 @@ namespace SquashNiagara.Models
 
         [Display(Name = "(H)-Bonus")]
         [Range(0, 1, ErrorMessage = "Bonus have to be 0 or 1")]
-        [RegularExpression("^\\d{1}$", ErrorMessage = "Please enter a valid number")]
-        public Int16? HomeTeamBonus { get; set; }
+        [RegularExpression(@"^\d+(.\d{1,2})?$", ErrorMessage = "Please enter a valid number")]
+        public double? HomeTeamBonus { get; set; }
 
         [Display(Name = "(A)-Bonus")]
-        [Range(0, 1, ErrorMessage = "Bonus have to be 0 or 1")]
-        [RegularExpression("^\\d{1}$", ErrorMessage = "Please enter a valid number")]
-        public Int16? AwayTeamBonus { get; set; }
+        [Range(0, 1, ErrorMessage = "Bonus have to be 0, 0.5 or 1")]
+        [RegularExpression(@"^\d+(.\d{1,2})?$", ErrorMessage = "Please enter a valid number")]
+        public double? AwayTeamBonus { get; set; }
 
         [ScaffoldColumn(false)]
         public int? CaptainResultID { get; set; }

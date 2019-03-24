@@ -10,6 +10,24 @@
     @*<a asp-action="Create" class="btn btn-primary btn-sm">Create New</a>*@
 </p>
 @*<table class="table">*@
+
+<form asp-action="PlayerRanking">
+    <div class="form-horizontal">
+        <div class="row well">
+            <div class="form-group col-md-6">
+                @foreach (Division i in @ViewBag.DivisionID)
+                {
+                    <button name="DivisionID" value="@i.ID" class="btn btn-primary btn-sm">@i.Name</button>
+                }
+            </div>
+            <div class="form-group col-md-4">
+                <label class="control-label col-md-6">Season:</label>
+                @Html.DropDownList("SeasonID", (SelectList)ViewBag.SeasonID, new { onchange = "this.form.submit();" })
+            </div>
+        </div>
+    </div>
+</form>
+
 <table id="indxFix" class="table table-striped table-bordered" style="width: 100%">
     <thead>
         <tr>

@@ -47,7 +47,7 @@ namespace SquashNiagara.Data.SQUASHMigrations
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(false);
 
-                    b.Property<short?>("AwayTeamBonus");
+                    b.Property<double?>("AwayTeamBonus");
 
                     b.Property<int>("AwayTeamID");
 
@@ -61,7 +61,7 @@ namespace SquashNiagara.Data.SQUASHMigrations
 
                     b.Property<int>("DivisionID");
 
-                    b.Property<short?>("HomeTeamBonus");
+                    b.Property<double?>("HomeTeamBonus");
 
                     b.Property<int>("HomeTeamID");
 

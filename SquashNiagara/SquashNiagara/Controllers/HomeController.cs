@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SquashNiagara.Data;
 using SquashNiagara.Models;
@@ -75,15 +76,79 @@ namespace SquashNiagara.Controllers
         //    return View();
         //}
         // GET: Matches
-        public async Task<IActionResult> PlayerRanking()
+        public async Task<IActionResult> PlayerRanking(int? SeasonID, string DivisionID)
         {
-            var playerRankings = _context.PlayerRankings.Include(p => p.Player).Include(p => p.Season).Include(p => p.Division);
+            //var playerRankings = _context.PlayerRankings.Include(p => p.Player).Include(p => p.Season).Include(p => p.Division);
+
+            var playerRankings = from f in _context.PlayerRankings.
+                                 Include(f => f.Player)
+                                 .Include(f => f.Season)
+                                 .Include(f => f.Division)
+                                 select f;
+
+            if (SeasonID.HasValue)
+            {
+                playerRankings = playerRankings.Where(p => p.SeasonID == SeasonID);
+            }
+            else
+            {
+                SeasonID = ((from d in _context.Seasons
+                             orderby d.EndDate descending
+                             select d.ID).FirstOrDefault());
+            }
+
+            if (DivisionID != null)
+            {
+                playerRankings = playerRankings.Where(p => p.DivisionID == Convert.ToInt32(DivisionID));
+            }
+            else
+            {
+                playerRankings = playerRankings.Where(p => p.DivisionID == 0);
+            }
+
+            PopulateDropDownListSeason();
+
+            ViewData["DivisionID"] = from d in _context.Divisions
+                                     select d;
+
             return View(await playerRankings.ToListAsync());
         }
 
-        public async Task<IActionResult> TeamRanking()
+        public async Task<IActionResult> TeamRanking(int? SeasonID, string DivisionID)
         {
-            var teamRankings = _context.TeamRankings.Include(p => p.Team).Include(p => p.Season).Include(p => p.Division);
+            //var teamRankings = _context.TeamRankings.Include(p => p.Team).Include(p => p.Season).Include(p => p.Division);
+
+            var teamRankings = from f in _context.TeamRankings
+                               .Include(f => f.Team)
+                               .Include(f => f.Season)
+                               .Include(f => f.Division)
+                               select f;
+
+            if (SeasonID.HasValue)
+            {
+                teamRankings = teamRankings.Where(p => p.SeasonID == SeasonID);
+            }
+            else
+            {
+                SeasonID = ((from d in _context.Seasons
+                             orderby d.EndDate descending
+                             select d.ID).FirstOrDefault());
+            }
+
+            if (DivisionID != null)
+            {
+                teamRankings = teamRankings.Where(p => p.DivisionID == Convert.ToInt32(DivisionID));
+            }
+            else
+            {
+                teamRankings = teamRankings.Where(p => p.DivisionID == 0);
+            }
+
+            PopulateDropDownListSeason();
+
+            ViewData["DivisionID"] = from d in _context.Divisions
+                                     select d;
+
             return View(await teamRankings.ToListAsync());
         }
 
@@ -175,6 +240,13 @@ namespace SquashNiagara.Controllers
                 ViewBag.error = "Some problem happend that need to be analised. Report it to the team";
             }
             return View();
+        }
+        private void PopulateDropDownListSeason()
+        {
+            var dQuery = from d in _context.Seasons
+                         orderby d.EndDate descending
+                         select d;
+            ViewData["SeasonID"] = new SelectList(dQuery, "ID", "Name");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

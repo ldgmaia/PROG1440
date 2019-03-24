@@ -78,10 +78,24 @@
                     @Html.DisplayFor(modelItem => item.HomeTeam.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.HomeTeamScore)
+                    @if (item.HomeTeamScore.HasValue)
+                    {
+                        @(@Convert.ToDouble(item.HomeTeamScore) + @Convert.ToDouble(item.HomeTeamBonus))
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.HomeTeamScore)
+                    }
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.AwayTeamScore)
+                    @if (item.HomeTeamScore.HasValue)
+                    {
+                        @(@Convert.ToDouble(item.AwayTeamScore) + @Convert.ToDouble(item.AwayTeamBonus))
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.AwayTeamScore)
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.AwayTeam.Name)
