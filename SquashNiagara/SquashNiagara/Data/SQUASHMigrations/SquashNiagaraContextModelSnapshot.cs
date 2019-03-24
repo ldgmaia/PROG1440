@@ -109,11 +109,15 @@ namespace SquashNiagara.Data.SQUASHMigrations
 
                     b.Property<short?>("HomePlayerScore");
 
+                    b.Property<int>("PositionID");
+
                     b.HasKey("ID");
 
                     b.HasIndex("AwayPlayerID");
 
                     b.HasIndex("HomePlayerID");
+
+                    b.HasIndex("PositionID");
 
                     b.HasIndex("FixtureID", "HomePlayerID", "AwayPlayerID")
                         .IsUnique();
@@ -431,6 +435,11 @@ namespace SquashNiagara.Data.SQUASHMigrations
                         .WithMany("HomeMatches")
                         .HasForeignKey("HomePlayerID")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("SquashNiagara.Models.Position", "Position")
+                        .WithMany("Matches")
+                        .HasForeignKey("PositionID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("SquashNiagara.Models.Player", b =>

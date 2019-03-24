@@ -97,69 +97,67 @@
             @{ int counter = 1;
                 for (int i = 0; i < ViewBag.nPositions; i++)
                 {
+                    <div class="form-group row">
+                        <label asp-for="Matches[i].HomePlayerID" class="text-center col-sm-4  control-label"></label>
+                        <label class="text-center col-sm-2">Position @counter</label>
+                        <label asp-for="Matches[i].AwayPlayerID" class="text-center col-sm-4  control-label"></label>
+                    </div>
+                    <div class="form-group row">
+                        <input type="hidden" asp-for="Matches[i].FixtureID" value=@ViewBag.FixtureID />
+
+                        <div class="col-sm-3">
+                            <select asp-for="Matches[i].HomePlayerID" class="form-control" asp-items="ViewBag.HomePlayerID"></select>
+                        </div>
+
+                        <div class="col-sm-1">
+                            <input asp-for="Matches[i].HomePlayerScore" class="form-control" />
+                            <span asp-validation-for="Matches[i].HomePlayerScore" class="text-danger"></span>
+                        </div>
+
+
+                        <div class="col-sm-2 lead text-center">VS.</div>
+
+                        <div class="col-sm-3">
+                            <select asp-for="Matches[i].AwayPlayerID" class="form-control" asp-items="ViewBag.AwayPlayerID"></select>
+                        </div>
+
+                        <div class="col-sm-1">
+                            <input asp-for="Matches[i].AwayPlayerScore" class="form-control" />
+                            <span asp-validation-for="Matches[i].AwayPlayerScore" class="text-danger"></span>
+                        </div>
+                    </div>
+                    @*<input type="hidden" asp-for="Matches[i].PositionID" />*@
+                    counter += 1;
+                };
+            }
+
+
             <div class="form-group row">
-                <label asp-for="Matches[i].HomePlayerID" class="text-center col-sm-4  control-label"></label>
-                <label class="text-center col-sm-2">Position @counter</label>
-                @*<h4 class="text-center col-sm-4">Position @counter</h4>*@
-                <label asp-for="Matches[i].AwayPlayerID" class="text-center col-sm-4  control-label"></label>
+
+                <label asp-for="Fixture.HomeTeamBonus" class="col-sm-4  text-center control-label"></label>
+                <div class="col-sm-1">
+                    <input asp-for="Fixture.HomeTeamBonus" class="form-control" />
+                    <span asp-validation-for="Fixture.HomeTeamBonus" class="text-danger"></span>
+                </div>
+                <div class="col-sm-1">
+                    <input asp-for="Fixture.AwayTeamBonus" class="form-control" />
+                    <span asp-validation-for="Fixture.AwayTeamBonus" class="text-danger"></span>
+                </div>
+                <label asp-for="Fixture.AwayTeamBonus" class="col-sm-4  text-center control-label"></label>
+
             </div>
-                        <div class="form-group row">
-                            <input type="hidden" asp-for="Matches[i].FixtureID" value=@ViewBag.FixtureID />
-                          
-                            <div class="col-sm-3">
-                                <select asp-for="Matches[i].HomePlayerID" class="form-control" asp-items="ViewBag.HomePlayerID"></select>
-                            </div>
 
-                            <div class="col-sm-1">
-                                @*<label asp-for="Matches[i].HomePlayerScore" class="control-label"></label>*@
-                                <input asp-for="Matches[i].HomePlayerScore" class="form-control" />
-                                <span asp-validation-for="Matches[i].HomePlayerScore" class="text-danger"></span>
-                            </div>
-
-
-                            <div class="col-sm-2 lead text-center">VS.</div>
-                            
-                            <div class="col-sm-3">
-                                <select asp-for="Matches[i].AwayPlayerID" class="form-control" asp-items="ViewBag.AwayPlayerID"></select>
-                            </div>
-
-                            <div class="col-sm-1">
-                                @*<label asp-for="Matches[i].AwayPlayerScore" class="control-label"></label>*@
-                                <input asp-for="Matches[i].AwayPlayerScore" class="form-control" />
-                                <span asp-validation-for="Matches[0].AwayPlayerScore" class="text-danger"></span>
-                            </div>
-                        </div>
-                        counter += 1;
-                        };
-                        }
-
-                       
-                        <div class="form-group row">
-
-                            <label asp-for="Fixture.HomeTeamBonus" class="col-sm-4  text-center control-label"></label>
-                            <div class="col-sm-1">
-                                <input asp-for="Fixture.HomeTeamBonus" class="form-control" />
-                                <span asp-validation-for="Fixture.HomeTeamBonus" class="text-danger"></span>
-                            </div>
-                            <div class="col-sm-1">
-                                <input asp-for="Fixture.AwayTeamBonus" class="form-control" />
-                                <span asp-validation-for="Fixture.AwayTeamBonus" class="text-danger"></span>
-                            </div>
-                            <label asp-for="Fixture.AwayTeamBonus" class="col-sm-4  text-center control-label"></label>
-
-                        </div>
-
-                        <div class="form-group">
-                            <input type="submit" value="Add Result" class="btn btn-default" />
-                        </div>
-                </form>
+            <div class="form-group">
+                <input type="submit" value="Add Result" class="btn btn-default" />
+            </div>
+        </form>
     </div>
 
 </div>
 
 <div>
     <a asp-area="" asp-controller="Fixtures" asp-action="Index"></a>
-        @*<a asp-action="Index">Back to List</a>*@
+    @*<a asp-action="Index">Back to List</a>*@
 </div>
 
 @section Scripts {

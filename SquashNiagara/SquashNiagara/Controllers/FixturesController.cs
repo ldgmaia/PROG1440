@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using SquashNiagara.Data;
 using SquashNiagara.Models;
+using SquashNiagara.ViewModels;
+using SquashNiagaraLib;
 
 namespace SquashNiagara.Controllers
 {
@@ -25,8 +27,6 @@ namespace SquashNiagara.Controllers
         // GET: Fixtures
         public async Task<IActionResult> Index(int? SeasonID, string DivisionID)
         {
-           
-                
 
             var fixtures = from f in _context.Fixtures
                 .Include(f => f.AwayTeam)
@@ -61,17 +61,20 @@ namespace SquashNiagara.Controllers
             ViewData["DivisionID"] = from d in _context.Divisions
                                          select d;
 
+            int captainID = 0;
+
             if (User.IsInRole("Captain"))
             {
                 //var captainID = from d in _context.Players
                 //                where d.Email == User.Identity.Name
                 //                select d;
 
-                var captainID = _context.Players.FirstOrDefault(d => d.Email == User.Identity.Name).ID;
+                captainID = _context.Players.FirstOrDefault(d => d.Email == User.Identity.Name).ID;
                 var teamID = _context.Teams.FirstOrDefault(d => d.CaptainID == captainID).ID;
 
                 fixtures = fixtures.Where(p => p.HomeTeamID == teamID || p.AwayTeamID == teamID);
             }
+            ViewData["CaptainID"] = captainID;
 
             return View(await fixtures.ToListAsync());
         }
@@ -364,17 +367,26 @@ namespace SquashNiagara.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ApproveResult(int id, [Bind("ID,SeasonID,DivisionID,HomeTeamID,AwayTeamID,Date,Time,VenueID,HomeTeamScore,AwayTeamScore,HomeTeamBonus,AwayTeamBonus,Approved")] Fixture fixture)
+        public async Task<IActionResult> ApproveResult(int id, [Bind("ID,SeasonID,DivisionID,HomeTeamID,AwayTeamID,Date,Time,VenueID,HomeTeamScore,AwayTeamScore,HomeTeamBonus,AwayTeamBonus,Approved,CaptainResultID,CaptainApproveID")] Fixture fixture)
         {
             if (id != fixture.ID)
             {
                 return NotFound();
             }
 
+            if (fixture.Approved == false)
+            {
+                return RedirectToAction(nameof(Index));
+            } 
+
             if (ModelState.IsValid)
             {
                 try
                 {
+                    if (User.IsInRole("Captain"))
+                    {
+                        fixture.CaptainApproveID = _context.Players.FirstOrDefault(p => p.Email == User.Identity.Name).ID;
+                    }
                     _context.Update(fixture);
                     await _context.SaveChangesAsync();
                 }
@@ -389,6 +401,23 @@ namespace SquashNiagara.Controllers
                         throw;
                     }
                 }
+
+                FixtureMatchVM fixtureMatch = new FixtureMatchVM();
+
+                fixtureMatch.Fixture = _context.Fixtures.Find(id);
+               
+                var matchesFromFixture = from m in _context.Matches
+                    .Where(m => m.FixtureID == id)
+                    .Include(m => m.Fixture)
+                    .Include(m => m.Position)
+                    .Include(m => m.HomePlayer)
+                    .Include(m => m.AwayPlayer)
+                    select m;
+
+                fixtureMatch.Matches = matchesFromFixture.ToList();
+
+                UpdateRankings(fixtureMatch);
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AwayTeamID"] = new SelectList(_context.Teams, "ID", "Name", fixture.AwayTeamID);
@@ -466,6 +495,169 @@ namespace SquashNiagara.Controllers
             var dQuery = from d in _context.Divisions
                          select d;
             ViewData["DivisionID"] = new SelectList(dQuery, "ID", "Name", fixture?.Division);
+        }
+
+        public void UpdateRankings(FixtureMatchVM fixtureMatch)
+        {
+            int nPositions = _context.Divisions.FirstOrDefault(d => d.ID == fixtureMatch.Fixture.DivisionID).PositionNo;
+
+            Fixture fixture = fixtureMatch.Fixture;
+
+            TeamRanking teamRankingHome = new TeamRanking();
+            var teamRankingHomeToUpdate = _context.TeamRankings.FirstOrDefault(d => d.TeamID == fixture.HomeTeamID && d.SeasonID == fixture.SeasonID && d.DivisionID == fixture.DivisionID);
+
+            TeamRanking teamRankingAway = new TeamRanking();
+            var teamRankingAwayToUpdate = _context.TeamRankings.FirstOrDefault(d => d.TeamID == fixture.AwayTeamID && d.SeasonID == fixture.SeasonID && d.DivisionID == fixture.DivisionID);
+
+            if (teamRankingHomeToUpdate == null)
+            {
+                teamRankingHome.TeamID = fixture.HomeTeamID;
+                teamRankingHome.DivisionID = fixture.DivisionID;
+                teamRankingHome.SeasonID = fixture.SeasonID;
+                teamRankingHome.Points = (short)(fixture.HomeTeamScore + fixture.HomeTeamBonus);
+                teamRankingHome.Won = (fixture.HomeTeamScore > fixture.AwayTeamScore) ? 1 : 0;
+                teamRankingHome.Lost = (fixture.HomeTeamScore < fixture.AwayTeamScore) ? 1 : 0;
+                teamRankingHome.Played = 1;
+
+                _context.Add(teamRankingHome);
+                _context.SaveChanges();
+            }
+            else
+            {
+                teamRankingHome = teamRankingHomeToUpdate;
+                teamRankingHome.Points += (short)(fixture.HomeTeamScore + fixture.HomeTeamBonus);
+                teamRankingHome.Won += (fixture.HomeTeamScore > fixture.AwayTeamScore) ? 1 : 0;
+                teamRankingHome.Lost += (fixture.HomeTeamScore < fixture.AwayTeamScore) ? 1 : 0;
+                teamRankingHome.Played += 1;
+                _context.Update(teamRankingHome);
+                _context.SaveChanges();
+            }
+
+            if (teamRankingAwayToUpdate == null)
+            {
+                teamRankingAway.TeamID = fixture.AwayTeamID;
+                teamRankingAway.DivisionID = fixture.DivisionID;
+                teamRankingAway.SeasonID = fixture.SeasonID;
+                teamRankingAway.Points = (short)(fixture.AwayTeamScore + fixture.AwayTeamBonus);
+                teamRankingAway.Won = (fixture.HomeTeamScore < fixture.AwayTeamScore) ? 1 : 0;
+                teamRankingAway.Lost = (fixture.HomeTeamScore > fixture.AwayTeamScore) ? 1 : 0;
+                teamRankingAway.Played = 1;
+
+                _context.Add(teamRankingAway);
+                _context.SaveChanges();
+            }
+            else
+            {
+                teamRankingAway = teamRankingAwayToUpdate;
+                teamRankingAway.Points += (short)(fixture.AwayTeamScore + fixture.AwayTeamBonus);
+                teamRankingAway.Won += (fixture.HomeTeamScore < fixture.AwayTeamScore) ? 1 : 0;
+                teamRankingAway.Lost += (fixture.HomeTeamScore > fixture.AwayTeamScore) ? 1 : 0;
+                teamRankingAway.Played += 1;
+                _context.Update(teamRankingAway);
+                _context.SaveChanges();
+            }
+
+            //Loop trough the matches to update the rankings
+            foreach (Match match in fixtureMatch.Matches)
+            {
+                //Add statistics for home player
+                PlayerRanking playerRankingHome = new PlayerRanking();
+                var playerRankingHomeToUpdate = _context.PlayerRankings.FirstOrDefault(d => d.PlayerID == match.HomePlayerID && d.SeasonID == fixture.SeasonID && d.DivisionID == fixture.DivisionID);
+
+                if (playerRankingHomeToUpdate == null)
+                {
+                    playerRankingHome.PlayerID = match.HomePlayerID;
+                    playerRankingHome.SeasonID = fixture.SeasonID;
+                    playerRankingHome.DivisionID = fixture.DivisionID;
+                    playerRankingHome.Played = 1;
+                    if (match.HomePlayerScore > match.AwayPlayerScore)
+                    {
+                        playerRankingHome.WonMatches = 1;
+                        playerRankingHome.LostMatches = 0;
+                    }
+                    else
+                    {
+                        playerRankingHome.WonMatches = 0;
+                        playerRankingHome.LostMatches = 1;
+                    }
+
+                    playerRankingHome.WonGames = (short)match.HomePlayerScore;
+                    playerRankingHome.LostGames = (short)match.AwayPlayerScore;
+                    playerRankingHome.Points = RankPlayer.CalcPoints(match.Position.Name, (short)match.HomePlayerScore, (short)match.AwayPlayerScore, ResultFor.Home);
+                    playerRankingHome.Average = playerRankingHome.Points / playerRankingHome.Played;
+                    _context.Add(playerRankingHome);
+                }
+                else
+                {
+                    playerRankingHome = playerRankingHomeToUpdate;
+                    playerRankingHome.Played += 1;
+                    if (match.HomePlayerScore > match.AwayPlayerScore)
+                    {
+                        playerRankingHome.WonMatches += 1;
+                    }
+                    else
+                    {
+                        playerRankingHome.LostMatches += 1;
+                    }
+
+
+                    playerRankingHome.WonGames += (short)match.HomePlayerScore;
+                    playerRankingHome.LostGames += (short)match.AwayPlayerScore;
+                    playerRankingHome.Points += RankPlayer.CalcPoints(match.Position.Name, (short)match.HomePlayerScore, (short)match.AwayPlayerScore, ResultFor.Home);
+                    playerRankingHome.Average = playerRankingHome.Points / playerRankingHome.Played;
+                    _context.Update(playerRankingHome);
+                }
+
+                //Add statistics for away player
+                PlayerRanking playerRankingAway = new PlayerRanking();
+                var playerRankingAwayToUpdate = _context.PlayerRankings.FirstOrDefault(d => d.PlayerID == match.AwayPlayerID && d.SeasonID == fixture.SeasonID && d.DivisionID == fixture.DivisionID);
+
+
+                if (playerRankingAwayToUpdate == null)
+                {
+                    playerRankingAway.PlayerID = match.AwayPlayerID;
+                    playerRankingAway.SeasonID = fixture.SeasonID;
+                    playerRankingAway.DivisionID = fixture.SeasonID;
+                    playerRankingAway.Played = 1;
+                    if (match.HomePlayerScore < match.AwayPlayerScore)
+                    {
+                        playerRankingAway.WonMatches = 1;
+                        playerRankingAway.LostMatches = 0;
+                    }
+                    else
+                    {
+                        playerRankingAway.WonMatches = 0;
+                        playerRankingAway.LostMatches = 1;
+                    }
+
+
+                    playerRankingAway.WonGames = (short)match.AwayPlayerScore;
+                    playerRankingAway.LostGames = (short)match.HomePlayerScore;
+                    playerRankingAway.Points = RankPlayer.CalcPoints(match.Position.Name, (short)match.HomePlayerScore, (short)match.AwayPlayerScore, ResultFor.Away);
+                    playerRankingAway.Average = playerRankingAway.Points / playerRankingAway.Played;
+                    _context.Add(playerRankingAway);
+                }
+                else
+                {
+                    playerRankingAway = playerRankingAwayToUpdate;
+                    playerRankingAway.Played += 1;
+                    if (match.HomePlayerScore < match.AwayPlayerScore)
+                    {
+                        playerRankingAway.WonMatches += 1;
+                    }
+                    else
+                    {
+                        playerRankingAway.LostMatches += 1;
+                    }
+
+                    playerRankingAway.WonGames += (short)match.AwayPlayerScore;
+                    playerRankingAway.LostGames += (short)match.HomePlayerScore;
+                    playerRankingAway.Points += RankPlayer.CalcPoints(match.Position.Name, (short)match.HomePlayerScore, (short)match.AwayPlayerScore, ResultFor.Away);
+                    playerRankingAway.Average = playerRankingAway.Points / playerRankingAway.Played;
+                    _context.Update(playerRankingAway);
+                }
+            }
+            _context.SaveChanges();
         }
 
         private bool FixtureExists(int id)

@@ -6,10 +6,17 @@
 
 <h1 class="text-center">Squash Niagara Fixtures</h1>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary btn-sm">Create New</a>
-    <a asp-action="ImportFixtures" class="btn btn-default btn-sm">Import Fixtures</a>
-</p>
+@if (User.Identity.IsAuthenticated)
+{
+    if (User.IsInRole("Admin"))
+    {
+        <p>
+            <a asp-action="Create" class="btn btn-primary btn-sm">Create New</a>
+            <a asp-action="ImportFixtures" class="btn btn-default btn-sm">Import Fixtures</a>
+        </p>
+    }
+
+}
 
 <form asp-action="Index">
     <div class="form-horizontal">
@@ -19,12 +26,12 @@
                 {
                     <button name="DivisionID" value="@i.ID" class="btn btn-primary btn-sm">@i.Name</button>
                     @*<a asp-action="Index" asp-route-id="@i.ID" class="btn btn-primary btn-sm">@i.Name</a>
-                    <input type="submit" name="divisionButton" value="@i.Name" id="@i.ID" class="btn btn-default" />*@
+                        <input type="submit" name="divisionButton" value="@i.Name" id="@i.ID" class="btn btn-default" />*@
                 }
             </div>
             <div class="form-group col-md-4">
                 <label class="control-label col-md-6">Season:</label>
-                    @Html.DropDownList("SeasonID", (SelectList)ViewBag.SeasonID, new { onchange = "this.form.submit();" })
+                @Html.DropDownList("SeasonID", (SelectList)ViewBag.SeasonID, new { onchange = "this.form.submit();" })
             </div>
         </div>
     </div>
@@ -60,38 +67,75 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Time)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HomeTeam.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HomeTeamScore)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AwayTeamScore)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AwayTeam.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Venue.Name)
-            </td>
-            <td>
-                <small>
-                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                    <a asp-controller="Matches" asp-action="Create" asp-route-id="@item.ID">Add Result</a> |
-                    <a asp-action="ApproveResult" asp-route-id="@item.ID">Approve Result</a> |
-                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                </small>
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Time)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HomeTeam.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HomeTeamScore)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AwayTeamScore)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AwayTeam.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Venue.Name)
+                </td>
+                <td>
+                    <small>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            if (User.IsInRole("Admin"))
+                            {
+                                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> @:|
+                                <a asp-controller="Matches" asp-action="Create" asp-route-id="@item.ID">Add Result</a> @:|
+                                <a asp-action="ApproveResult" asp-route-id="@item.ID">Approve Result</a> @:|
+                            }
+                            else if (User.IsInRole("Captain"))
+                            {
+                                if (item.Approved == false)
+                                {
+                                    if (!item.CaptainResultID.HasValue)
+                                    {
+                                        <a asp-controller="Matches" asp-action="Create" asp-route-id="@item.ID">Add Result</a> @:|
+                                    }
+                                    else
+                                    {
+                                        if (item.CaptainResultID != ViewBag.CaptainID)
+                                        {
+                                            <a asp-action="ApproveResult" asp-route-id="@item.ID">Approve Result</a> @:|
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> @:|
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        <a asp-action="Details" asp-route-id="@item.ID">Details</a>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            if (User.IsInRole("Admin"))
+                            {
+                                @:|
+                                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                            }
+
+                        }
+
+
+                    </small>
+                </td>
+            </tr>
         }
     </tbody>
 </table>

@@ -233,7 +233,8 @@ namespace SquashNiagara.Data.SQUASHMigrations
                     HomePlayerID = table.Column<int>(nullable: false),
                     AwayPlayerID = table.Column<int>(nullable: false),
                     HomePlayerScore = table.Column<short>(nullable: true),
-                    AwayPlayerScore = table.Column<short>(nullable: true)
+                    AwayPlayerScore = table.Column<short>(nullable: true),
+                    PositionID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -245,6 +246,13 @@ namespace SquashNiagara.Data.SQUASHMigrations
                         principalTable: "Fixtures",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Matches_Positions_PositionID",
+                        column: x => x.PositionID,
+                        principalSchema: "SQUASH",
+                        principalTable: "Positions",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -394,6 +402,12 @@ namespace SquashNiagara.Data.SQUASHMigrations
                 schema: "SQUASH",
                 table: "Matches",
                 column: "HomePlayerID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Matches_PositionID",
+                schema: "SQUASH",
+                table: "Matches",
+                column: "PositionID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Matches_FixtureID_HomePlayerID_AwayPlayerID",

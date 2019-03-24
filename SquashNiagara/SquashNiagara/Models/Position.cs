@@ -13,6 +13,7 @@ namespace SquashNiagara.Models
             //PlayerTeams = new HashSet<PlayerTeam>();
             PlayerPositions = new HashSet<PlayerPosition>();
             Players = new HashSet<Player>();
+            Matches = new HashSet<Match>();
         }
 
         public int ID { get; set; }
@@ -27,5 +28,7 @@ namespace SquashNiagara.Models
         public virtual ICollection<PlayerPosition> PlayerPositions { get; set; }
 
         public virtual ICollection<Player> Players { get; set; }
+
+        public virtual ICollection<Match> Matches { get; set; }
     }
 }

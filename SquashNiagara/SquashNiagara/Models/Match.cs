@@ -40,6 +40,11 @@ namespace SquashNiagara.Models
         [RegularExpression("^\\d{1}$", ErrorMessage = "Please enter a valid number")]
         public Int16? AwayPlayerScore { get; set; }
 
+        [Display(Name = "Match Position")]
+        [Range(1, int.MaxValue, ErrorMessage = "You must select a player to create the matches.")]
+        public int? PositionID { get; set; }
+        public virtual Position Position { get; set; }
+
         public virtual ICollection<PlayerPosition> PlayerPositions { get; set; }
     }
 }

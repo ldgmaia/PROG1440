@@ -5,19 +5,19 @@ namespace SquashNiagaraLib
     public class RankPlayer
     {
 
-        public static double CalcPoints(int position, short HomePlayerScore, short AwayPlayerScore, ResultFor playerType)
+        public static double CalcPoints(string position, short HomePlayerScore, short AwayPlayerScore, ResultFor playerType)
         {
 
             if (HomePlayerScore == 3 && AwayPlayerScore == 0)
             {
-                if (position == 1)
+                if (position == "Position 1")
                 {
                     if (playerType == ResultFor.Home)
                         return 10d;
                     else
                         return 7.5d;
                 }
-                else if (position == 2)
+                else if (position == "Position 2")
                 {
                     if (playerType == ResultFor.Home)
                         return 9d;
@@ -25,14 +25,14 @@ namespace SquashNiagaraLib
                         return 6.5d;
 
                 }
-                else if (position == 3)
+                else if (position == "Position 3")
                 {
                     if (playerType == ResultFor.Home)
                         return 8d;
                     else
                         return 5.5d;
                 }
-                else if (position == 4)
+                else if (position == "Position 4")
                 {
                     if (playerType == ResultFor.Home)
                         return 7d;
@@ -47,14 +47,14 @@ namespace SquashNiagaraLib
             }
             else if (HomePlayerScore == 3 && AwayPlayerScore == 1)
             {
-                if (position == 1)
+                if (position == "Position 1")
                 {
                     if (playerType == ResultFor.Home)
                         return 9.5d;
                     else
                         return 8d;
                 }
-                else if (position == 2)
+                else if (position == "Position 2")
                 {
                     if (playerType == ResultFor.Home)
                         return 8.5d;
@@ -62,14 +62,14 @@ namespace SquashNiagaraLib
                         return 7d;
 
                 }
-                else if (position == 3)
+                else if (position == "Position 3")
                 {
                     if (playerType == ResultFor.Home)
                         return 7.5d;
                     else
                         return 6d;
                 }
-                else if (position == 4)
+                else if (position == "Position 4")
                 {
                     if (playerType == ResultFor.Home)
                         return 6.5d;
@@ -83,14 +83,14 @@ namespace SquashNiagaraLib
             }
             else if (HomePlayerScore == 3 && AwayPlayerScore == 2)
             {
-                if (position == 1)
+                if (position == "Position 1")
                 {
                     if (playerType == ResultFor.Home)
                         return 9d;
                     else
                         return 8.5d;
                 }
-                else if (position == 2)
+                else if (position == "Position 2")
                 {
                     if (playerType == ResultFor.Home)
                         return 8d;
@@ -98,14 +98,14 @@ namespace SquashNiagaraLib
                         return 7.5d;
 
                 }
-                else if (position == 3)
+                else if (position == "Position 3")
                 {
                     if (playerType == ResultFor.Home)
                         return 7d;
                    else
                         return 6.5d;
                 }
-                else if (position == 4)
+                else if (position == "Position 4")
                 {
                     if (playerType == ResultFor.Home)
                         return 6d;
@@ -119,14 +119,14 @@ namespace SquashNiagaraLib
             }//end Home
             if (HomePlayerScore == 0 && AwayPlayerScore == 3)
             {
-                if (position == 1)
+                if (position == "Position 1")
                 {
                     if (playerType == ResultFor.Away)
                         return 10d;
                     else
                         return 7.5d;
                 }
-                else if (position == 2)
+                else if (position == "Position 2")
                 {
                     if (playerType == ResultFor.Away)
                         return 9d;
@@ -134,14 +134,14 @@ namespace SquashNiagaraLib
                         return 6.5d;
 
                 }
-                else if (position == 3)
+                else if (position == "Position 3")
                 {
                     if (playerType == ResultFor.Away)
                         return 8d;
                     else
                         return 5.5d;
                 }
-                else if (position == 4)
+                else if (position == "Position 4")
                 {
                     if (playerType == ResultFor.Away)
                         return 7d;
@@ -156,14 +156,14 @@ namespace SquashNiagaraLib
             }
             else if (HomePlayerScore == 1 && AwayPlayerScore == 3)
             {
-                if (position == 1)
+                if (position == "Position 1")
                 {
                     if (playerType == ResultFor.Away)
                         return 9.5d;
                     else
                         return 8d;
                 }
-                else if (position == 2)
+                else if (position == "Position 2")
                 {
                     if (playerType == ResultFor.Away)
                         return 8.5d;
@@ -171,14 +171,14 @@ namespace SquashNiagaraLib
                         return 7d;
 
                 }
-                else if (position == 3)
+                else if (position == "Position 3")
                 {
                     if (playerType == ResultFor.Away)
                         return 7.5d;
                     else
                         return 6d;
                 }
-                else if (position == 4)
+                else if (position == "Position 4")
                 {
                     if (playerType == ResultFor.Away)
                         return 6.5d;
@@ -192,14 +192,14 @@ namespace SquashNiagaraLib
             }
             else if (HomePlayerScore == 2 && AwayPlayerScore == 3)
             {
-                if (position == 1)
+                if (position == "Position 1")
                 {
                     if (playerType == ResultFor.Away)
                         return 9d;
                     else
                         return 8.5d;
                 }
-                else if (position == 2)
+                else if (position == "Position 2")
                 {
                     if (playerType == ResultFor.Away)
                         return 8d;
@@ -207,14 +207,14 @@ namespace SquashNiagaraLib
                         return 7.5d;
 
                 }
-                else if (position == 3)
+                else if (position == "Position 3")
                 {
                     if (playerType == ResultFor.Away)
                         return 7d;
                     else
                         return 6.5d;
                 }
-                else if (position == 4)
+                else if (position == "Position 4")
                 {
                     if (playerType == ResultFor.Away)
                         return 6d;
