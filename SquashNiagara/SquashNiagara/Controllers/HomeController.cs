@@ -154,6 +154,7 @@ namespace SquashNiagara.Controllers
 
         public IActionResult Standings()
         {
+            ViewBag.error = "";
             try
             {
                 //Getting the number of positions by division - I'm using hardcoded Division 1

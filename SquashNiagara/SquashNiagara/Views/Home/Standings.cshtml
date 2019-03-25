@@ -4,7 +4,7 @@
 
 <div class="form-group row">
     <h2>Positional Standings</h2>
-    @if (ViewBag.error[0] == null)
+    @if (ViewBag.error == "")
     {
         @for (short count = 0; count < @ViewBag.positions[0]; count++)
         {

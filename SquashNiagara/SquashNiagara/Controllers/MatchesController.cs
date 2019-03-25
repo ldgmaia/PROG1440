@@ -135,8 +135,13 @@ namespace SquashNiagara.Controllers
                     {
                         if (fixtureMatch.Matches[n].HomePlayerScore > fixtureMatch.Matches[n].AwayPlayerScore)
                             fixture.HomeTeamScore += 1;
-                        else
+                        else if (fixtureMatch.Matches[n].HomePlayerScore < fixtureMatch.Matches[n].AwayPlayerScore)
                             fixture.AwayTeamScore += 1;
+                        else
+                        {
+                            ModelState.AddModelError("Score error", "No results can be blank");
+                            return View(fixtureMatch);
+                        }
 
                         //Save the fixture in the DB
                         if (User.IsInRole("Captain"))

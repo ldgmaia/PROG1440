@@ -10,7 +10,7 @@ using SquashNiagara.Data;
 namespace SquashNiagara.Data.SQUASHMigrations
 {
     [DbContext(typeof(SquashNiagaraContext))]
-    [Migration("20190324201556_Initial")]
+    [Migration("20190325132301_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
