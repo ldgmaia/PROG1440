@@ -131,19 +131,20 @@
                                     {
                                         if (item.CaptainResultID != ViewBag.CaptainID)
                                         {
+                                            if (User.IsInRole("Admin"))
+                                            {
+                                                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> @:|
+                                            }
                                             <a asp-action="ApproveResult" asp-route-id="@item.ID">Approve Result</a> @:|
                                         }
-                                        else
+                                        else if (item.CaptainResultID == ViewBag.CaptainID)
                                         {
                                             <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> @:|
                                         }
-                                    }
-                                }
-                                else
-                                {
-                                    if (User.IsInRole("Admin"))
-                                    {
-                                        <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> @:|
+                                        else if (User.IsInRole("Admin"))
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> @:|
+                                        }
                                     }
                                 }
                             }
