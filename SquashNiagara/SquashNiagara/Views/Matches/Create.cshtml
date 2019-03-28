@@ -22,7 +22,7 @@
         </div>
     }*@
 
-@*<div>
+<div>
 
         <hr />
         <dl class="dl-horizontal">
@@ -81,7 +81,7 @@
                 @Html.DisplayFor(model => model.Fixture.AwayTeamScore)
             </dd>
         </dl>
-    </div>*@
+    </div>
 
 <hr />
 
@@ -103,93 +103,146 @@
                 <input type="hidden" asp-for="Fixture.HomeTeamBonus" />
                 <input type="hidden" asp-for="Fixture.AwayTeamBonus" />
             </div>
-            @{ int counter = 1;
-                for (int i = 0; i < ViewBag.nPositions; i++)
-                {
-                    <div class="form-group row">
-                        <label asp-for="Matches[i].HomePlayerID" class="text-center col-sm-4  control-label"></label>
-                        <label class="text-center col-sm-2">Position @counter</label>
-                        <label asp-for="Matches[i].AwayPlayerID" class="text-center col-sm-4  control-label"></label>
-                    </div>
-                    <div class="form-group row">
-                        <input type="hidden" asp-for="Matches[i].FixtureID" value=@ViewBag.FixtureID />
-
-                        <div class="col-sm-2">
-                            <select asp-for="Matches[i].HomePlayerID" class="form-control" asp-items="ViewBag.HomePlayerID"></select>
-                        </div>
-
-                        <div class="col-sm-2">
-                            @*<input asp-for="Matches[i].HomePlayerScore" class="form-control" />
-            <span asp-validation-for="Matches[i].HomePlayerScore" class="text-danger"></span>*@
-
-                            @Html.RadioButtonFor(model => model.Matches[i].HomePlayerScore, "0", new { @checked = "checked" })
-                            0&nbsp;&nbsp;
-                            @Html.RadioButtonFor(model => model.Matches[i].HomePlayerScore, "1")
-                            1&nbsp;&nbsp;
-                            @Html.RadioButtonFor(model => model.Matches[i].HomePlayerScore, "2")
-                            2&nbsp;&nbsp;
-                            @Html.RadioButtonFor(model => model.Matches[i].HomePlayerScore, "3")
-                            3
-                        </div>
-
-
-                        <div class="col-sm-2 lead text-center">VS.</div>
-
-                        <div class="col-sm-2">
-                            <select asp-for="Matches[i].AwayPlayerID" class="form-control" asp-items="ViewBag.AwayPlayerID"></select>
-                        </div>
-
-                        <div class="col-sm-2">
-                            @*<input asp-for="Matches[i].AwayPlayerScore" class="form-control" />
-            <span asp-validation-for="Matches[i].AwayPlayerScore" class="text-danger"></span>*@
-
-                            @Html.RadioButtonFor(model => model.Matches[i].AwayPlayerScore, "0")
-                            0&nbsp;&nbsp;
-                            @Html.RadioButtonFor(model => model.Matches[i].AwayPlayerScore, "1")
-                            1&nbsp;&nbsp;
-                            @Html.RadioButtonFor(model => model.Matches[i].AwayPlayerScore, "2")
-                            2&nbsp;&nbsp;
-                            @Html.RadioButtonFor(model => model.Matches[i].AwayPlayerScore, "3")
-                            3
-                        </div>
-                    </div>
-                    @*<input type="hidden" asp-for="Matches[i].PositionID" />*@
-                    counter += 1;
-                };
-            }
-
-
             <div class="form-group row">
 
-                <label asp-for="Fixture.HomeTeamBonus" class="col-sm-4  text-center control-label"></label>
-                <div class="col-sm-1">
-                    Home
-                    <input id="Bonus" name="Bonus" value="Home" type="radio">
-                    
-                    @*<input asp-for="Fixture.HomeTeamBonus" class="form-control" />
-        <span asp-validation-for="Fixture.HomeTeamBonus" class="text-danger"></span>*@
-                </div>
-                <div class="col-sm-1">
-                    Tie
-                    <input id="Bonus" name="Bonus" value="Tie" type="radio" checked>
-                    @*<input asp-for="Fixture.HomeTeamBonus" class="form-control" />
-        <span asp-validation-for="Fixture.HomeTeamBonus" class="text-danger"></span>*@
-                </div>
-                <div class="col-sm-1">
-                    @*<input asp-for="Fixture.AwayTeamBonus" class="form-control" />
+                @if (@ViewBag.HomeTeam.imageContent != null && @ViewBag.HomeTeam.imageMimeType.Contains("image"))
+                {
+                    string imageBase64 = Convert.ToBase64String(@ViewBag.HomeTeam.imageContent);
+                    string imageSrc = string.Format("data:" + @ViewBag.HomeTeam.imageMimeType + ";base64,{0}", imageBase64);
+
+
+                    <strong>
+                        <span class="col-sm-4 col-md-offset-2">
+                            @Html.DisplayFor(model => model.Fixture.HomeTeam.Name)
+                            <img src="@imageSrc" alt="Team Picture" title="Team Picture" style="max-height: 100px; max-width: 100px" class="img-responsive img-rounded" />
+                        </span>
+                    </strong>
+                    <strong><span class="text-center col-sm-2 col-sm-offset-3">@Html.DisplayFor(model => model.Fixture.AwayTeam.Name)</span></strong>
+                }
+                else if (@ViewBag.HomeTeam.imageContent == null)
+                {
+
+                    <strong>
+                        <span class="col-sm-4 col-md-offset-2">
+                            @Html.DisplayFor(model => model.Fixture.HomeTeam.Name)
+                            <img src="~/images/SquashDefault.png" alt="Player Picture" style="width: 60px; height: 60px" class="img-responsive img-rounded" />
+                        </span>
+                    </strong>
+                }
+
+                @if (@ViewBag.AwayTeam.imageContent != null && @ViewBag.AwayTeam.imageMimeType.Contains("image"))
+                {
+                    string imageBase64 = Convert.ToBase64String(@ViewBag.AwayTeam.imageContent);
+                    string imageSrc = string.Format("data:" + @ViewBag.AwayTeam.imageMimeType + ";base64,{0}", imageBase64);
+
+                    <strong>
+                        <span class="col-sm-2 col-sm-offset-2">
+                            @Html.DisplayFor(model => model.Fixture.AwayTeam.Name)
+                            <img src="@imageSrc" alt="Team Picture" title="Team Picture" style="max-height: 100px; max-width: 100px" class="img-responsive img-rounded" />
+                        </span>
+                    </strong>
+                    <strong>@*<span class="text-center col-sm-2 col-sm-offset-3">@Html.DisplayFor(model => model.Fixture.AwayTeam.Name)</span>*@</strong>
+                }
+                else if (@ViewBag.AwayTeam.imageContent == null)
+                {
+                    <strong>
+                        <span class="col-sm-2 col-sm-offset-2">
+                            @Html.DisplayFor(model => model.Fixture.AwayTeam.Name)
+                            <img src="~/images/SquashDefault.png" alt="Player Picture" style="width: 60px; height: 60px" class="img-responsive img-rounded" />
+                        </span>
+                    </strong>
+                }
+
+            </div>
+
+
+                @{ int counter = 1;
+                    for (int i = 0; i < ViewBag.nPositions; i++)
+                    {
+                        <div class="form-group row">
+                            @*<label asp-for="Matches[i].HomePlayerID" class="text-center col-sm-4  control-label"></label>*@
+                            <label class="text-center col-sm-2 col-lg-offset-4">Position @counter</label>
+                            @*<label asp-for="Matches[i].AwayPlayerID" class="text-center col-sm-4  control-label"></label>*@
+                        </div>
+                        <div class="form-group row">
+                            <input type="hidden" asp-for="Matches[i].FixtureID" value=@ViewBag.FixtureID />
+
+                            <div class="col-sm-2">
+                                <select asp-for="Matches[i].HomePlayerID" class="form-control" asp-items="ViewBag.HomePlayerID"></select>
+                            </div>
+
+                            <div class="col-sm-2">
+                                @*<input asp-for="Matches[i].HomePlayerScore" class="form-control" />
+                            <span asp-validation-for="Matches[i].HomePlayerScore" class="text-danger"></span>*@
+
+                                @Html.RadioButtonFor(model => model.Matches[i].HomePlayerScore, "0", new { @checked = "checked" })
+                                0&nbsp;&nbsp;
+                                @Html.RadioButtonFor(model => model.Matches[i].HomePlayerScore, "1")
+                                1&nbsp;&nbsp;
+                                @Html.RadioButtonFor(model => model.Matches[i].HomePlayerScore, "2")
+                                2&nbsp;&nbsp;
+                                @Html.RadioButtonFor(model => model.Matches[i].HomePlayerScore, "3")
+                                3
+                            </div>
+
+
+                            <div class="col-sm-2 lead text-center">VS.</div>
+
+                            <div class="col-sm-2">
+                                <select asp-for="Matches[i].AwayPlayerID" class="form-control" asp-items="ViewBag.AwayPlayerID"></select>
+                            </div>
+
+                            <div class="col-sm-2">
+                                @*<input asp-for="Matches[i].AwayPlayerScore" class="form-control" />
+                            <span asp-validation-for="Matches[i].AwayPlayerScore" class="text-danger"></span>*@
+
+                                @Html.RadioButtonFor(model => model.Matches[i].AwayPlayerScore, "0")
+                                0&nbsp;&nbsp;
+                                @Html.RadioButtonFor(model => model.Matches[i].AwayPlayerScore, "1")
+                                1&nbsp;&nbsp;
+                                @Html.RadioButtonFor(model => model.Matches[i].AwayPlayerScore, "2")
+                                2&nbsp;&nbsp;
+                                @Html.RadioButtonFor(model => model.Matches[i].AwayPlayerScore, "3")
+                                3
+                            </div>
+                        </div>
+                        @*<input type="hidden" asp-for="Matches[i].PositionID" />*@
+                        counter += 1;
+                    };
+                }
+
+
+                <div class="form-group row">
+
+                    <label asp-for="Fixture.HomeTeamBonus" class="col-sm-4  text-center control-label"></label>
+                    <div class="col-sm-1">
+                        Home
+                        <input id="Bonus" name="Bonus" value="Home" type="radio">
+
+                        @*<input asp-for="Fixture.HomeTeamBonus" class="form-control" />
+                    <span asp-validation-for="Fixture.HomeTeamBonus" class="text-danger"></span>*@
+                    </div>
+                    <div class="col-sm-1">
+                        Tie
+                        <input id="Bonus" name="Bonus" value="Tie" type="radio" checked>
+                        @*<input asp-for="Fixture.HomeTeamBonus" class="form-control" />
+                    <span asp-validation-for="Fixture.HomeTeamBonus" class="text-danger"></span>*@
+                    </div>
+                    <div class="col-sm-1">
+                        @*<input asp-for="Fixture.AwayTeamBonus" class="form-control" />
                     <span asp-validation-for="Fixture.AwayTeamBonus" class="text-danger"></span>*@
-                    
-                    Away
-                    <input id="Bonus" name="Bonus" value="Away" type="radio">
+
+                        Away
+                        <input id="Bonus" name="Bonus" value="Away" type="radio">
+                    </div>
+                    <label asp-for="Fixture.AwayTeamBonus" class="col-sm-4  text-center control-label"></label>
+
                 </div>
-                <label asp-for="Fixture.AwayTeamBonus" class="col-sm-4  text-center control-label"></label>
 
-            </div>
-
-            <div class="form-group">
-                <input type="submit" value="Add Result" class="btn btn-default" />
-            </div>
-        </form>
+                <div class="form-group">
+                    <input type="submit" value="Add Result" class="btn btn-default" />
+                </div>
+            </form>
     </div>
 
 </div>

@@ -11,5 +11,6 @@ namespace SquashNiagara.ViewModels
         public int PositionID { get; set; }
         public string PlayerName { get; set; }
         public decimal PercPlayed { get; set; }
+        public decimal PositionAverage { get; set; }
     }
 }
