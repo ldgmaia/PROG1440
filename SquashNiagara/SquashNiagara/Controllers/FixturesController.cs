@@ -103,6 +103,10 @@ namespace SquashNiagara.Controllers
                 .Include(f => f.HomeTeam)
                 .Include(f => f.Season)
                 .Include(f => f.Venue)
+                .Include(f => f.Matches)
+                .ThenInclude(m => m.HomePlayer)
+                .Include(f => f.Matches)
+                .ThenInclude(m => m.AwayPlayer)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (fixture == null)
             {

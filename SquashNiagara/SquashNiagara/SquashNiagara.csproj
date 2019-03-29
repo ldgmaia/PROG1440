@@ -71,6 +71,9 @@
     <Content Update="Views\Matches\OriginalFiles\Create1.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Views\Matches\OriginalFiles\Edit.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Players\ImportPlayers.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
