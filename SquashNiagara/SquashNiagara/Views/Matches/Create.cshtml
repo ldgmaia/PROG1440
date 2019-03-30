@@ -159,37 +159,43 @@
             }
 
 
-            <div class="form-group row">
+                    <div class="form-group row">
+                        <div class="col-sm-4  text-center">
+                            <label asp-for="Fixture.HomeTeamBonus" class="control-label"></label>
+                            &nbsp;&nbsp;
+                            <input id="Bonus" name="Bonus" value="Home" type="radio">
+                        </div>
+                        <div class="col-sm-2  text-center">
 
-                <label asp-for="Fixture.HomeTeamBonus" class="col-sm-4  text-center control-label"></label>
-                <div class="col-sm-1">
-                    Home
-                    <input id="Bonus" name="Bonus" value="Home" type="radio">
-                    
-                    @*<input asp-for="Fixture.HomeTeamBonus" class="form-control" />
+
+
+                            @*<input asp-for="Fixture.HomeTeamBonus" class="form-control" />
         <span asp-validation-for="Fixture.HomeTeamBonus" class="text-danger"></span>*@
-                </div>
-                <div class="col-sm-1">
-                    Tie
-                    <input id="Bonus" name="Bonus" value="Tie" type="radio" checked>
-                    @*<input asp-for="Fixture.HomeTeamBonus" class="form-control" />
+
+                            <label class="control-label">Tie</label>
+                            &nbsp;&nbsp;
+                            <input id="Bonus" name="Bonus" value="Tie" type="radio" checked>
+                            @*<input asp-for="Fixture.HomeTeamBonus" class="form-control" />
         <span asp-validation-for="Fixture.HomeTeamBonus" class="text-danger"></span>*@
-                </div>
-                <div class="col-sm-1">
-                    @*<input asp-for="Fixture.AwayTeamBonus" class="form-control" />
-                    <span asp-validation-for="Fixture.AwayTeamBonus" class="text-danger"></span>*@
-                    
-                    Away
-                    <input id="Bonus" name="Bonus" value="Away" type="radio">
-                </div>
-                <label asp-for="Fixture.AwayTeamBonus" class="col-sm-4  text-center control-label"></label>
 
-            </div>
 
-            <div class="form-group">
-                <input type="submit" value="Add Result" class="btn btn-default" />
-            </div>
-        </form>
+                            @*<input asp-for="Fixture.AwayTeamBonus" class="form-control" />
+        <span asp-validation-for="Fixture.AwayTeamBonus" class="text-danger"></span>*@
+
+
+
+                        </div>
+                        <div class="col-sm-4  text-center">
+                            <input id="Bonus" name="Bonus" value="Away" type="radio">
+                            &nbsp;&nbsp;
+                            <label asp-for="Fixture.AwayTeamBonus" class="  text-left control-label"></label>
+
+                        </div>
+                       </div>
+                        <div class="form-group">
+                            <input type="submit" value="Add Result" class="btn btn-default" />
+                        </div>
+</form>
     </div>
 
 </div>
