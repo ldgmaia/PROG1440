@@ -41,6 +41,8 @@ namespace SquashNiagara.Models
 
         public int LostGames { get; set; }
 
+        public int TotalPositions { get; set; }
+
         [DisplayFormat(DataFormatString = "{0:N1}")]
         public double Points { get; set; }
 

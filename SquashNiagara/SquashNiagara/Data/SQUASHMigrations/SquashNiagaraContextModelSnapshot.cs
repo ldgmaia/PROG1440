@@ -216,6 +216,8 @@ namespace SquashNiagara.Data.SQUASHMigrations
 
                     b.Property<int>("SeasonID");
 
+                    b.Property<int>("TotalPositions");
+
                     b.Property<int>("WonGames");
 
                     b.Property<int>("WonMatches");

@@ -138,6 +138,7 @@ namespace SquashNiagara.Data.SQUASHMigrations
                     LostMatches = table.Column<int>(nullable: false),
                     WonGames = table.Column<int>(nullable: false),
                     LostGames = table.Column<int>(nullable: false),
+                    TotalPositions = table.Column<int>(nullable: false),
                     Points = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
