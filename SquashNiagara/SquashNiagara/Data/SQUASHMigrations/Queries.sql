@@ -2,10 +2,22 @@
 * Get the number of times each player played on each position *
 **************************************/
 select PlayerID, PositionID, COUNT(PositionID) as 'played this position'
-from SQUASH.PlayerPositions
+from SQUASH.PlayerPositions pp
 --where PlayerID = 8 or PlayerID = 16
 group by PlayerID, PositionID
 order by PlayerID
+
+select pp.PlayerID, pp.PositionID, COUNT(pp.PositionID) as 'played this position', tr.Played
+from SQUASH.PlayerPositions pp
+join SQUASH.Players p
+	on pp.PlayerID = p.ID
+join SQUASH.Teams t
+	on p.TeamID = t.ID
+join SQUASH.TeamRankings tr
+	on tr.TeamID = p.TeamID
+--where PlayerID = 8 or PlayerID = 16
+group by pp.PlayerID, pp.PositionID, tr.Played
+order by pp.PlayerID
 
 /**************************************
 * Get the number of fixtures played by team
