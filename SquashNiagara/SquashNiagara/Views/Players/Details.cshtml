@@ -28,15 +28,15 @@
             <div class="panel panel-primary">
                 <div class="panel-heading">@Html.DisplayFor(model => model.FirstName)'s Next Match </div>
                 <div class="panel-body">
-                    BACC VS Brock2
+                    WO 1 VS RC 2
                     <p>
                         <span class="fo"></span>
                         <span class="fa fa-calendar fa-lg colored-tex"></span>
-                        19 March, 2019
+                        10/03/2019
                         <span class="fa fa-clock-o fa-lg colored-tex"></span>
-                        (<small>15:30 local | 09:30 GMT</small>)
+                        (<small>12:00 pm</small>)
                     </p>
-                    <p><small>Venue BACC</small></p>
+                    <p><small>Venue WO</small></p>
                 </div>
             </div>
         </div>
@@ -45,15 +45,15 @@
             <div class="panel panel-danger">
                 <div class="panel-heading">@Html.DisplayFor(model => model.FirstName)'s Last Match   </div>
                 <div class="panel-body">
-                    <p class="text-success">   BACC won (5 - 1) Against BROCK1</p>
-                    @Html.DisplayFor(model => model.FirstName)'s won against
-                    Vasco - Positon 1
+                    <p class="text-success">   @ViewBag.LastFixture.HomeTeam.Name (@ViewBag.LastFixture.HomeTeamScore - @ViewBag.LastFixture.AwayTeamScore) @ViewBag.LastFixture.AwayTeam.Name</p>
+                    @Html.DisplayFor(model => model.FirstName)'s plays against
+                    John - Positon 1
                     <p>
                         <span class="fo"></span>
                         <span class="fa fa-calendar fa-lg colored-tex"></span>
-                        3 March, 2019
+                        @ViewBag.LastFixture.Date.ToShortDateString()
                         <span class="fa fa-clock-o fa-lg colored-tex"></span>
-                        (<small>15:30 local | 09:30 GMT</small>)
+                        (<small>@ViewBag.LastFixture.Date.ToShortTimeString()</small>)
                     </p>
                     <p>Points 3</p>
 

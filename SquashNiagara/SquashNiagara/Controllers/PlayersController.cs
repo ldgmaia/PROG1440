@@ -60,6 +60,35 @@ namespace SquashNiagara.Controllers
             {
                 return NotFound();
             }
+            var lastFixture = (from i in _context.Fixtures.Include(n => n.Matches).Include(n => n.HomeTeam).Include(n => n.AwayTeam)
+                              join m in _context.Matches on i.ID equals m.FixtureID
+                              where (m.HomePlayerID == id || m.AwayPlayerID == id) && i.Approved == true && i.Date < DateTime.Now
+                              orderby i.Date
+                              select i).FirstOrDefault();
+            var lastMatch = lastFixture.Matches.Where(m => m.HomePlayerID == id || m.AwayPlayerID == id);
+            int a = 1;
+
+            //var items = from u in context.Items
+            //            let dt = (from i in context.Items
+            //                      where i.CheckDate > DateTime.Now
+            //                      orderby i.CheckDate ).FirstOrDefault()
+            //            where u.CheckDate <= dt
+            //            select u;
+
+
+
+
+            //var playersByPosition =
+            //      (from pp in playerPositions
+            //       join m in matches on pp.MatchID equals m.ID
+            //       join f in fixtures on m.FixtureID equals f.ID
+            //       join p in players on pp.PlayerID equals p.ID
+            //       where f.SeasonID == 1 && f.DivisionID == 1 && f.HomeTeamScore != null
+            //       orderby pp.PositionID
+            //       select new PositionalStandings { PlayerID = p.ID, PlayerName = p.FirstName + " " + p.LastName, PositionID = pp.PositionID }).Distinct();
+
+            ViewData["LastFixture"] = lastFixture;
+            ViewData["LastMatch"] = lastMatch;
 
             return View(player);
         }
