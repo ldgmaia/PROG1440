@@ -7,7 +7,14 @@ from SQUASH.PlayerPositions pp
 group by PlayerID, PositionID
 order by PlayerID
 
-select pp.PlayerID, pp.PositionID, COUNT(pp.PositionID) as 'played this position', tr.Played
+select COUNT(pp.PositionID)
+from SQUASH.PlayerPositions pp
+join SQUASH.Players p
+	on pp.PlayerID = p.ID
+where p.ID = 3 and pp.PositionID = 2
+group by pp.PositionID
+
+select pp.PlayerID, pp.PositionID, COUNT(pp.PositionID) as 'played this position', tr.Played, tr.TeamID
 from SQUASH.PlayerPositions pp
 join SQUASH.Players p
 	on pp.PlayerID = p.ID
@@ -16,7 +23,7 @@ join SQUASH.Teams t
 join SQUASH.TeamRankings tr
 	on tr.TeamID = p.TeamID
 --where PlayerID = 8 or PlayerID = 16
-group by pp.PlayerID, pp.PositionID, tr.Played
+group by pp.PlayerID, pp.PositionID, tr.Played, tr.TeamID
 order by pp.PlayerID
 
 /**************************************

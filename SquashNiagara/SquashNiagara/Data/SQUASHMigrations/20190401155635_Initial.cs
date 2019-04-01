@@ -245,7 +245,7 @@ namespace SquashNiagara.Data.SQUASHMigrations
                         principalSchema: "SQUASH",
                         principalTable: "Fixtures",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Matches_Positions_PositionID",
                         column: x => x.PositionID,

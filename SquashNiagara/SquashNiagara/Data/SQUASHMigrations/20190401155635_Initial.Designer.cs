@@ -10,7 +10,7 @@ using SquashNiagara.Data;
 namespace SquashNiagara.Data.SQUASHMigrations
 {
     [DbContext(typeof(SquashNiagaraContext))]
-    [Migration("20190328192932_Initial")]
+    [Migration("20190401155635_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -431,7 +431,7 @@ namespace SquashNiagara.Data.SQUASHMigrations
                     b.HasOne("SquashNiagara.Models.Fixture", "Fixture")
                         .WithMany("Matches")
                         .HasForeignKey("FixtureID")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("SquashNiagara.Models.Player", "HomePlayer")
                         .WithMany("HomeMatches")
