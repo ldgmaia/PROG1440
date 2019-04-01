@@ -103,6 +103,10 @@ namespace SquashNiagara.Controllers
                 .Include(f => f.HomeTeam)
                 .Include(f => f.Season)
                 .Include(f => f.Venue)
+                .Include(f => f.Matches)
+                .ThenInclude(m => m.HomePlayer)
+                .Include(f => f.Matches)
+                .ThenInclude(m => m.AwayPlayer)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (fixture == null)
             {
@@ -221,6 +225,16 @@ namespace SquashNiagara.Controllers
                 return NotFound();
             }
 
+            //var fixture = await _context.Fixtures
+            //    .Include(f => f.AwayTeam)
+            //    .Include(f => f.CaptainApprove)
+            //    .Include(f => f.CaptainResult)
+            //    .Include(f => f.Division)
+            //    .Include(f => f.HomeTeam)
+            //    .Include(f => f.Season)
+            //    .Include(f => f.Venue)
+            //    .FirstOrDefaultAsync(m => m.ID == id);
+
             var fixture = await _context.Fixtures
                 .Include(f => f.AwayTeam)
                 .Include(f => f.CaptainApprove)
@@ -229,7 +243,12 @@ namespace SquashNiagara.Controllers
                 .Include(f => f.HomeTeam)
                 .Include(f => f.Season)
                 .Include(f => f.Venue)
+                .Include(f => f.Matches)
+                .ThenInclude(m => m.HomePlayer)
+                .Include(f => f.Matches)
+                .ThenInclude(m => m.AwayPlayer)
                 .FirstOrDefaultAsync(m => m.ID == id);
+
             if (fixture == null)
             {
                 return NotFound();
@@ -344,6 +363,16 @@ namespace SquashNiagara.Controllers
 
             //var fixture = await _context.Fixtures.FindAsync(id);
 
+            //var fixture = await _context.Fixtures
+            //    .Include(f => f.AwayTeam)
+            //    .Include(f => f.CaptainApprove)
+            //    .Include(f => f.CaptainResult)
+            //    .Include(f => f.Division)
+            //    .Include(f => f.HomeTeam)
+            //    .Include(f => f.Season)
+            //    .Include(f => f.Venue)
+            //    .FirstOrDefaultAsync(m => m.ID == id);
+
             var fixture = await _context.Fixtures
                 .Include(f => f.AwayTeam)
                 .Include(f => f.CaptainApprove)
@@ -352,6 +381,10 @@ namespace SquashNiagara.Controllers
                 .Include(f => f.HomeTeam)
                 .Include(f => f.Season)
                 .Include(f => f.Venue)
+                .Include(f => f.Matches)
+                .ThenInclude(m => m.HomePlayer)
+                .Include(f => f.Matches)
+                .ThenInclude(m => m.AwayPlayer)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             if (fixture == null)

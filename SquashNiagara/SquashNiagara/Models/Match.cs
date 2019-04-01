@@ -30,14 +30,14 @@ namespace SquashNiagara.Models
         public int AwayPlayerID { get; set; }
         public virtual Player AwayPlayer { get; set; }
 
-        [Display(Name = "Home Player Score")]
-        [Range(0, 3, ErrorMessage = "Score have to be 0 or 3")]
-        [RegularExpression("^\\d{1}$", ErrorMessage = "Please enter a valid number")]
+        //[Display(Name = "Home Player Score")]
+        //[Range(0, 3, ErrorMessage = "Score have to be 0 or 3")]
+        //[RegularExpression("^\\d{1}$", ErrorMessage = "Please enter a valid number")]
         public Int16? HomePlayerScore { get; set; }
 
-        [Display(Name = "Away Player Score")]
-        [Range(0, 3, ErrorMessage = "Score have to be 0 or 3")]
-        [RegularExpression("^\\d{1}$", ErrorMessage = "Please enter a valid number")]
+        //[Display(Name = "Away Player Score")]
+        //[Range(0, 3, ErrorMessage = "Score have to be 0 or 3")]
+        //[RegularExpression("^\\d{1}$", ErrorMessage = "Please enter a valid number")]
         public Int16? AwayPlayerScore { get; set; }
 
         [Display(Name = "Match Position")]
