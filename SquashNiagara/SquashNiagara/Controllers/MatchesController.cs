@@ -80,6 +80,11 @@ namespace SquashNiagara.Controllers
             FixtureMatchVM fixtureMatch = new FixtureMatchVM();
             fixtureMatch.Fixture = fixture;
 
+            for (int i = 0; i < nPositions; i++)
+            {
+                Match match = new Match();
+                fixtureMatch.Matches.Add(match);
+            }
 
             //.FirstOrDefaultAsync(m => m.ID == fixture.DivisionID);
 

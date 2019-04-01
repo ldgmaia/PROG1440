@@ -242,6 +242,98 @@ namespace SquashNiagara.Controllers
             }
             return View();
         }
+
+        // GET: Schedule
+        public async Task<IActionResult> Schedule(int? SeasonID, string DivisionID)
+        {
+
+            var fixtures = from f in _context.Fixtures
+                .Include(f => f.AwayTeam)
+                .Include(f => f.CaptainApprove)
+                .Include(f => f.CaptainResult)
+                .Include(f => f.Division)
+                .Include(f => f.HomeTeam)
+                .Include(f => f.Season)
+                .Include(f => f.Venue)
+                           select f;
+
+            if (SeasonID.HasValue)
+            {
+                fixtures = fixtures.Where(p => p.SeasonID == SeasonID);
+            }
+            else
+            {
+                SeasonID = ((from d in _context.Seasons
+                             orderby d.EndDate descending
+                             select d.ID).FirstOrDefault());
+            }
+
+            int userID = 0;
+            int userDivision = 0;
+
+            if (User.IsInRole("Captain") || User.IsInRole("User"))
+            {
+                //var captainID = from d in _context.Players
+                //                where d.Email == User.Identity.Name
+                //                select d;
+
+                userID = _context.Players.FirstOrDefault(d => d.Email == User.Identity.Name).ID;
+                var teamID = _context.Teams.FirstOrDefault(d => d.CaptainID == userID).ID;
+                userDivision = _context.SeasonDivisionTeams.FirstOrDefault(d => d.TeamID == teamID && d.SeasonID == SeasonID).DivisionID;
+
+                //fixtures = fixtures.Where(p => p.HomeTeamID == teamID || p.AwayTeamID == teamID);
+            }
+
+
+            if (DivisionID != null)
+            {
+                fixtures = fixtures.Where(p => p.DivisionID == Convert.ToInt32(DivisionID));
+            }
+            else
+            {
+                fixtures = fixtures.Where(p => p.DivisionID == userDivision);
+            }
+
+            PopulateDropDownListSeason();
+
+            ViewData["UserDivision"] = userDivision;
+
+            ViewData["DivisionID"] = from d in _context.Divisions
+                                     select d;
+
+
+            return View(await fixtures.ToListAsync());
+        }
+
+        // GET: Fixtures/Details/5
+        public async Task<IActionResult> FixtureDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var fixture = await _context.Fixtures
+                .Include(f => f.AwayTeam)
+                .Include(f => f.CaptainApprove)
+                .Include(f => f.CaptainResult)
+                .Include(f => f.Division)
+                .Include(f => f.HomeTeam)
+                .Include(f => f.Season)
+                .Include(f => f.Venue)
+                .Include(f => f.Matches)
+                .ThenInclude(m => m.HomePlayer)
+                .Include(f => f.Matches)
+                .ThenInclude(m => m.AwayPlayer)
+                .FirstOrDefaultAsync(m => m.ID == id);
+            if (fixture == null)
+            {
+                return NotFound();
+            }
+
+            return View(fixture);
+        }
+
         private void PopulateDropDownListSeason()
         {
             var dQuery = from d in _context.Seasons

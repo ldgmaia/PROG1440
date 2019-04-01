@@ -177,11 +177,11 @@ namespace SquashNiagara.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             //Prevent Cascade Delete Fixture to Match
-            modelBuilder.Entity<Fixture>()
-                .HasMany<Match>(p => p.Matches)
-                .WithOne(c => c.Fixture)
-                .HasForeignKey(c => c.FixtureID)
-                .OnDelete(DeleteBehavior.Restrict);
+            //modelBuilder.Entity<Fixture>()
+            //    .HasMany<Match>(p => p.Matches)
+            //    .WithOne(c => c.Fixture)
+            //    .HasForeignKey(c => c.FixtureID)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
             //Prevent Cascade Delete Team (home) to Fixture
             modelBuilder.Entity<Team>()

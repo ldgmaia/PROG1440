@@ -92,12 +92,15 @@
                             <li><a asp-area="" asp-controller="Home" asp-action="Standings">Standings</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown">
+                    @*<li class="dropdown">
                         <a href="#" data-toggle="dropdown" class="dropdown-toggle">Squash Schedule <i class="far fa-calendar-alt"></i><b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li><a asp-area="" asp-controller="Fixtures" asp-action="Index">Men's Schedule</a></li>
                             <li><a asp-area="" asp-controller="Fixtures" asp-action="Index">Women's Schedule</a></li>
                         </ul>
+                    </li>*@
+                    <li>
+                        <a asp-area="" asp-controller="Home" asp-action="Schedule">Squash Schedule</a>
                     </li>
                     <li class="dropdown">
                         <a href="#" data-toggle="dropdown" class="dropdown-toggle">Squash Rules/News <i class="fas fa-tasks"></i><b class="caret"></b></a>
@@ -107,17 +110,17 @@
                         </ul>
                     </li>
                     @*<li class="dropdown">
-                        <a href="#" data-toggle="dropdown" class="dropdown-toggle">League Rules <i class="fas fa-tasks"></i><b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a asp-area="" asp-controller="Home" asp-action="Rules">League Constitution</a></li>
-                        </ul>
-                    </li>*@
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle">League Rules <i class="fas fa-tasks"></i><b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li><a asp-area="" asp-controller="Home" asp-action="Rules">League Constitution</a></li>
+            </ul>
+        </li>*@
                     @*<li class="dropdown">
-                        <a href="#" data-toggle="dropdown" class="dropdown-toggle">Document <i class="fas fa-file"></i><b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a asp-area="" asp-controller="Home" asp-action="Index">Score Sheet</a></li>
-                        </ul>
-                    </li>*@
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle">Document <i class="fas fa-file"></i><b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li><a asp-area="" asp-controller="Home" asp-action="Index">Score Sheet</a></li>
+            </ul>
+        </li>*@
                     @*<li><a asp-area="" asp-controller="Home" asp-action="News">News <i class="far fa-newspaper"></i></a></li>*@
                 </ul>
                 <partial name="_LoginPartial" />

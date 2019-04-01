@@ -1,0 +1,139 @@
+﻿@model SquashNiagara.Models.Fixture
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <h4>Fixture</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Season)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Season.Name)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Division)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Division.Name)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.HomeTeam)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.HomeTeam.Name)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.AwayTeam)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.AwayTeam.Name)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Date)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Date)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Time)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Time)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Venue)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Venue.Name)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.HomeTeamScore)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.HomeTeamScore)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.AwayTeamScore)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.AwayTeamScore)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.HomeTeamBonus)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.HomeTeamBonus)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.AwayTeamBonus)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.AwayTeamBonus)
+            </dd>
+            <dt>
+                Result added by
+            </dt>
+            <dd>
+                @if (Model.CaptainResultID.HasValue)
+                {
+                    @Html.DisplayFor(model => model.CaptainResult.FullName)
+                }
+                else if (Model.HomeTeamScore.HasValue || Model.AwayTeamScore.HasValue)
+                {
+                    @:Admin
+                }
+            </dd>
+            <dt>
+                Result approved by
+            </dt>
+            <dd>
+                @if (Model.CaptainApproveID.HasValue)
+                {
+                    @Html.DisplayFor(model => model.CaptainApprove.FullName)
+                }
+                else if (Model.Approved == true)
+                {
+                    @:Admin
+                }
+            </dd>
+        </dl>
+    </div>
+    <div class="col-md-8">
+        <h4>Matches</h4>
+        <hr />
+        @foreach (Match match in Model.Matches)
+        {
+        <div class="row">
+            <div class="col-md-2">
+                @Html.DisplayFor(m => match.HomePlayer.FullName)
+            </div>
+            <div class="col-md-1">
+                @Html.DisplayFor(m => match.HomePlayerScore)
+            </div>
+            <div class="col-md-1">
+                X
+            </div>
+            <div class="col-md-1">
+                @Html.DisplayFor(m => match.AwayPlayerScore)
+            </div>
+            <div class="col-md-2">
+                @Html.DisplayFor(m => match.AwayPlayer.FullName)
+            </div>
+        </div>
+        <div class="row">
+            <hr />
+        </div>
+       
+        }
+    </div>
+</div>
+<div>
+    <a asp-action="Schedule">Back to List</a>
+</div>

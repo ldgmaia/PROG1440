@@ -1,43 +1,19 @@
 ﻿@model IEnumerable<SquashNiagara.Models.Fixture>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Schedule";
 }
 
-<h1 class="text-center">Squash Niagara Fixtures</h1>
+<h1 class="text-center">Squash Niagara Schedule</h1>
 
-@if (User.Identity.IsAuthenticated)
-{
-    if (User.IsInRole("Admin"))
-    {
-        <p>
-            <a asp-action="Create" class="btn btn-primary btn-sm">Create New</a>
-            <a asp-action="ImportFixtures" class="btn btn-default btn-sm">Import Fixtures</a>
-        </p>
-    }
 
-}
-
-<form asp-action="Index">
+<form asp-action="Schedule">
     <div class="form-inline">
         <div class="row ">
             <div class="form-group col-sm-10 ">
                 @foreach (Division i in @ViewBag.DivisionID)
                 {
-                    if (User.IsInRole("Captain"))
-                    {
-                        if (ViewBag.CaptainDivision == i.ID)
-                        {
-                            <button name="DivisionID" value="@i.ID" class="btn btn-primary btn-sm">@i.Name</button>
-                        }
-                    }
-                    else
-                    {
                         <button name="DivisionID" value="@i.ID" class="btn btn-primary btn-sm">@i.Name</button>
-                    }
-
-                    @*<a asp-action="Index" asp-route-id="@i.ID" class="btn btn-primary btn-sm">@i.Name</a>
-                        <input type="submit" name="divisionButton" value="@i.Name" id="@i.ID" class="btn btn-default" />*@
                 }
             </div>
             <div class="form-group col-sm-2 ">
@@ -117,53 +93,7 @@
                 </td>
                 <td>
                     <small>
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            if (User.IsInRole("Admin") || User.IsInRole("Captain"))
-                            {
-                                if (item.Approved == false)
-                                {
-                                    if (!item.CaptainResultID.HasValue && !item.HomeTeamScore.HasValue)
-                                    {
-                                        <a asp-controller="Matches" asp-action="Create" asp-route-id="@item.ID">Add Result</a> @:|
-                                    }
-                                    else
-                                    {
-                                        if (item.CaptainResultID != ViewBag.CaptainID)
-                                        {
-                                            if (User.IsInRole("Admin"))
-                                            {
-                                                <a asp-controller="Matches" asp-action="Edit" asp-route-id="@item.ID">Edit</a> @:|
-                                            }
-                                            <a asp-action="ApproveResult" asp-route-id="@item.ID">Approve Result</a> @:|
-                                        }
-                                        else if (item.CaptainResultID == ViewBag.CaptainID)
-                                        {
-                                            <a asp-controller="Matches" asp-action="Edit" asp-route-id="@item.ID">Edit</a> @:|
-                                        }
-                                        else if (User.IsInRole("Admin"))
-                                        {
-                                            <a asp-controller="Matches" asp-action="Edit" asp-route-id="@item.ID">Edit</a> @:|
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        <a asp-action="Details" asp-route-id="@item.ID">Details</a>
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            if (User.IsInRole("Admin"))
-                            {
-                                if (!item.Approved){
-                                    @:|
-                                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                                }
-
-                            }
-
-                        }
-
-
+                        <a asp-action="FixtureDetails" asp-route-id="@item.ID">Details</a>
                     </small>
                 </td>
             </tr>
