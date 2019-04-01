@@ -606,6 +606,7 @@ namespace SquashNiagara.Controllers
 
                 if (playerRankingHomeToUpdate == null)
                 {
+                    playerRankingHome.TotalPositions = (int)match.PositionID;
                     playerRankingHome.PlayerID = match.HomePlayerID;
                     playerRankingHome.SeasonID = fixture.SeasonID;
                     playerRankingHome.DivisionID = fixture.DivisionID;
@@ -631,6 +632,7 @@ namespace SquashNiagara.Controllers
                 {
                     playerRankingHome = playerRankingHomeToUpdate;
                     playerRankingHome.Played += 1;
+                    playerRankingHome.TotalPositions += (int)match.PositionID;
                     if (match.HomePlayerScore > match.AwayPlayerScore)
                     {
                         playerRankingHome.WonMatches += 1;
@@ -659,6 +661,7 @@ namespace SquashNiagara.Controllers
                     playerRankingAway.SeasonID = fixture.SeasonID;
                     playerRankingAway.DivisionID = fixture.SeasonID;
                     playerRankingAway.Played = 1;
+                    playerRankingAway.TotalPositions = (int)match.PositionID;
                     if (match.HomePlayerScore < match.AwayPlayerScore)
                     {
                         playerRankingAway.WonMatches = 1;
@@ -681,6 +684,7 @@ namespace SquashNiagara.Controllers
                 {
                     playerRankingAway = playerRankingAwayToUpdate;
                     playerRankingAway.Played += 1;
+                    playerRankingAway.TotalPositions += (int)match.PositionID;
                     if (match.HomePlayerScore < match.AwayPlayerScore)
                     {
                         playerRankingAway.WonMatches += 1;

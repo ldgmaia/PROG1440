@@ -98,6 +98,12 @@ namespace SquashNiagara.Controllers
                              where d.TeamID == fixture.AwayTeamID
                              select d;
 
+            var homeTeam = _context.Teams.FirstOrDefault(t => t.ID == fixture.HomeTeamID);
+            var awayTeam = _context.Teams.FirstOrDefault(t => t.ID == fixture.AwayTeamID);
+
+            ViewData["HomeTeam"] = homeTeam;
+            ViewData["AwayTeam"] = awayTeam;
+
             ViewData["AwayPlayerID"] = new SelectList(dQueryAway, "ID", "FullName");
             ViewData["HomePlayerID"] = new SelectList(dQueryHome, "ID", "FullName");
             ViewData["nPositions"] = nPositions;
