@@ -86,24 +86,25 @@ namespace SquashNiagara.Data
                 }
 
                 //Add sample data Table Player
-                //if (!context.Players.Any())
-                //{
-                //    context.Players.AddRange(
-                //        new Player
-                //        {
-                //            FirstName = "Kok-Wah",
-                //            LastName = "Seet",
-                //            Email = "Seet@home.com"
-                //        },
+                if (!context.Players.Any())
+                {
+                    context.Players.AddRange(
+                        new Player
+                        {
+                            ID = 0,
+                            FirstName = "Default",
+                            LastName = "Player",
+                            Email = "defaultplayer@squashniagara.org"
+                        }
                 //         new Player
                 //         {
                 //             FirstName = "George",
                 //             LastName = "Kelm",
                 //             Email = "Kelm@home.com"
                 //         }
-                //    );
-                //    context.SaveChanges();
-                //}
+                   );
+                    context.SaveChanges();
+                }
 
                 //Add sample data Table Venue
                 //if (!context.Venues.Any())

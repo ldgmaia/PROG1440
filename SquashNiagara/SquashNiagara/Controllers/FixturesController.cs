@@ -600,105 +600,111 @@ namespace SquashNiagara.Controllers
             //Loop trough the matches to update the rankings
             foreach (Match match in fixtureMatch.Matches)
             {
-                //Add statistics for home player
-                PlayerRanking playerRankingHome = new PlayerRanking();
-                var playerRankingHomeToUpdate = _context.PlayerRankings.FirstOrDefault(d => d.PlayerID == match.HomePlayerID && d.SeasonID == fixture.SeasonID && d.DivisionID == fixture.DivisionID);
-
-                if (playerRankingHomeToUpdate == null)
+                if (match.HomePlayerID != 1)
                 {
-                    playerRankingHome.TotalPositions = (int)match.PositionID;
-                    playerRankingHome.PlayerID = match.HomePlayerID;
-                    playerRankingHome.SeasonID = fixture.SeasonID;
-                    playerRankingHome.DivisionID = fixture.DivisionID;
-                    playerRankingHome.Played = 1;
-                    if (match.HomePlayerScore > match.AwayPlayerScore)
+                    //Add statistics for home player
+                    PlayerRanking playerRankingHome = new PlayerRanking();
+                    var playerRankingHomeToUpdate = _context.PlayerRankings.FirstOrDefault(d => d.PlayerID == match.HomePlayerID && d.SeasonID == fixture.SeasonID && d.DivisionID == fixture.DivisionID);
+
+                    if (playerRankingHomeToUpdate == null)
                     {
-                        playerRankingHome.WonMatches = 1;
-                        playerRankingHome.LostMatches = 0;
+                        playerRankingHome.TotalPositions = (int)match.PositionID;
+                        playerRankingHome.PlayerID = match.HomePlayerID;
+                        playerRankingHome.SeasonID = fixture.SeasonID;
+                        playerRankingHome.DivisionID = fixture.DivisionID;
+                        playerRankingHome.Played = 1;
+                        if (match.HomePlayerScore > match.AwayPlayerScore)
+                        {
+                            playerRankingHome.WonMatches = 1;
+                            playerRankingHome.LostMatches = 0;
+                        }
+                        else
+                        {
+                            playerRankingHome.WonMatches = 0;
+                            playerRankingHome.LostMatches = 1;
+                        }
+
+                        playerRankingHome.WonGames = (short)match.HomePlayerScore;
+                        playerRankingHome.LostGames = (short)match.AwayPlayerScore;
+                        playerRankingHome.Points = RankPlayer.CalcPoints(match.Position.Name, (short)match.HomePlayerScore, (short)match.AwayPlayerScore, ResultFor.Home);
+                        playerRankingHome.Average = playerRankingHome.Points / playerRankingHome.Played;
+                        _context.Add(playerRankingHome);
                     }
                     else
                     {
-                        playerRankingHome.WonMatches = 0;
-                        playerRankingHome.LostMatches = 1;
-                    }
+                        playerRankingHome = playerRankingHomeToUpdate;
+                        playerRankingHome.Played += 1;
+                        playerRankingHome.TotalPositions += (int)match.PositionID;
+                        if (match.HomePlayerScore > match.AwayPlayerScore)
+                        {
+                            playerRankingHome.WonMatches += 1;
+                        }
+                        else
+                        {
+                            playerRankingHome.LostMatches += 1;
+                        }
 
-                    playerRankingHome.WonGames = (short)match.HomePlayerScore;
-                    playerRankingHome.LostGames = (short)match.AwayPlayerScore;
-                    playerRankingHome.Points = RankPlayer.CalcPoints(match.Position.Name, (short)match.HomePlayerScore, (short)match.AwayPlayerScore, ResultFor.Home);
-                    playerRankingHome.Average = playerRankingHome.Points / playerRankingHome.Played;
-                    _context.Add(playerRankingHome);
+
+                        playerRankingHome.WonGames += (short)match.HomePlayerScore;
+                        playerRankingHome.LostGames += (short)match.AwayPlayerScore;
+                        playerRankingHome.Points += RankPlayer.CalcPoints(match.Position.Name, (short)match.HomePlayerScore, (short)match.AwayPlayerScore, ResultFor.Home);
+                        playerRankingHome.Average = playerRankingHome.Points / playerRankingHome.Played;
+                        _context.Update(playerRankingHome);
+                    }
                 }
-                else
+
+
+                if (match.AwayPlayerID != 1)
                 {
-                    playerRankingHome = playerRankingHomeToUpdate;
-                    playerRankingHome.Played += 1;
-                    playerRankingHome.TotalPositions += (int)match.PositionID;
-                    if (match.HomePlayerScore > match.AwayPlayerScore)
+                    //Add statistics for away player
+                    PlayerRanking playerRankingAway = new PlayerRanking();
+                    var playerRankingAwayToUpdate = _context.PlayerRankings.FirstOrDefault(d => d.PlayerID == match.AwayPlayerID && d.SeasonID == fixture.SeasonID && d.DivisionID == fixture.DivisionID);
+
+                    if (playerRankingAwayToUpdate == null)
                     {
-                        playerRankingHome.WonMatches += 1;
+                        playerRankingAway.PlayerID = match.AwayPlayerID;
+                        playerRankingAway.SeasonID = fixture.SeasonID;
+                        playerRankingAway.DivisionID = fixture.DivisionID;
+                        playerRankingAway.Played = 1;
+                        playerRankingAway.TotalPositions = (int)match.PositionID;
+                        if (match.HomePlayerScore < match.AwayPlayerScore)
+                        {
+                            playerRankingAway.WonMatches = 1;
+                            playerRankingAway.LostMatches = 0;
+                        }
+                        else
+                        {
+                            playerRankingAway.WonMatches = 0;
+                            playerRankingAway.LostMatches = 1;
+                        }
+
+
+                        playerRankingAway.WonGames = (short)match.AwayPlayerScore;
+                        playerRankingAway.LostGames = (short)match.HomePlayerScore;
+                        playerRankingAway.Points = RankPlayer.CalcPoints(match.Position.Name, (short)match.HomePlayerScore, (short)match.AwayPlayerScore, ResultFor.Away);
+                        playerRankingAway.Average = playerRankingAway.Points / playerRankingAway.Played;
+                        _context.Add(playerRankingAway);
                     }
                     else
                     {
-                        playerRankingHome.LostMatches += 1;
+                        playerRankingAway = playerRankingAwayToUpdate;
+                        playerRankingAway.Played += 1;
+                        playerRankingAway.TotalPositions += (int)match.PositionID;
+                        if (match.HomePlayerScore < match.AwayPlayerScore)
+                        {
+                            playerRankingAway.WonMatches += 1;
+                        }
+                        else
+                        {
+                            playerRankingAway.LostMatches += 1;
+                        }
+
+                        playerRankingAway.WonGames += (short)match.AwayPlayerScore;
+                        playerRankingAway.LostGames += (short)match.HomePlayerScore;
+                        playerRankingAway.Points += RankPlayer.CalcPoints(match.Position.Name, (short)match.HomePlayerScore, (short)match.AwayPlayerScore, ResultFor.Away);
+                        playerRankingAway.Average = playerRankingAway.Points / playerRankingAway.Played;
+                        _context.Update(playerRankingAway);
                     }
-
-
-                    playerRankingHome.WonGames += (short)match.HomePlayerScore;
-                    playerRankingHome.LostGames += (short)match.AwayPlayerScore;
-                    playerRankingHome.Points += RankPlayer.CalcPoints(match.Position.Name, (short)match.HomePlayerScore, (short)match.AwayPlayerScore, ResultFor.Home);
-                    playerRankingHome.Average = playerRankingHome.Points / playerRankingHome.Played;
-                    _context.Update(playerRankingHome);
-                }
-
-                //Add statistics for away player
-                PlayerRanking playerRankingAway = new PlayerRanking();
-                var playerRankingAwayToUpdate = _context.PlayerRankings.FirstOrDefault(d => d.PlayerID == match.AwayPlayerID && d.SeasonID == fixture.SeasonID && d.DivisionID == fixture.DivisionID);
-
-
-                if (playerRankingAwayToUpdate == null)
-                {
-                    playerRankingAway.PlayerID = match.AwayPlayerID;
-                    playerRankingAway.SeasonID = fixture.SeasonID;
-                    playerRankingAway.DivisionID = fixture.SeasonID;
-                    playerRankingAway.Played = 1;
-                    playerRankingAway.TotalPositions = (int)match.PositionID;
-                    if (match.HomePlayerScore < match.AwayPlayerScore)
-                    {
-                        playerRankingAway.WonMatches = 1;
-                        playerRankingAway.LostMatches = 0;
-                    }
-                    else
-                    {
-                        playerRankingAway.WonMatches = 0;
-                        playerRankingAway.LostMatches = 1;
-                    }
-
-
-                    playerRankingAway.WonGames = (short)match.AwayPlayerScore;
-                    playerRankingAway.LostGames = (short)match.HomePlayerScore;
-                    playerRankingAway.Points = RankPlayer.CalcPoints(match.Position.Name, (short)match.HomePlayerScore, (short)match.AwayPlayerScore, ResultFor.Away);
-                    playerRankingAway.Average = playerRankingAway.Points / playerRankingAway.Played;
-                    _context.Add(playerRankingAway);
-                }
-                else
-                {
-                    playerRankingAway = playerRankingAwayToUpdate;
-                    playerRankingAway.Played += 1;
-                    playerRankingAway.TotalPositions += (int)match.PositionID;
-                    if (match.HomePlayerScore < match.AwayPlayerScore)
-                    {
-                        playerRankingAway.WonMatches += 1;
-                    }
-                    else
-                    {
-                        playerRankingAway.LostMatches += 1;
-                    }
-
-                    playerRankingAway.WonGames += (short)match.AwayPlayerScore;
-                    playerRankingAway.LostGames += (short)match.HomePlayerScore;
-                    playerRankingAway.Points += RankPlayer.CalcPoints(match.Position.Name, (short)match.HomePlayerScore, (short)match.AwayPlayerScore, ResultFor.Away);
-                    playerRankingAway.Average = playerRankingAway.Points / playerRankingAway.Played;
-                    _context.Update(playerRankingAway);
                 }
             }
             _context.SaveChanges();

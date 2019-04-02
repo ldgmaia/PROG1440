@@ -40,7 +40,7 @@ namespace SquashNiagara.Controllers
                 return RedirectToAction("Details", new { id = player.ID });
 
             }
-            var playersList = _context.Players.Include(t => t.Position).Include(t => t.Team);
+            var playersList = _context.Players.Include(t => t.Position).Include(t => t.Team).Where(t => t.ID != 1);
             return View(await playersList.ToListAsync());
         }
 

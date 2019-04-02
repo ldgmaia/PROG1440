@@ -90,12 +90,12 @@ namespace SquashNiagara.Controllers
 
             var dQueryHome = from d in _context.Players
                          orderby d.FirstName, d.LastName
-                         where d.TeamID == fixture.HomeTeamID
+                         where d.TeamID == fixture.HomeTeamID || d.ID == 1
                          select d;
 
             var dQueryAway = from d in _context.Players
                              orderby d.FirstName, d.LastName
-                             where d.TeamID == fixture.AwayTeamID
+                             where d.TeamID == fixture.AwayTeamID || d.ID == 1
                              select d;
 
             var homeTeam = _context.Teams.FirstOrDefault(t => t.ID == fixture.HomeTeamID);
@@ -214,12 +214,12 @@ namespace SquashNiagara.Controllers
             {
                 var dQueryHome = from d in _context.Players
                                  orderby d.FirstName, d.LastName
-                                 where d.TeamID == fixtureMatch.Fixture.HomeTeamID
+                                 where d.TeamID == fixtureMatch.Fixture.HomeTeamID || d.ID == 1
                                  select d;
 
                 var dQueryAway = from d in _context.Players
                                  orderby d.FirstName, d.LastName
-                                 where d.TeamID == fixtureMatch.Fixture.AwayTeamID
+                                 where d.TeamID == fixtureMatch.Fixture.AwayTeamID || d.ID == 1
                                  select d;
 
                 ViewData["AwayPlayerID"] = new SelectList(dQueryAway, "ID", "FullName");
@@ -277,12 +277,12 @@ namespace SquashNiagara.Controllers
 
             var dQueryHome = from d in _context.Players
                              orderby d.FirstName, d.LastName
-                             where d.TeamID == fixture.HomeTeamID
+                             where d.TeamID == fixture.HomeTeamID || d.ID == 1
                              select d;
 
             var dQueryAway = from d in _context.Players
                              orderby d.FirstName, d.LastName
-                             where d.TeamID == fixture.AwayTeamID
+                             where d.TeamID == fixture.AwayTeamID || d.ID == 1
                              select d;
 
             int pos1ID = _context.Positions.FirstOrDefault(d => d.Name.Contains("Position 1")).ID;
@@ -441,12 +441,12 @@ namespace SquashNiagara.Controllers
             {
                 var dQueryHome = from d in _context.Players
                                  orderby d.FirstName, d.LastName
-                                 where d.TeamID == fixtureMatch.Fixture.HomeTeamID
+                                 where d.TeamID == fixtureMatch.Fixture.HomeTeamID || d.ID == 1
                                  select d;
 
                 var dQueryAway = from d in _context.Players
                                  orderby d.FirstName, d.LastName
-                                 where d.TeamID == fixtureMatch.Fixture.AwayTeamID
+                                 where d.TeamID == fixtureMatch.Fixture.AwayTeamID || d.ID == 1
                                  select d;
 
                 //ViewData["AwayPlayerID"] = new SelectList(dQueryAway, "ID", "FullName");
