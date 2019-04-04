@@ -238,6 +238,8 @@ namespace SquashNiagara.Controllers
                 {
                     foreach (var player in players)
                     {
+                        if (player.ID == 1)
+                            continue;
                         PositionalStandings p = fixturePlayedByPlayer(player.ID, i + 1);
                         positionalStandingsList.Add(p);
                     }
@@ -295,6 +297,7 @@ namespace SquashNiagara.Controllers
 
                 ViewBag.positions = pos;
                 ViewBag.playersByPosition = positionalStandingsList.OrderByDescending(ps => ps.PercPlayed).ToList();
+                //ViewBag.playersByPosition = positionalStandingsList;
             }
             catch (ArgumentOutOfRangeException err)
             {
@@ -348,8 +351,8 @@ namespace SquashNiagara.Controllers
 
             //var teamPlayedHome = from f in fixtures as AwayTeam
             var teamPlayedAway = (from f in fixturesAway
-                                  join sdt1 in seadivteaAway on f.AwayTeamID equals sdt1.TeamID
-                                  where sdt1.TeamID == playerTeamID.TeamID
+                                  join sdt2 in seadivteaAway on f.AwayTeamID equals sdt2.TeamID
+                                  where sdt2.TeamID == playerTeamID.TeamID
                                   select f.ID).Count();
 
             ps.PlayerID = playerID;
