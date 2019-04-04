@@ -423,6 +423,84 @@ namespace SquashNiagara.Controllers
             return View(await fixtures.ToListAsync());
         }
 
+
+        public async Task<IActionResult> Violation(int? SeasonID, string DivisionID)
+        {
+
+            var fixtures = from f in _context.Fixtures
+                .Include(f => f.AwayTeam)
+                .Include(f => f.CaptainApprove)
+                .Include(f => f.CaptainResult)
+                .Include(f => f.Division)
+                .Include(f => f.HomeTeam)
+                .Include(f => f.Season)
+                .Include(f => f.Venue)
+                .Include(f => f.Matches)
+                .ThenInclude(h => h.HomePlayer)
+                .Include(f => f.Matches)
+                .ThenInclude(a => a.AwayPlayer)
+                .Include(f => f.Matches)
+                .ThenInclude(p => p.Position)
+                .Where(f => f.Approved == true)
+                           select f;
+
+            if (SeasonID.HasValue)
+            {
+                fixtures = fixtures.Where(p => p.SeasonID == SeasonID);
+            }
+            else
+            {
+                SeasonID = ((from d in _context.Seasons
+                             orderby d.EndDate descending
+                             select d.ID).FirstOrDefault());
+            }
+
+            int userID = 0;
+            int userDivision = 0;
+
+            if (User.IsInRole("Captain") || User.IsInRole("User"))
+            {
+                //var captainID = from d in _context.Players
+                //                where d.Email == User.Identity.Name
+                //                select d;
+
+                userID = _context.Players.FirstOrDefault(d => d.Email == User.Identity.Name).ID;
+                var teamID = _context.Teams.FirstOrDefault(d => d.CaptainID == userID).ID;
+                userDivision = _context.SeasonDivisionTeams.FirstOrDefault(d => d.TeamID == teamID && d.SeasonID == SeasonID).DivisionID;
+
+                //fixtures = fixtures.Where(p => p.HomeTeamID == teamID || p.AwayTeamID == teamID);
+            }
+
+            int pos = 5;
+            if (DivisionID != null)
+            {
+                fixtures = fixtures.Where(p => p.DivisionID == Convert.ToInt32(DivisionID));
+                if (!fixtures.Count().Equals(0))
+                {
+                    pos = (int)fixtures.FirstOrDefault().Division.PositionNo;
+                    pos++;
+                }
+                    
+            }
+            else
+            {
+                fixtures = fixtures.Where(p => p.DivisionID == userDivision);
+            }
+
+            PopulateDropDownListSeason();
+
+            ViewData["UserDivision"] = userDivision;
+
+            ViewData["DivisionID"] = from d in _context.Divisions
+                                     select d;
+
+            
+
+            ViewData["Positions"] = pos;
+
+            return View(await fixtures.ToListAsync());
+        }
+
         // GET: Fixtures/Details/5
         public async Task<IActionResult> FixtureDetails(int? id)
         {

@@ -29,6 +29,9 @@
     <Content Update="Views\Home\FixtureDetails.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Views\Home\Violation.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Home\Schedule.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
