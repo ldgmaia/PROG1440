@@ -19,14 +19,15 @@
                     <tbody>
                         @foreach (var player in ViewBag.playersByPosition)
                         {
-                            @if (player.PositionID == (count + 1) && player.PercPlayed >= 50)
+                            @if (player.PositionID == (count + 1))
                             {
-                                <tr>
-                                    <td>
-                                        @player.PlayerName
-                                    </td>
-                                    <td>@player.PercPlayed</td>
-                                </tr>
+                        <tr>
+                            <td>
+                                @player.PlayerName
+                            </td>
+                            <td>@(Math.Round(player.winPerc).ToString())</td>
+                            
+                        </tr>
                             }
                             else
                             {
