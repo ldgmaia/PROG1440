@@ -45,6 +45,10 @@ namespace SquashNiagara.Models
         public int? PositionID { get; set; }
         public virtual Position Position { get; set; }
 
+        public bool? HomePlayerViolation { get; set; }
+        
+        public bool? AwayPlayerViolation { get; set; }
+
         public virtual ICollection<PlayerPosition> PlayerPositions { get; set; }
     }
 }

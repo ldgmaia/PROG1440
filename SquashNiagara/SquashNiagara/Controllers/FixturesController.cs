@@ -458,6 +458,8 @@ namespace SquashNiagara.Controllers
 
                 UpdateRankings(fixtureMatch);
 
+                checkViolation(fixtureMatch);
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AwayTeamID"] = new SelectList(_context.Teams, "ID", "Name", fixture.AwayTeamID);
@@ -535,6 +537,213 @@ namespace SquashNiagara.Controllers
             var dQuery = from d in _context.Divisions
                          select d;
             ViewData["DivisionID"] = new SelectList(dQuery, "ID", "Name", fixture?.Division);
+        }
+
+        public void checkViolation(FixtureMatchVM fixtureMatch)
+        {
+            var fixtureDate = fixtureMatch.Fixture.Date;
+            foreach (Match match in fixtureMatch.Matches)
+            {
+
+                int homePlayerID = match.HomePlayerID;
+                int awayPlayerID = match.AwayPlayerID;
+                int? positionID = match.PositionID;
+                
+
+                //var beforeHomeFixture = (from f in _context.Fixtures
+                //                     join m in _context.Matches on f.ID equals m.FixtureID
+                //                   where f.Date < fixtureDate && (f.HomeTeamID == homeTeamID || f.AwayTeamID == homeTeamID) && m.HomePlayerID
+                //                   orderby f.Date descending
+                //                   select f).FirstOrDefault();
+
+                var beforeHomeMatches = (from m in _context.Matches
+                                        join f in _context.Fixtures on m.FixtureID equals f.ID
+                                        where f.Date < fixtureDate && (m.HomePlayerID == homePlayerID || m.AwayPlayerID == homePlayerID)
+                                        orderby f.Date descending
+                                        select m).FirstOrDefault();
+                var beforeAwayMatches = (from m in _context.Matches
+                                         join f in _context.Fixtures on m.FixtureID equals f.ID
+                                         where f.Date < fixtureDate && (m.HomePlayerID == awayPlayerID || m.AwayPlayerID == awayPlayerID)
+                                         orderby f.Date descending
+                                         select m).FirstOrDefault();
+
+                /*
+                 * SELECT * from SQUASH.Matches
+                JOIN SQUASH.Fixtures on SQUASH.Fixtures.ID = SQUASH.Matches.FixtureID
+                WHERE SQUASH.Fixtures.Date < '2018-10-20' and (HomePlayerID = 8 OR AwayPlayerID = 8)
+                ORDER BY SQUASH.Fixtures.Date desc
+                 */
+
+                if (positionID == 1)
+                {
+                    if (beforeHomeMatches != null)
+                    {
+                        if (beforeHomeMatches.PositionID == 3 || beforeHomeMatches.PositionID == 4 || beforeHomeMatches.PositionID == 5)
+                        {
+                            match.HomePlayerViolation = true;
+                        }
+                        else
+                        {
+                            match.HomePlayerViolation = false;
+                        }
+                    }
+
+                    if (beforeAwayMatches != null)
+                    {
+                        if (beforeAwayMatches.PositionID == 3 || beforeAwayMatches.PositionID == 4 || beforeAwayMatches.PositionID == 5)
+                        {
+                            match.AwayPlayerViolation = true;
+                        }
+                        else
+                        {
+                            match.AwayPlayerViolation = false;
+                        }
+                    }
+
+                }
+                else if (positionID == 2)
+                {
+                    if (beforeHomeMatches != null)
+                    {
+                        if (beforeHomeMatches.PositionID == 4 || beforeHomeMatches.PositionID == 5)
+                        {
+                            match.HomePlayerViolation = true;
+                        }
+                        else
+                        {
+                            match.HomePlayerViolation = false;
+                        }
+                    }
+                    else
+                    {
+                        match.HomePlayerViolation = false;
+                    }
+
+                    if (beforeAwayMatches != null)
+                    {
+                        if (beforeAwayMatches.PositionID == 4 || beforeAwayMatches.PositionID == 5)
+                        {
+                            match.AwayPlayerViolation = true;
+                        }
+                        else
+                        {
+                            match.AwayPlayerViolation = false;
+                        }
+                    }
+                    else
+                    {
+                        match.AwayPlayerViolation = false;
+                    }
+
+                }
+                else if (positionID == 3)
+                {
+                    if (beforeHomeMatches != null)
+                    {
+                        if (beforeHomeMatches.PositionID == 1 || beforeHomeMatches.PositionID == 5)
+                        {
+                            match.HomePlayerViolation = true;
+                        }
+                        else
+                        {
+                            match.HomePlayerViolation = false;
+                        }
+                    }
+                    else
+                    {
+                        match.HomePlayerViolation = false;
+                    }
+
+                    if (beforeAwayMatches != null)
+                    {
+                        if (beforeAwayMatches.PositionID == 1 || beforeAwayMatches.PositionID == 5)
+                        {
+                            match.AwayPlayerViolation = true;
+                        }
+                        else
+                        {
+                            match.AwayPlayerViolation = false;
+                        }
+                    }
+                    else
+                    {
+                        match.AwayPlayerViolation = false;
+                    }
+
+                }
+                else if (positionID == 4)
+                {
+                    if (beforeHomeMatches != null)
+                    {
+                        if (beforeHomeMatches.PositionID == 1 || beforeHomeMatches.PositionID == 2)
+                        {
+                            match.HomePlayerViolation = true;
+                        }
+                        else
+                        {
+                            match.HomePlayerViolation = false;
+                        }
+                    }
+                    else
+                    {
+                        match.HomePlayerViolation = false;
+                    }
+
+                    if (beforeAwayMatches != null)
+                    {
+                        if (beforeAwayMatches.PositionID == 1 || beforeAwayMatches.PositionID == 2)
+                        {
+                            match.AwayPlayerViolation = true;
+                        }
+                        else
+                        {
+                            match.AwayPlayerViolation = false;
+                        }
+                    }
+                    else
+                    {
+                        match.AwayPlayerViolation = false;
+                    }
+
+                }
+                else if (positionID == 5)
+                {
+                    if (beforeHomeMatches != null)
+                    {
+                        if (beforeHomeMatches.PositionID == 1 || beforeHomeMatches.PositionID == 2 || beforeHomeMatches.PositionID == 3)
+                        {
+                            match.HomePlayerViolation = true;
+                        }
+                        else
+                        {
+                            match.HomePlayerViolation = false;
+                        }
+                    }
+                    else
+                    {
+                        match.HomePlayerViolation = false;
+                    }
+
+                    if (beforeAwayMatches != null)
+                    {
+                        if (beforeAwayMatches.PositionID == 1 || beforeAwayMatches.PositionID == 2 || beforeAwayMatches.PositionID == 3)
+                        {
+                            match.AwayPlayerViolation = true;
+                        }
+                        else
+                        {
+                            match.AwayPlayerViolation = false;
+                        }
+                    }
+                    else
+                    {
+                        match.AwayPlayerViolation = false;
+                    }
+
+                }
+                _context.Update(match);
+                _context.SaveChanges();
+            }
         }
 
         public void UpdateRankings(FixtureMatchVM fixtureMatch)

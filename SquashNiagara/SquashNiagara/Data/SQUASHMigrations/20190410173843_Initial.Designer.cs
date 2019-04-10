@@ -10,7 +10,7 @@ using SquashNiagara.Data;
 namespace SquashNiagara.Data.SQUASHMigrations
 {
     [DbContext(typeof(SquashNiagaraContext))]
-    [Migration("20190408171938_Initial")]
+    [Migration("20190410173843_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -105,11 +105,15 @@ namespace SquashNiagara.Data.SQUASHMigrations
 
                     b.Property<short?>("AwayPlayerScore");
 
+                    b.Property<bool?>("AwayPlayerViolation");
+
                     b.Property<int>("FixtureID");
 
                     b.Property<int>("HomePlayerID");
 
                     b.Property<short?>("HomePlayerScore");
+
+                    b.Property<bool?>("HomePlayerViolation");
 
                     b.Property<int?>("PositionID");
 

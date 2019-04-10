@@ -235,7 +235,9 @@ namespace SquashNiagara.Data.SQUASHMigrations
                     AwayPlayerID = table.Column<int>(nullable: false),
                     HomePlayerScore = table.Column<short>(nullable: true),
                     AwayPlayerScore = table.Column<short>(nullable: true),
-                    PositionID = table.Column<int>(nullable: true)
+                    PositionID = table.Column<int>(nullable: true),
+                    HomePlayerViolation = table.Column<bool>(nullable: true),
+                    AwayPlayerViolation = table.Column<bool>(nullable: true)
                 },
                 constraints: table =>
                 {

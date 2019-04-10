@@ -103,11 +103,15 @@ namespace SquashNiagara.Data.SQUASHMigrations
 
                     b.Property<short?>("AwayPlayerScore");
 
+                    b.Property<bool?>("AwayPlayerViolation");
+
                     b.Property<int>("FixtureID");
 
                     b.Property<int>("HomePlayerID");
 
                     b.Property<short?>("HomePlayerScore");
+
+                    b.Property<bool?>("HomePlayerViolation");
 
                     b.Property<int?>("PositionID");
 
