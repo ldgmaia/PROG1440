@@ -53,8 +53,20 @@
         </tr>
     </thead>
     <tbody>
+        @{ 
+            bool homeWin = false;
+            bool awayWin = false;
+        }
         @foreach (var item in Model)
         {
+            if ((@Convert.ToDouble(item.HomeTeamScore) + @Convert.ToDouble(item.HomeTeamBonus)) > (@Convert.ToDouble(item.AwayTeamScore) + @Convert.ToDouble(item.AwayTeamBonus)))
+            {
+                homeWin = true;
+            }
+            else if ((@Convert.ToDouble(item.HomeTeamScore) + @Convert.ToDouble(item.HomeTeamBonus)) < (@Convert.ToDouble(item.AwayTeamScore) + @Convert.ToDouble(item.AwayTeamBonus)))
+            {
+                awayWin = true;
+            }
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Date)
@@ -63,7 +75,14 @@
                     @Html.DisplayFor(modelItem => item.Time)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.HomeTeam.Name)
+                    @if (homeWin)
+                    {
+                        <strong>@Html.DisplayFor(modelItem => item.HomeTeam.Name)</strong>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.HomeTeam.Name)
+                    }
                 </td>
                 <td>
                     @if (item.HomeTeamScore.HasValue)
@@ -86,7 +105,14 @@
                     }
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.AwayTeam.Name)
+                    @if (awayWin)
+                    {
+                    <strong>@Html.DisplayFor(modelItem => item.AwayTeam.Name)</strong>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.AwayTeam.Name)
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Venue.Name)
@@ -97,6 +123,8 @@
                     </small>
                 </td>
             </tr>
+            homeWin = false;
+            awayWin = false;
         }
     </tbody>
 </table>

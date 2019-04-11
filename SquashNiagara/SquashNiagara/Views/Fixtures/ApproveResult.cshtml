@@ -109,9 +109,33 @@
     <div class="col-md-8">
         <h4>Matches</h4>
         <hr />
+        <div class="row">
+            <div class="col-md-2">
+
+            </div>
+            <div class="col-md-2" style="text-align:center">
+                <strong>@Html.DisplayFor(model => model.HomeTeam.Name)</strong>
+            </div>
+            <div class="col-md-1">
+
+            </div>
+            <div class="col-md-1">
+
+            </div>
+            <div class="col-md-1">
+
+            </div>
+            <div class="col-md-2" style="text-align:center">
+                <strong>@Html.DisplayFor(model => model.AwayTeam.Name)</strong>
+            </div>
+        </div>
+        <br />
         @foreach (Match match in Model.Matches)
         {
             <div class="row">
+                <div class="col-md-2">
+                    @Html.DisplayFor(m => match.Position.Name)
+                </div>
                 <div class="col-md-2">
                     @Html.DisplayFor(m => match.HomePlayer.FullName)
                 </div>

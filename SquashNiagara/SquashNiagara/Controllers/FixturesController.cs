@@ -107,6 +107,8 @@ namespace SquashNiagara.Controllers
                 .ThenInclude(m => m.HomePlayer)
                 .Include(f => f.Matches)
                 .ThenInclude(m => m.AwayPlayer)
+                .Include(f => f.Matches)
+                .ThenInclude(m => m.Position)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (fixture == null)
             {
@@ -385,6 +387,8 @@ namespace SquashNiagara.Controllers
                 .ThenInclude(m => m.HomePlayer)
                 .Include(f => f.Matches)
                 .ThenInclude(m => m.AwayPlayer)
+                .Include(f => f.Matches)
+                .ThenInclude(m => m.Position)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             if (fixture == null)
