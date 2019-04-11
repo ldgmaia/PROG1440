@@ -101,7 +101,7 @@
                 <td>
                     @if (homeWin)
                     {
-                        <strong>@Html.DisplayFor(modelItem => item.HomeTeam.Name)</strong>
+                        <strong>@Html.DisplayFor(modelItem => item.HomeTeam.Name) <i class="fas fa-trophy"></i></strong>
                     }
                     else
                     {
@@ -131,7 +131,7 @@
                 <td>
                     @if (awayWin)
                     {
-                        <strong>@Html.DisplayFor(modelItem => item.AwayTeam.Name)</strong>
+                        <strong>@Html.DisplayFor(modelItem => item.AwayTeam.Name) <i class="fas fa-trophy"></i></strong>
                     }
                     else
                     {

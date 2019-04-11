@@ -152,9 +152,17 @@ namespace SquashNiagara.Controllers
             return View(await teamRankings.ToListAsync());
         }
 
-        public IActionResult Standings()
+        public async Task<IActionResult> Standings(int? SeasonID, string DivisionID)
         {
             ViewBag.error = "";
+            if (!SeasonID.HasValue)
+            {
+                ViewData["FirstTime"] = true;
+            }
+            else
+            {
+                ViewData["FirstTime"] = false;
+            }
             try
             {
                 //Getting the number of positions by division - I'm using hardcoded Division 1
@@ -164,8 +172,21 @@ namespace SquashNiagara.Controllers
                            select p.PositionNo).SingleOrDefault();
 
                 //Getting a list of all players
-                var players = _context.Players;
-               
+                var players = from p in _context.Players
+                              where p.ID == 0
+                              select p;
+
+                if (SeasonID.HasValue)
+                {
+                    players = from p in _context.Players
+                                  join t in _context.Teams on p.TeamID equals t.ID
+                                  join sdt in _context.SeasonDivisionTeams on t.ID equals sdt.TeamID
+                                  where sdt.DivisionID == Convert.ToInt32(DivisionID) && sdt.SeasonID == SeasonID
+                                  select p;
+                }
+
+                
+
                 List<PositionalStandings> positionalStandingsList = new List<PositionalStandings>();
 
                 for (int i = 0; i < pos; i++)
@@ -175,188 +196,12 @@ namespace SquashNiagara.Controllers
                         if (player.ID == 1)
                             continue;
 
-                        PositionalStandings p = fixturePlayedByPlayer(player.ID, i + 1);
+                        PositionalStandings p = fixturePlayedByPlayer(player.ID, i + 1, SeasonID, DivisionID);
 
                         if(p.PercPlayed >= 50)
                             positionalStandingsList.Add(p);
                     }
                 }
-
-
-
-                /*select p.FirstName, p.ID, m.HomePlayerID, m.AwayPlayerID, m.HomePlayerScore, m.AwayPlayerScore
-                from SQUASH.Players p
-                join SQUASH.SeasonDivisionTeams sdt
-
-                    on p.TeamID = sdt.TeamID
-                join SQUASH.Matches m
-
-                    on m.AwayPlayerID = p.ID
-                where sdt.DivisionID = 1 and sdt.SeasonID = 1 and p.ID = 2
-
-                select p.FirstName, p.ID, m.HomePlayerID, m.AwayPlayerID, m.HomePlayerScore, m.AwayPlayerScore
-                from SQUASH.Players p
-                join SQUASH.SeasonDivisionTeams sdt
-
-                    on p.TeamID = sdt.TeamID
-                join SQUASH.Matches m
-
-                    on m.HomePlayerID = p.ID
-                where sdt.DivisionID = 1 and sdt.SeasonID = 1 and p.ID = 2*/
-
-
-
-
-
-                //var seaDivTea = _context.SeasonDivisionTeams.Select(s => s);
-                //var players = from p in allPlayers
-                //              join sdt in seaDivTea on p.TeamID equals sdt.TeamID
-                //              ;
-
-                /*
-                select * 
-                from SQUASH.Players p
-                join SQUASH.SeasonDivisionTeams sdt
-	                on p.TeamID = sdt.TeamID
-                where sdt.DivisionID = 1 and sdt.SeasonID = 1
-                */
-
-
-
-                //var playersByPosition = from spp in standingsplayerPositions
-                //                        join sp in standingsPlayers on spp.PlayerID equals sp.ID
-                //                        join st in standingsTeams on sp.TeamID equals st.ID
-                //                        join tr in standingsTeamRanking on sp.TeamID equals tr.TeamID
-                //                        group spp by spp.PositionID into gspp
-                //                        select new PositionalStandings
-                //                        {
-                //                            PlayerID = sp.ID,
-                //                            PlayerName = sp.FirstName + " " + sp.LastName,
-                //                            PositionID = spp.PositionID,
-                //                            TeamFixturePlayed = tr.Played,
-                //                            playerFixturePlayedPosition = gspp.Count()
-                //                        };
-
-
-
-
-                //select*
-                //from SQUASH.Players p
-                //join SQUASH.SeasonDivisionTeams sdt
-
-                //    on p.TeamID = sdt.TeamID
-
-                //    where sdt.DivisionID = 1 and sdt.SeasonID = 1
-
-
-
-
-                //select pp.PlayerID, pp.PositionID, COUNT(pp.PositionID) as 'played this position', tr.Played
-                //from SQUASH.PlayerPositions pp
-                //join SQUASH.Players p
-
-                //    on pp.PlayerID = p.ID
-                //join SQUASH.Teams t
-
-                //    on p.TeamID = t.ID
-                //join SQUASH.TeamRankings tr
-
-                //    on tr.TeamID = p.TeamID
-                //--where PlayerID = 8 or PlayerID = 16
-                //group by pp.PlayerID, pp.PositionID, tr.Played
-                //order by pp.PlayerID
-
-
-                //var standingsplayerPositions = _context.PlayerPositions
-                //        .Include(pp => pp.PlayerID)
-                //        .Include(pp => pp.PositionID);
-                //var standingsPlayers = _context.Players.Include(p => p.ID);
-                //var standingsTeams = _context.Teams.Include(t => t.ID);
-                //var standingsTeamRanking = _context.TeamRankings.Include(tr => tr.TeamID);
-
-                //var playersByPosition = from spp in standingsplayerPositions                                        
-                //                        join sp in standingsPlayers on spp.PlayerID equals sp.ID
-                //                        join st in standingsTeams on sp.TeamID equals st.ID
-                //                        join tr in standingsTeamRanking on sp.TeamID equals tr.TeamID
-                //                        group spp by spp.PositionID into gspp
-                //                        select new PositionalStandings {
-                //                            PlayerID = sp.ID,
-                //                            PlayerName = sp.FirstName + " " + sp.LastName,
-                //                            PositionID = spp.PositionID,
-                //                            TeamFixturePlayed = tr.Played,
-                //                            playerFixturePlayedPosition = gspp.Count()
-                //                        };
-
-
-
-                //int currentPosition = (int)pos.ToList()[0];
-
-                //Getting the list o player that played in given position
-                //var playerPositions = _context.PlayerPositions.Include(pp => pp.PlayerID);
-                //var matches = _context.Matches.Include(m => m.ID);
-                //var fixtures = _context.Fixtures.Include(f => f.ID);
-                //var players = _context.Players.Include(p => p.ID);
-
-                //var playersByPosition =
-                //   (from pp in playerPositions
-                //    join m in matches on pp.MatchID equals m.ID
-                //    join f in fixtures on m.FixtureID equals f.ID
-                //    join p in players on pp.PlayerID equals p.ID
-                //    where f.SeasonID == 1 && f.DivisionID == 1 && f.HomeTeamScore != null
-                //    orderby pp.PositionID
-                //    select new PositionalStandings { PlayerID = p.ID, PlayerName = p.FirstName + " " + p.LastName, PositionID = pp.PositionID }).Distinct();
-
-
-
-                //foreach (var r in playersByPosition.ToList())
-                //{
-                //    PositionalStandings temp = new PositionalStandings();
-                //    temp.PlayerID = r.PlayerID;
-                //    temp.PlayerName = r.PlayerName;
-                //    temp.PositionID = r.PositionID;
-
-                //    //getting the team of the player
-                //    var playerTeam = _context.Players.Include(p => p.TeamID);
-                //    var pt = from p in playerTeam
-                //             where p.ID == r.PlayerID
-                //             select p.TeamID;
-                //    int teamID = (int)pt.ToList()[0];
-
-                //    //getting the number of fixtures by team
-                //    var nFixturesByTeam = _context.Fixtures
-                //        .Include(f => f.ID)
-                //        .Include(f => f.SeasonID)
-                //        .Include(f => f.DivisionID)
-                //        .Include(f => f.HomeTeamID)
-                //        .Include(f => f.AwayTeamID)
-                //        .Include(f => f.HomeTeamScore);
-                //    var fixturesByTeam = (from f in nFixturesByTeam
-                //                          where f.SeasonID == 1
-                //                          && f.DivisionID == 1
-                //                          && (f.HomeTeamID == teamID || f.AwayTeamID == teamID)
-                //                          && f.HomeTeamScore != null
-                //                          select f.ID).Count();
-
-                //    //getting the number of fixtures by player
-                //    var nFixturesByPlayer = _context.Fixtures.Include(f => f.ID);
-                //    var nMatches = _context.Matches
-                //        .Include(m => m.ID)
-                //        .Include(m => m.FixtureID)
-                //        .Include(m => m.HomePlayerID)
-                //        .Include(m => m.AwayPlayerID)
-                //        ;
-                //    var fixturesByPlayer = (from f in nFixturesByPlayer
-                //                            join m in nMatches on f.ID equals m.FixtureID
-                //                            where f.SeasonID == 1
-                //                            && f.DivisionID == 1
-                //                            && (m.HomePlayerID == r.PlayerID || m.AwayPlayerID == r.PlayerID)
-                //                            select f.ID).Count();
-
-                //    decimal pTemp = Convert.ToDecimal(fixturesByPlayer) / Convert.ToDecimal(fixturesByTeam);
-                //    temp.PercPlayed = Math.Round(pTemp * 100, 0);
-                //    newPS.Add(temp);
-                //    //Debug.WriteLine("-------" + r.PlayerName + ", " + r.PositionID + ", " + fixturesByPlayer + ", " + fixturesByTeam);
-                //}
 
                 ViewBag.positions = pos;
                 ViewBag.playersByPosition = positionalStandingsList.OrderByDescending(ps => ps.winPerc).ToList();
@@ -369,10 +214,19 @@ namespace SquashNiagara.Controllers
             {
                 ViewBag.error = "Some problem happend that need to be analysed. Report it to the team";
             }
+            PopulateDropDownListSeason();
+
+            int userDivision = 0;
+
+            ViewData["UserDivision"] = userDivision;
+
+            ViewData["DivisionID"] = from d in _context.Divisions
+                                     select d;
+
             return View();
         }
 
-        private PositionalStandings fixturePlayedByPlayer(int playerID, int positionID)
+        private PositionalStandings fixturePlayedByPlayer(int playerID, int positionID, int? SeasonID, string DivisionID)
         {
             PositionalStandings ps = new PositionalStandings();
             /*
@@ -426,12 +280,12 @@ namespace SquashNiagara.Controllers
             var homeMatches = from p in allPlayers
                               join sdt in allSeaDivTea on p.TeamID equals sdt.TeamID
                               join m in allMatches on p.ID equals m.HomePlayerID
-                              where sdt.DivisionID == 1 && sdt.SeasonID == 1 && p.ID == playerID
+                              where sdt.DivisionID == Convert.ToInt32(DivisionID) && sdt.SeasonID == SeasonID && p.ID == playerID
                               select new { p, m };
             var awayMatches = from p in allPlayers
                               join sdt in allSeaDivTea on p.TeamID equals sdt.TeamID
                               join m in allMatches on p.ID equals m.AwayPlayerID
-                              where sdt.DivisionID == 1 && sdt.SeasonID == 1 && p.ID == playerID
+                              where sdt.DivisionID == Convert.ToInt32(DivisionID) && sdt.SeasonID == SeasonID && p.ID == playerID
                               select new { p, m };
 
             int forScore = 0;
